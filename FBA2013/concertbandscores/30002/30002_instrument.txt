@@ -1,8 +1,8 @@
 // data format: instrument name(str)	activity name(str)
-xyl	preparation
-sna	preparation
-tim	preparation
-xyl	scale
-xyl	scale
+xyl	etude
+sna	etude
+tim	etude
+xyl	scalesChromatic
+xyl	scalesMajor
 xyl	sightReading
 sna	sightReading
