@@ -442,61 +442,103 @@ public class MiddleSchoolStudentAssessments {
   public String toString() {
     return 
         // Only one decimal place for -1 because "-" takes up an extra character.
-               (this.lyrical_etude_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.lyrical_etude_musicality_tempo_style)) + 
-        "\t" + (this.lyrical_etude_tone_quality < 0 ? "-1.0" : String.format("%.2f", this.lyrical_etude_tone_quality)) + 
+        "-1.0" +
+        "\t" + (this.lyrical_etude_artistry < 0 ? "-1.0" : String.format("%.2f", this.lyrical_etude_artistry)) + 
+        "\t" + (this.lyrical_etude_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.lyrical_etude_musicality_tempo_style)) + 
         "\t" + (this.lyrical_etude_note_accuracy < 0 ? "-1.0" : String.format("%.2f", this.lyrical_etude_note_accuracy)) +
         "\t" + (this.lyrical_etude_rhythmic_accuracy < 0 ? "-1.0" : String.format("%.2f", this.lyrical_etude_rhythmic_accuracy)) + 
-        "\t" + (this.lyrical_etude_artistry < 0 ? "-1.0" : String.format("%.2f", this.lyrical_etude_artistry)) + 
+        "\t" + (this.lyrical_etude_tone_quality < 0 ? "-1.0" : String.format("%.2f", this.lyrical_etude_tone_quality)) + 
+        "\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0" + 
 
-        "\n" + (this.technical_etude_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.technical_etude_musicality_tempo_style)) +
-        "\t" + (this.technical_etude_tone_quality < 0 ? "-1.0" : String.format("%.2f", this.technical_etude_tone_quality)) +
+        "\n" + 
+
+               (this.technical_etude_articulation < 0 ? "-1.0" : String.format("%.2f", this.technical_etude_articulation)) +
+        "\t-1.0" +
+        "\t" + (this.technical_etude_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.technical_etude_musicality_tempo_style)) +
         "\t" + (this.technical_etude_note_accuracy < 0 ? "-1.0" : String.format("%.2f", this.technical_etude_note_accuracy)) +
         "\t" + (this.technical_etude_rhythmic_accuracy < 0 ? "-1.0" : String.format("%.2f", this.technical_etude_rhythmic_accuracy)) +
-        "\t" + (this.technical_etude_articulation < 0 ? "-1.0" : String.format("%.2f", this.technical_etude_articulation)) +
+        "\t" + (this.technical_etude_tone_quality < 0 ? "-1.0" : String.format("%.2f", this.technical_etude_tone_quality)) +
+        "\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0" + 
 
-        "\n" + (this.sight_reading_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.sight_reading_musicality_tempo_style)) +
-        "\t" + (this.sight_reading_tone_quality < 0 ? "-1.0" : String.format("%.2f", this.sight_reading_tone_quality)) +
+        "\n" + 
+
+        "-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0" +
+        "\t" + (this.scales_chromatic < 0 ? "-1.0" : String.format("%.2f", this.scales_chromatic)) +
+        "\t-1.0\t-1.0\t-1.0" + 
+ 
+        "\n" +
+
+        "-1.0\t-1.0" +
+        "\t" + (this.scales_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.scales_musicality_tempo_style)) +
+        "\t" + (this.scales_note_accuracy < 0 ? "-1.0" : String.format("%.2f", this.scales_note_accuracy)) +
+        "\t-1.0" +
+        "\t" + (this.scales_tone_quality < 0 ? "-1.0" : String.format("%.2f", this.scales_tone_quality)) +
+        "\t" + (this.scales_articulation_style < 0 ? "-1.0" : String.format("%.2f", this.scales_articulation_style)) +
+        "\t" + (this.scales_musicality_phrasing_style < 0 ? "-1.0" : String.format("%.2f", this.scales_musicality_phrasing_style)) +
+        "\t" + (this.scales_note_accuracy_consistency < 0 ? "-1.0" : String.format("%.2f", this.scales_note_accuracy_consistency)) +
+        "\t" + (this.scales_tempo_consistency < 0 ? "-1.0" : String.format("%.2f", this.scales_tempo_consistency)) +
+        "\t" + (this.scales_ab < 0 ? "-1.0" : String.format("%.2f", this.scales_ab)) +
+        "\t-1.0" +
+        "\t" + (this.scales_bb < 0 ? "-1.0" : String.format("%.2f", this.scales_bb)) +
+        "\t-1.0" +
+        "\t" + (this.scales_c < 0 ? "-1.0" : String.format("%.2f", this.scales_c)) +
+        "\t" + (this.scales_db < 0 ? "-1.0" : String.format("%.2f", this.scales_db)) +
+        "\t-1.0" +
+        "\t" + (this.scales_eb < 0 ? "-1.0" : String.format("%.2f", this.scales_eb)) +
+        "\t-1.0" +
+        "\t" + (this.scales_f < 0 ? "-1.0" : String.format("%.2f", this.scales_f)) +
+        "\t-1.0" +
+        "\t" + (this.scales_g < 0 ? "-1.0" : String.format("%.2f", this.scales_g)) +
+        "\t-1.0\t-1.0\t-1.0\t-1.0" +
+
+        "\n" +
+
+        "-1.0" +
+        "\t" + (this.sight_reading_artistry < 0 ? "-1.0" : String.format("%.2f", this.sight_reading_artistry)) +
+        "\t" + (this.sight_reading_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.sight_reading_musicality_tempo_style)) +
         "\t" + (this.sight_reading_note_accuracy < 0 ? "-1.0" : String.format("%.2f", this.sight_reading_note_accuracy)) +
         "\t" + (this.sight_reading_rhythmic_accuracy < 0 ? "-1.0" : String.format("%.2f", this.sight_reading_rhythmic_accuracy)) +
-        "\t" + (this.sight_reading_artistry < 0 ? "-1.0" : String.format("%.2f", this.sight_reading_artistry)) +
+        "\t" + (this.sight_reading_tone_quality < 0 ? "-1.0" : String.format("%.2f", this.sight_reading_tone_quality)) +
+        "\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0" + 
 
-        "\n" + (this.scales_g < 0 ? "-1.0" : String.format("%.2f", this.scales_g)) +
-        "\t" + (this.scales_c < 0 ? "-1.0" : String.format("%.2f", this.scales_c)) +
-        "\t" + (this.scales_f < 0 ? "-1.0" : String.format("%.2f", this.scales_f)) +
-        "\t" + (this.scales_bb < 0 ? "-1.0" : String.format("%.2f", this.scales_bb)) +
-        "\t" + (this.scales_eb < 0 ? "-1.0" : String.format("%.2f", this.scales_eb)) +
-        "\t" + (this.scales_ab < 0 ? "-1.0" : String.format("%.2f", this.scales_ab)) +
-        "\t" + (this.scales_db < 0 ? "-1.0" : String.format("%.2f", this.scales_db)) +
-        "\t" + (this.scales_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.scales_musicality_tempo_style)) +
-        "\t" + (this.scales_tone_quality < 0 ? "-1.0" : String.format("%.2f", this.scales_tone_quality)) +
-        "\t" + (this.scales_note_accuracy_consistency < 0 ? "-1.0" : String.format("%.2f", this.scales_note_accuracy_consistency)) +
-        "\t" + (this.scales_articulation_style < 0 ? "-1.0" : String.format("%.2f", this.scales_articulation_style)) +
-        "\t" + (this.scales_chromatic < 0 ? "-1.0" : String.format("%.2f", this.scales_chromatic)) +
+        "\n" + 
 
-        "\t" + (this.scales_musicality_phrasing_style < 0 ? "-1.0" : String.format("%.2f", this.scales_musicality_phrasing_style)) +
-        "\t" + (this.scales_note_accuracy < 0 ? "-1.0" : String.format("%.2f", this.scales_note_accuracy)) +
-        "\t" + (this.scales_tempo_consistency < 0 ? "-1.0" : String.format("%.2f", this.scales_tempo_consistency)) +
- 
-        "\n" + (this.mallet_etude_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.mallet_etude_musicality_tempo_style)) +
+        "-1.0\t-1.0" +
+        "\t" + (this.mallet_etude_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.mallet_etude_musicality_tempo_style)) +
         "\t" + (this.mallet_etude_note_accuracy < 0 ? "-1.0" : String.format("%.2f", this.mallet_etude_note_accuracy)) +
         "\t" + (this.mallet_etude_rhythmic_accuracy < 0 ? "-1.0" : String.format("%.2f", this.mallet_etude_rhythmic_accuracy)) +
+        "\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0" + 
 
-        "\n" + (this.reading_mallet_musicality_style < 0 ? "-1.0" : String.format("%.2f", this.reading_mallet_musicality_style)) +
+        "\n" + 
+
+        "-1.0\t-1.0" +
+        "\t" + (this.snare_etude_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.snare_etude_musicality_tempo_style)) +
+        "\t" + (this.snare_etude_note_accuracy < 0 ? "-1.0" : String.format("%.2f", this.snare_etude_note_accuracy)) +
+        "\t" + (this.snare_etude_rhythmic_accuracy < 0 ? "-1.0" : String.format("%.2f", this.snare_etude_rhythmic_accuracy)) +
+        "\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0" + 
+
+        "\n" + 
+
+        "-1.0\t-1.0" +
+        "\t" + (this.timpani_etude_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.timpani_etude_musicality_tempo_style)) +
+        "\t" + (this.timpani_etude_note_accuracy < 0 ? "-1.0" : String.format("%.2f", this.timpani_etude_note_accuracy)) +
+        "\t" + (this.timpani_etude_rhythmic_accuracy < 0 ? "-1.0" : String.format("%.2f", this.timpani_etude_rhythmic_accuracy)) +
+        "\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0" + 
+
+        "\n" + 
+
+        "-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0" +
+        "\t" + (this.reading_mallet_musicality_style < 0 ? "-1.0" : String.format("%.2f", this.reading_mallet_musicality_style)) +
         "\t" + (this.reading_mallet_note_accuracy_tone < 0 ? "-1.0" : String.format("%.2f", this.reading_mallet_note_accuracy_tone)) +
         "\t" + (this.reading_mallet_rhythmic_accuracy_articulation < 0 ? "-1.0" : String.format("%.2f", this.reading_mallet_rhythmic_accuracy_articulation)) +
 
-        "\n" + (this.snare_etude_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.snare_etude_musicality_tempo_style)) +
-        "\t" + (this.snare_etude_note_accuracy < 0 ? "-1.0" : String.format("%.2f", this.snare_etude_note_accuracy)) +
-        "\t" + (this.snare_etude_rhythmic_accuracy < 0 ? "-1.0" : String.format("%.2f", this.snare_etude_rhythmic_accuracy)) +
+        "\n" + 
 
-        "\n" + (this.reading_snare_musicality_style < 0 ? "-1.0" : String.format("%.2f", this.reading_snare_musicality_style)) +
+        "-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0\t-1.0" +
+        "\t" + (this.reading_snare_musicality_style < 0 ? "-1.0" : String.format("%.2f", this.reading_snare_musicality_style)) +
         "\t" + (this.reading_snare_note_accuracy_tone < 0 ? "-1.0" : String.format("%.2f", this.reading_snare_note_accuracy_tone)) +
         "\t" + (this.reading_snare_rhythmic_accuracy_articulation < 0 ? "-1.0" : String.format("%.2f", this.reading_snare_rhythmic_accuracy_articulation)) +
 
-        "\n" + (this.timpani_etude_musicality_tempo_style < 0 ? "-1.0" : String.format("%.2f", this.timpani_etude_musicality_tempo_style)) +
-        "\t" + (this.timpani_etude_note_accuracy < 0 ? "-1.0" : String.format("%.2f", this.timpani_etude_note_accuracy)) +
-        "\t" + (this.timpani_etude_rhythmic_accuracy < 0 ? "-1.0" : String.format("%.2f", this.timpani_etude_rhythmic_accuracy)) +
-  
         "\n";
   }
 }

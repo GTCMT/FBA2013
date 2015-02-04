@@ -101,25 +101,16 @@ public class ParseHighSchoolStudentAssessments {
 
     String comment_string = "";
 
-    comment_string += "// Student Assessments. All assessments are normalized " +
-                   "between 0 and 1, rounded to 2 decimal places (0 being poor and 1 being excellent). " +
-                   "If a student doesn't have a certain assessment, then that assessment value is -1.0. " +
-                   "Note that percussionists have a different set of assessments than other performers, " +
-                   "but everyone plays the chromatic scale. " +
-                   "Each line represents assessments for a particular segment. " +
-                   "Assessments are ordered as follows: ";
-
+    comment_string += "// assessments: range 0.00 (poor)...1.00 (excellent), rounded to 2 decimal places; " +
+                      "-1.0 indicates no assessment. rows -> segments, columns -> categories. ";
     comment_string += 
-                   "Lyrical_Etude: Musicality_Tempo_Style Tone_Quality Note_Accuracy Rhythmic_Accuracy Artistry. " +
-                   "Technical_Etude: Musicality_Tempo_Style Tone_Quality Note_Accuracy Rhythmic_Accuracy Artistry. " +
-                   "Sight_Reading: Musicality_Tempo_Style Tone_Quality Note_Accuracy Rhythmic_Accuracy Reading_Artistry. " + 
-                   "Scales: G C F Bb Eb Ab Db Gb B E A D Musicality_Tempo_Style Tone_Quality Note_Accuracy_Consistency " + 
-                           "Chromatic Musicality_Phrasing_Style Note_Accuracy Tempo_Consistency. " +
-                   "Mallet_Etude: Musicality_Tempo_Style Note_Accuracy Rhythmic_Accuracy. " +
-                   "Reading_Mallet: Musicality_Style Note_Accuracy_Tone Rhythmic_Accuracy_Articulation. " + 
-                   "Snare_Etude: Musicality_Tempo_Style Note_Accuracy Rhythmic_Accuracy. " +
-                   "Reading_Snare: Musicality_Style Note_Accuracy_Tone Rhythmic_Accuracy_Articulation. " + 
-                   "Timpani_Etude: Musicality_Tempo_Style Note_Accuracy Rhythmic_Accuracy. " + 
+                   "rows: lyricalEtude, technicalEtude, scalesChromatic, scalesMajor, sightReading, " +
+                   "malletEtude, snareEtude, timpaniEtude, readingMallet, readingSnare. " + 
+                   "columns: articulation, artistry, musicalityTempoStyle, noteAccuracy, " +
+                   "rhythmicAccuracy, toneQuality, articulationStyle, musicalityPhrasingStyle, " +
+                   "noteAccuracyConsistency, tempoConsistency, " +
+                   "Ab, A, Bb, B, C, Db, D, Eb, E, F, Gb, G, chromatic, musicalityStyle, " +
+                   "noteAccuracyTone, rhythmicAccuracyArticulation." +
                    "\n";
     // Add one student string (aka one line) at a time.
     for (HighSchoolStudentAssessments student : ParseHighSchoolStudentAssessments.students.values()) {
@@ -150,7 +141,6 @@ public class ParseHighSchoolStudentAssessments {
       writer.close();
     }
 
-
   }
 
   // The script starts here.
@@ -173,6 +163,9 @@ public class ParseHighSchoolStudentAssessments {
     // Write normalized student assessments to file.
     ParseHighSchoolStudentAssessments.writeStudentsToFiles(0);
 
+    // Clear out the concert band students before dealing with the Symphonic
+    // Band students.
+    students.clear();
 
     // Retrieve student assessments from Symphonic Band.
     ParseHighSchoolStudentAssessments.parseAssessmentFile("txt_files/Symphonic_Band_Scores.txt");
