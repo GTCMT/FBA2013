@@ -14,7 +14,7 @@ A few notes:
  Piccolo auditions.
 
 An easy to read description at the assessments.txt format:
-Columns (10 segments):
+Rows (10 segments):
 1. lyricalEtude
 2. technicalEtude
 3. scalesChromatic
@@ -26,7 +26,7 @@ Columns (10 segments):
 9. readingMallet
 10. readingSnare
 
-Rows (26 categories):
+Columns (26 categories):
 1. articulation
 2. artistry
 3. musicalityTempoStyle
