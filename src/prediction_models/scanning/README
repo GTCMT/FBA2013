@@ -1,0 +1,12 @@
+Scanning
+
+Code here reads audio files from the FBA database into vectors. This could be
+split into two functions:
+-get the audio file names and corresponding labels
+-from the audio filenames, read in audio.
+
+Options we should support include:
+-which band(s)
+-which instrument(s)
+-which segment(s)
+-which assessment label(s)

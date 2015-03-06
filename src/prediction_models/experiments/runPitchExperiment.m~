@@ -1,0 +1,30 @@
+% Example experiment in which correctness assessments are predicted based
+% on pitch tracking (basically nonsensible prediction).
+function runPitchExperiment(f0)
+
+BAND = 'Concert'; % 'Middle' 'Symphonic'
+SEGMENTS = [0,1]; % Different segments
+
+
+[audio, labels, Fs] = scanFBA(BAND, SEGMENTS);
+
+% Preprocessing
+CUTOFF = Fs / 4;
+for(i = 1:size(audio,1));
+  audio(i) = lowPass(audio(i), Fs, CUTOFF);
+end
+
+f
+% One feature extraction script for this experiment
+for(i = 1:size(audio,1));
+  audio(i) = lowPass(audio(i), Fs, CUTOFF);
+end
+features = extractFeaturesPitch(audio, Fs, f0);
+
+% Postprocessing
+features = meanFeatures(features);
+
+n_fold = 10;
+crossValidate(features, labels, n_fold);
+
+end
