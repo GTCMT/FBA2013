@@ -8,11 +8,11 @@ The data set contains 3,343 student recordings with 18 different instruments cov
 
 Annotations
 ===========
-The file structure resembles the structure of the audio files and is split into three main categories: concert band, middle school, and symphonic band.The annotated data is split into the following text files:
+The file structure resembles the structure of the audio files and is split into three main categories: concert band, middle school, and symphonic band. The annotated data is split into the following text files:
 
 1. *_assessments.txt
 --------------------
-Contains the judge assessments of a student’s audition. Students were assessed in different categories (ex. note accuracy) and separately for different segments of the audition (ex. technical etude). Assessments are normalized to [0,1], and -1 indicates a missing assessment. The assessments are organized into a 10 x 26 matrix where rows represent segments and columns represent categories, like so:
+Contains the judge assessments of a student’s audition. Students were assessed in different categories (ex. note accuracy) and separately for different segments of the audition (ex. technical etude). Assessments are normalized to [0,1], and -1 indicates a missing assessment. The assessments are organized into a 10 x 26 matrix where rows represent segments and columns represent categories:
 
 Rows (10 segments):
 1. lyricalEtude
@@ -57,6 +57,7 @@ Columns (26 categories):
 2. *_instrument.txt
 -------------------
 ENTER DESCRIPTION HERE
+
 3. *_segment.txt
 ----------------
 ENTER DESCRIPTION HERE
