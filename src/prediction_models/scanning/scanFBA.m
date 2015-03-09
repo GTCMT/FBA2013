@@ -17,7 +17,7 @@
 %
 %                         %%%% Output %%%%
 % audition_metadata.file_paths: The path to each audio file for a student.
-% audition_metdata.segments: TODO(Cian)
+% audition_metdata.segments: TODO(Chih-Wei)
 % audition_metadata.assessments: TODO(Chris)
 % audition_metadata.score: TODO(Yujia)
 %
@@ -32,9 +32,9 @@ function audition_metadata = scanFBA(fba_relative_path, band_option, ...
 student_ids = scanStudentIds(band_option, instrument_option);
 
 % Gather metadata.
-% TODO(Chih-Wei)
-file_paths = scanFilePaths(fba_relative_path, student_ids);
 % TODO(Cian)
+file_paths = scanFilePaths(fba_relative_path, student_ids);
+% TODO(Chih-Wei)
 segments = scanSegments(segment_option, student_ids);
 % TODO(Chris)
 assessments = scanAssessments(assessment_option, student_ids);
