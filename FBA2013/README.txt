@@ -56,11 +56,12 @@ Columns (26 categories):
 
 2. *_instrument.txt
 -------------------
-ENTER DESCRIPTION HERE
+Contains the played instruments (ex. snare drum) and their corresponding activities (ex. etude). The data is formatted as a N*2 matrix, N is the number of segments. The first column is the instrument name (str) represented by the first three letters (ex. xylophone as xyl, snare drum as sna). The second column is the activity name (str), which shares the same pool as the 26 categories described above. 
+
 
 3. *_segment.txt
 ----------------
-ENTER DESCRIPTION HERE
+Contains the starting time (in sec) and duration (in sec) of every segment. The data is formatted as a N*2 matrix, N is the number of segments. The first column is the starting time, and the second column is the duration. 
 
 Contact
 =======
