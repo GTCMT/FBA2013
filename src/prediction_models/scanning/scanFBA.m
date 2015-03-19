@@ -1,25 +1,29 @@
-% Scans the FBA dataset, returning metadata about student auditions. 
+%% Scans the FBA dataset, returning metadata about student auditions. 
+% CL@GTCMT 2015
 % Metadata is returned in the form of a struct, audition_metadata, which is
 % described below.
 %
 %                         %%%% Input %%%%
-% fba_relative_path (string): The relative path to the FBA2013 directory 
-%                             containing audio files in your computer's 
-%                             file system.
-% band_option (string): Chooses which band(s) to retrieve auditions for.
-% instrument_option (string): Chooses which instruments(s) to retrieve 
-%                             auditions for.
-% segment_option (string): Chooses which segment(s) of audio to use.
-% assessment_option (string): Chooses which assessments to use.
-% score_option (bool): Return a score or not.
-%
-% All options above should return everything if unspecified.
+% fba_relative_path: string, the relative path to the FBA2013 directory 
+%                    containing audio files in your computer's file system.
+% band_option: TODO(Cian)
+% instrument_option: TODO(Cian)
+% segment_option: N*1 int vector, specify your target segments, ex: [3; 5]
+% assessment_option: N*2 int vector, N -> assessments per student, 
+%                    1st column = segment, 2nd column = category. 
+%                    See /FBA2013/README.txt for index values. ex: for
+%                    technical etude tone quality and note accuracy, use
+%                    [2 6; 2 4].
 %
 %                         %%%% Output %%%%
-% audition_metadata.file_paths: The path to each audio file for a student.
-% audition_metdata.segments: TODO(Chih-Wei)
-% audition_metadata.assessments: TODO(Chris)
-% audition_metadata.score: TODO(Yujia)
+% Fields of audition_metadata:
+%   file_paths: string, the path to each audio file for a student.
+%   segments: N*1 cell vector, each cell is a m*2 matrix,
+%             1st column = starting time, 2nd column = duration.
+%   assessments: N*1 cell vector, each cell is a m*1 vector,
+%                N -> student_id's, m -> assessments, order taken from 
+%                assessment_option, -1 indicates missing assessment.
+%   score: TODO(Yujia)
 %
 % file_paths, segments, and assessments have the same index for a given
 % student.
@@ -34,9 +38,7 @@ student_ids = scanStudentIds(band_option, instrument_option);
 % Gather metadata.
 % TODO(Cian)
 file_paths = scanFilePaths(fba_relative_path, student_ids);
-% TODO(Chih-Wei)
 segments = scanSegments(segment_option, student_ids);
-% TODO(Chris)
 assessments = scanAssessments(assessment_option, student_ids);
 % TODO(Yujia)
 score = scanScore(instrument_option, score_option);
@@ -46,4 +48,4 @@ audition_metadata = struct('file_paths', file_paths, ...
                            'segments', segments, ...
                            'assessments', assessments, ...
                            'score', score);
-                         
+end

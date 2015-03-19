@@ -12,7 +12,7 @@ The file structure resembles the structure of the audio files and is split into 
 
 1. *_assessments.txt
 --------------------
-Contains the judge assessments of a student’s audition. Students were assessed in different categories (ex. note accuracy) and separately for different segments of the audition (ex. technical etude). Assessments are normalized to [0,1], and -1 indicates a missing assessment. The assessments are organized into a 10 x 26 matrix where rows represent segments and columns represent categories:
+Contains the judge assessments of a student's audition. Students were assessed in different categories (ex. note accuracy) and separately for different segments of the audition (ex. technical etude). Assessments are normalized to [0,1], and -1 indicates a missing assessment. The assessments are organized into a 10 x 26 matrix where rows represent segments and columns represent categories:
 
 Rows (10 segments):
 1. lyricalEtude
