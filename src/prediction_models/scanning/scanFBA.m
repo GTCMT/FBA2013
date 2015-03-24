@@ -6,8 +6,9 @@
 %                         %%%% Input %%%%
 % fba_relative_path: string, the relative path to the FBA2013 directory 
 %                    containing audio files in your computer's file system.
-% band_option: TODO(Cian)
-% instrument_option: TODO(Cian)
+% band_option:       string specifying the band: 'middle', 'concert' 
+%                    or 'symphonic'
+% instrument_option: string specifying instrument as it appears in the xls
 % segment_option: N*1 int vector, specify your target segments, ex: [3; 5]
 % assessment_option: N*2 int vector, N -> assessments per student, 
 %                    1st column = segment, 2nd column = category. 
@@ -29,14 +30,13 @@
 % student.
 function audition_metadata = scanFBA(fba_relative_path, band_option, ...
                                      instrument_option, segment_option, ...
-                                     assessment_option, score_option);
+                                     assessment_option, score_option)
                           
 % Figure out which students we retrive metadata for.
-% TODO(Cian). student_ids is a N X 1 vector.
+% student_ids is a N X 1 vector.
 student_ids = scanStudentIds(band_option, instrument_option);
 
 % Gather metadata.
-% TODO(Cian)
 file_paths = scanFilePaths(fba_relative_path, student_ids);
 segments = scanSegments(segment_option, student_ids);
 assessments = scanAssessments(assessment_option, student_ids);
