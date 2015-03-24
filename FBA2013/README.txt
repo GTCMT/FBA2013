@@ -1,4 +1,4 @@
-Introduction
+﻿Introduction
 ============
 This dataset contains the annotations and assessments of student performances for the 2013–2014 Florida all-state auditions. The dataset is available on request from the Florida Bandmasters Association (FBA).
 
@@ -57,7 +57,14 @@ Columns (26 categories):
 2. *_instrument.txt
 -------------------
 Contains the played instruments (ex. snare drum) and their corresponding activities (ex. etude). The data is formatted as a N*2 matrix, N is the number of segments. The first column is the instrument name (str) represented by the first three letters (ex. xylophone as xyl, snare drum as sna). The second column is the activity name (str), which shares the same pool as the 26 categories described above. 
-
+Instrument ids:
+bcl	Bb Clarinet
+tru	Trumpet
+tsa 	Tenor Saxophone
+flu 	Flute
+axs 	Alto Saxophone
+frh	French Horn
+obo 	Oboe
 
 3. *_segment.txt
 ----------------
