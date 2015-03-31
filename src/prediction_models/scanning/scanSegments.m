@@ -7,10 +7,10 @@
 % segments = N*1 cell vector, each cell is a m*2 matrix,
 %            1st column = starting time, 2nd column is duration
 
-function segments = scanSegments(segment_option, student_ids)
+function segments = scanSegments(segment_option, student_ids, root_path)
 
 % //initialization 
-annPath = '../../../FBA2013';
+annPath = [root_path '../../FBA2013'];
 N = length(student_ids);
 segments = cell(N, 1);
 

@@ -3,24 +3,22 @@
 % assessments = scanAssessments(assessment_option, student_ids)
 % Return the assessments for each student, read from the *_assessments.txt
 % file.
-% assessment_option = N*2 int vector, N -> assessments per student, 
-%                     1st column = segment, 2nd column = category. 
-%                     See /FBA2013/README.txt for index values. ex: for
-%                     technical etude tone quality and note accuracy, use
-%                     [2 6; 2 4].
+% segment_option = m*1 int vector, specify your target segments, ex: [3; 5]
 % student_ids = N*1 int vector of student ids.
-% assessments = N*1 cell vector, each cell is a m*1 vector
-%               N -> student_id's, m -> assessments, order taken from 
-%               assessment_option, -1 indicates missing assessment.
-
-function assessments = scanAssessments(assessment_option, student_ids)
+% root_path = relative path to the /prediction_models directory.
+% assessments = N*1 cell vector, each cell is a F*G vector
+%               N -> student_id's, F -> segment, G -> category (all 26).
+%               For segment and category indices, see /FBA/README.txt.
+%               Segments returned in order specified by segment_option.
+function assessments = scanAssessments(segment_option, student_ids, ...
+                                       root_path)
 
 NUM_SEGMENTS = 10; % Rows.
 NUM_CATEGORIES = 26; % Columns.
 
-annotation_path = '../../../FBA2013';
+annotation_path = [root_path '../../FBA2013'];
+num_chosen_segments = size(segment_option, 1);
 num_students = length(student_ids);
-num_assessments = size(assessment_option, 1);
 assessments = cell(num_students,1);
 
 for (student_idx = 1:num_students)
@@ -38,19 +36,18 @@ for (student_idx = 1:num_students)
       case 3
         band_folder = '/symphonicbandscores';
     end
-    file_name = strcat('/', current_id, '_', 'assessments.txt'); 
-    file_path = strcat(annotation_path, band_folder, '/', current_id, file_name);
+    file_name = ['/' current_id '_' 'assessments.txt']; 
+    file_path = [annotation_path band_folder '/' current_id file_name];
 
     % Read assessment file.
     if (exist(file_path, 'file') == 2)
       all_current_assessments = dlmread(file_path, ' ', ...
                                     [1 0 NUM_SEGMENTS NUM_CATEGORIES-1]);
-      current_assessments = ones(num_assessments,1) * -1;
-      for(assessment_idx = 1:num_assessments)
-        row_idx = assessment_option(assessment_idx, 1);
-        column_idx = assessment_option(assessment_idx, 2);
-        current_assessments(assessment_idx) = ...
-            all_current_assessments(row_idx, column_idx);
+      current_assessments = zeros(num_chosen_segments, NUM_CATEGORIES);
+      for(segment_idx = 1:num_chosen_segments)
+        current_segment = segment_option(segment_idx);
+        current_assessments(segment_idx, :) = ...
+            all_current_assessments(current_segment, :);
       end
       
       assessments{student_idx} = current_assessments;

@@ -1,3 +1,3 @@
 Experiments
 
-Scripts that run different experiments. The 'main' functions of projects go here. 
+Scripts that run different experiments. Each project should have it's own directory named <short_description>_<author_initials>. 

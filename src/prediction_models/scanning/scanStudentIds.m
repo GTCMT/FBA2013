@@ -1,9 +1,11 @@
-function [student_ids] = scanStudentIds(band_option, instrument_option)
+function [student_ids] = scanStudentIds(band_option, instrument_option, ...
+                                        root_path)
 %SCANSTUDENTIDS Return student Ids for given band and instrument
 %
 % input:
 %   band_option (string): 'middle', 'concert' or 'symphonic'
 %   instrument_option (string): instrument
+%   rooth_path (string): path to /prediction_models.
 %
 %   Instruments (incomplete list?):
 %     Alto Saxophone
@@ -30,7 +32,7 @@ function [student_ids] = scanStudentIds(band_option, instrument_option)
 %   N-by-1 vector of student ids
 
 % path to excel file:
-xls_path = '../../../FBA2013';
+xls_path = '../../FBA2013';
 
 switch band_option
     case 'middle'
@@ -44,7 +46,8 @@ switch band_option
         return;
 end
 
-[num,text] = xlsread(file_name, 1);
+file_path = [[root_path xls_path '/' file_name]];
+[num,text] = xlsread(file_path, 1);
 
 % find index of first id for this instrument:
 index = 1;
