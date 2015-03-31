@@ -8,6 +8,7 @@ function predictions = pitchFeaturesPredictLabels()
   INSTRUMENT_OPTION = 'Bb Clarinet';
   SEGMENT_OPTION = [1;2;3;4;5];
   SCORE_OPTION = [];
+  HOP_SIZE = 512;
   audition_metadata = scanFBA(ROOT_PATH, FBA_RELATIVE_PATH, ...
                               BAND_OPTION, INSTRUMENT_OPTION, ...
                               SEGMENT_OPTION, SCORE_OPTION);
@@ -28,6 +29,11 @@ function predictions = pitchFeaturesPredictLabels()
       % Use all existing assessments.
       segment_assessments = student_assessments(segment_idx, :);
       segment_assessments = segment_assessments(segment_assessments ~= -1);
+      
+      pitches = estimatePitch(current_audio, Fs, HOP_SIZE);
+      current_notes = ...
+          noteSegmentationQuantization(current_audio, pitches, Fs, ...
+                                                   HOP_SIZE);
     end
   end
   predictions = 5;
