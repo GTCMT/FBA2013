@@ -1,16 +1,15 @@
 %% Predict labels using pitch features
 % CL@GTCMT 2015
-function predictions = pitchFeaturesPredictLabels()
+function predictions = predictLabels()
   % Options.
-  ROOT_PATH = '../../';
-  FBA_RELATIVE_PATH = '../../../../../../dataset/FBA2013';
+  FBA_RELATIVE_PATH = '../../../../dataset/FBA2013';
   BAND_OPTION = 'symphonic';
   INSTRUMENT_OPTION = 'Bb Clarinet';
   SEGMENT_OPTION = [1;2;3;4;5];
   SCORE_OPTION = [];
-  audition_metadata = scanFBA(ROOT_PATH, FBA_RELATIVE_PATH, ...
-                              BAND_OPTION, INSTRUMENT_OPTION, ...
-                              SEGMENT_OPTION, SCORE_OPTION);
+  audition_metadata = scanFBA(FBA_RELATIVE_PATH, BAND_OPTION, ...
+                              INSTRUMENT_OPTION, SEGMENT_OPTION, ...
+                              SCORE_OPTION);
               
   % One student at a time.
   num_segments = size(SEGMENT_OPTION, 1);

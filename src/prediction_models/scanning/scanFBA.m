@@ -4,9 +4,9 @@
 % described below.
 %
 %                         %%%% Input %%%%
-% root_path: string, the relative path to the /preditive_models directory.
-% fba_relative_path: string, the relative path to the FBA2013 directory 
-%                    containing audio files in your computer's file system.
+% fba_relative_path: string, the relative path from the /predictive_models
+%                    directory to the FBA2013 directory containing audio 
+%                    files in your computer's file system.
 % band_option:       string specifying the band: 'middle', 'concert' 
 %                    or 'symphonic'
 % instrument_option: string specifying instrument as it appears in the xls
@@ -25,18 +25,19 @@
 %
 % file_paths, segments, and assessments have the same index for a given
 % student.
-function audition_metadata = scanFBA(root_path, fba_relative_path, ...
-                                     band_option, instrument_option, ...
-                                     segment_option, score_option)
-                          
+function audition_metadata = scanFBA(fba_relative_path, band_option, ...
+                                     instrument_option, segment_option, ...
+                                     score_option)
+root_path = deriveRootPath();
+full_fba_relative_path = [root_path fba_relative_path];
 % Figure out which students we retrive metadata for.
 % student_ids is a N X 1 vector.
-student_ids = scanStudentIds(band_option, instrument_option, root_path);
+student_ids = scanStudentIds(band_option, instrument_option);
 
 % Gather metadata.
-file_paths = scanFilePaths(fba_relative_path, student_ids);
-segments = scanSegments(segment_option, student_ids, root_path);
-assessments = scanAssessments(segment_option, student_ids, root_path);
+file_paths = scanFilePaths(full_fba_relative_path, student_ids);
+segments = scanSegments(segment_option, student_ids);
+assessments = scanAssessments(segment_option, student_ids);
 % TODO(Yujia)
 % score = scanScore(instrument_option, score_option);
 score = [];
