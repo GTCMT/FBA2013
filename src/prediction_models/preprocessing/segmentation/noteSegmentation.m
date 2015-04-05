@@ -1,115 +1,66 @@
-% Time-series harmonics are segmented by note.
-%
-% harmonics: N*M vector, N -> harmonic index, M -> time
-% pitches_hz: M*1 vector, M -> time.
-% Fs: sample rate of audio
-% hop_size_samples: The number of samples per window
-% notes: N*2 cell vector, N -> note index. First index is an M*1 vector
-%           of harmonics, 2nd index is a metadata struct. 
-% metadata.start: time index of the beginning of the note.
-% metadata.stop: time index of the end of the note.
-% metadata.pitch_hz: the average pitch of the note.
-function notes = noteSegmentation(audio, pitches_hz, Fs, ...
-                                     hop_size_samples)
-% Notes must be longer than this in order to be used during prediction.
-SHORTEST_NOTE_SECONDS = 0.1;
+% Segment audio into notes using only pitch information. Pitches are
+% smoothed with a median filter, quantized, and boundaries are detected at
+% changes in values. Then, adjacent notes whose average pitches
+% (unquantized) are within 85 cents are merged together, starting with the
+% closest two notes.
+function notes = noteSegmentation(audio, pitches_hz, Fs, hop_size, ...
+                                  INTERVAL_THRESH_CENTS, ...
+                                  MIN_NOTE_SECONDS, POWER_THRESH_DB)
 % Number of necessary sequential pitch estimates for a note to be valid.
-shortest_note_hops = floor(SHORTEST_NOTE_SECONDS * Fs / hop_size_samples);
+min_note_windows = floor(MIN_NOTE_SECONDS * Fs / hop_size);
+num_windows = size(pitches_hz, 2);
 
-% Amount of intonation error where a pitch is still considered the same
-% note.
-PITCH_ERROR_THRESHOLD_CENTS = 60;
+% Smooth pitches.
+pitches_hz_smooth = medfilt1(pitches_hz, 5);
 
-window_size_samples = hop_size_samples;
+% Quantize to semitone.
+quantized_pitches = quantizePitch(pitches_hz_smooth);
 
+disp('Getting boundaries');
+% Find note boundaries.
+boundaries = [];
+past_pitch = -1;
+for(window_idx = 1:num_windows)
+  cur_pitch = quantized_pitches(window_idx);
+  if(past_pitch ~= cur_pitch)
+    boundaries = [boundaries; window_idx];
+  end
+end
+
+% Derive notes from boundaries.
+num_notes = size(boundaries, 1) - 1;
+notes(num_notes) = struct();
+notes = notes.';
+for(note_idx = 1:num_notes)
+  note_start_idx = boundaries(note_idx);
+  note_stop_idx = boundaries(note_idx + 1);
+  note_start = ((boundaries(note_idx) - 1) * hop_size) + 1;
+  note_stop = ((boundaries(note_idx + 1) - 1) * hop_size) + 1;
+  cur_pitches_hz = pitches_hz_smooth(1, note_start_idx:note_stop_idx);
+
+  notes(note_idx).audio = audio(note_start:note_stop);
+  notes(note_idx).start = note_start_idx;
+  notes(note_idx).stop = note_stop_idx;
+  notes(note_idx).duration = note_stop_idx - note_start_idx + 1;
+  notes(note_idx).pitches_hz = cur_pitches_hz;
+  notes(note_idx).mean_pitch_hz = mean(cur_pitches_hz);
+end
+
+notes = greedyPitchMerge(notes, INTERVAL_THRESH_CENTS);
+notes = noteThinning(notes, min_note_windows);
+
+% Remove notes below a power threshold.
+old_notes = notes;
 notes = [];
-note_idx = 1;
-
-pitches_hz_smooth = medfilt1(pitches_hz, 7);
-
-% Variables for storing a note.
-note_length_windows = 0;
-note_start_idx = 1;
-average_pitch_hz = -1;
-end_of_note = false;
-
-% Windows correspond to pitch estimates.
-num_windows = size(pitches_hz_smooth, 2);
-window_idx = 1;
-while (window_idx <= num_windows)
-  
-  while(~end_of_note && window_idx <= num_windows)
-    cur_pitch = pitches_hz_smooth(window_idx);
-    
-    % Reject bad pitches.
-    if(cur_pitch == -1)
-      end_of_note = true;
-      break;
-    end
-    
-    % Set average pitch for the first window of a note.
-    if(average_pitch_hz == -1)
-      average_pitch_hz = cur_pitch;
-    end
-    
-    % Pitch difference between current window pitch and the note pitch.
-    num_cents_diff = abs(intervalCents(cur_pitch, average_pitch_hz));
-    
-    % Current window is accept as part of the current note.
-    if(num_cents_diff < PITCH_ERROR_THRESHOLD_CENTS)
-      note_length_windows = note_length_windows + 1;
-      
-      % Add to the average pitch.
-      average_coeff = (note_length_windows - 1) / note_length_windows;
-      new_coeff = 1 / note_length_windows;
-      average_pitch_hz = average_coeff * average_pitch_hz + ...
-                      new_coeff * cur_pitch;
-                    
-      % Move up one window.
-      window_idx = window_idx + 1;
-      
-    % Current window is rejected; end of current note.
-    else
-      end_of_note = true;
-    end
-  end
-  
-  % Only add note to list of notes if it is long enough.
-  if(note_length_windows >= shortest_note_hops)
-    note_stop_idx = note_start_idx + note_length_windows - 1;
-    note_start_samples = (note_start_idx - 1) * hop_size_samples + 1;
-    note_stop_samples = (note_stop_idx - 1) * hop_size_samples + ...
-                        window_size_samples + 1;
-    
-    note = struct();
-    note.audio = audio(note_start_samples:note_stop_samples);
-    note.start = note_start_idx;
-    note.stop = note_stop_idx;
-    note.mean_pitch_hz = average_pitch_hz;
-    note.pitches_hz = pitches_hz_smooth(1, note.start:note.stop);
+num_notes = size(old_notes, 1);
+for (note_idx = 1:num_notes)
+  note = old_notes(note_idx);
+  note_power = mean(abs(note.audio));
+  note_power = note_power * note_power;
+  note_power_db = 10 * log10(note_power / 1);
+  if(note.duration > min_note_windows && note_power_db > POWER_THRESH_DB)
     notes = [notes; note];
-    
-    note_idx = note_idx + 1;
   end
-  
-  % Reset to new note. 
-  % This pitch estimate is bad, start next note at next pitch estimate.
-  if(cur_pitch == -1)
-    note_length_windows = 0;
-    average_pitch_hz = -1;
-    note_start_idx = window_idx + 1;
-    end_of_note = false;
-  % The pitch estimate was good, but it was rejected from the previous
-  % note. Use this pitch estimate in the next note.
-  else
-    note_length_windows = 1;
-    average_pitch_hz = cur_pitch;
-    note_start_idx = window_idx;
-    end_of_note = false;
-  end
-  
-  window_idx = window_idx + 1;
 end
 
 end
-

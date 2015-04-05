@@ -2,12 +2,12 @@
 % best offset from 440 tuning is selected by doing quantization at
 % different offsets and using the offset that gave the smalles root-mean-square
 % error.
-function pitches_quantized = quantizePitch(pitches_hz)
+function [pitches_quantized, min_offset] = quantizePitch(pitches_hz)
 SEARCH_RANGE_CENTS = 50;
 OFFSET_VAL_CENTS = 2;
 pitches_quantized = [];
 min_error = 10000; % Arbitrarily large.
-min_offset = -1; % For debugging.
+min_offset = -1;
 
 cur_offset = -1 * SEARCH_RANGE_CENTS;
 while(cur_offset <= SEARCH_RANGE_CENTS);
