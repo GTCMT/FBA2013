@@ -31,7 +31,6 @@ function predictions = createTrainingData(write_file_name)
   
   training_features = zeros(num_students, NUM_FEATURES);
   training_labels = zeros(num_students, num_labels);
-                
   % One student at a time.
   for(student_idx = 1:num_students)
     disp(['Processing student with id: ' num2str(student_idx)]);

@@ -7,7 +7,8 @@
 % segments = N*1 cell vector, each cell is a m*2 matrix,
 %            1st column = starting time, 2nd column is duration
 
-function segments = scanSegments(segment_option, student_ids, root_path)
+function segments = scanSegments(segment_option, student_ids)
+root_path = deriveRootPath();
 
 % //initialization 
 annPath = [root_path '../../FBA2013'];

@@ -1,6 +1,4 @@
-function [student_ids] = scanStudentIds(band_option, instrument_option, ...
-                                        root_path)
-%SCANSTUDENTIDS Return student Ids for given band and instrument
+%% SCANSTUDENTIDS Return student Ids for given band and instrument
 %
 % input:
 %   band_option (string): 'middle', 'concert' or 'symphonic'
@@ -30,6 +28,8 @@ function [student_ids] = scanStudentIds(band_option, instrument_option, ...
 %
 % output:
 %   N-by-1 vector of student ids
+function [student_ids] = scanStudentIds(band_option, instrument_option)
+root_path = deriveRootPath();
 
 % path to excel file:
 xls_path = '../../FBA2013';

@@ -10,12 +10,12 @@
 %               N -> student_id's, F -> segment, G -> category (all 26).
 %               For segment and category indices, see /FBA/README.txt.
 %               Segments returned in order specified by segment_option.
-function assessments = scanAssessments(segment_option, student_ids, ...
-                                       root_path)
+function assessments = scanAssessments(segment_option, student_ids)
 
 NUM_SEGMENTS = 10; % Rows.
 NUM_CATEGORIES = 26; % Columns.
 
+root_path = deriveRootPath();
 annotation_path = [root_path '../../FBA2013'];
 num_chosen_segments = size(segment_option, 1);
 num_students = length(student_ids);
