@@ -41,7 +41,7 @@ for (student_idx = 1:num_students)
 
     % Read assessment file.
     if (exist(file_path, 'file') == 2)
-      all_current_assessments = dlmread(file_path, ' ', ...
+      all_current_assessments = dlmread(file_path, '\t', ...
                                     [1 0 NUM_SEGMENTS NUM_CATEGORIES-1]);
       current_assessments = zeros(num_chosen_segments, NUM_CATEGORIES);
       for(segment_idx = 1:num_chosen_segments)
