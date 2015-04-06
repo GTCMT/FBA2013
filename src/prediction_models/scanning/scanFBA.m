@@ -37,7 +37,8 @@ student_ids = scanStudentIds(band_option, instrument_option);
 % Gather metadata.
 file_paths = scanFilePaths(full_fba_relative_path, student_ids);
 segments = scanSegments(segment_option, student_ids);
-assessments = scanAssessments(segment_option, student_ids);
+segment_option_remapped = segmentRemap(segment_option, instrument_option);
+assessments = scanAssessments(segment_option_remapped, student_ids);
 % TODO(Yujia)
 % score = scanScore(instrument_option, score_option);
 score = [];
