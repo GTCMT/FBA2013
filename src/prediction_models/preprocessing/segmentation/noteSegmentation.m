@@ -41,7 +41,7 @@ for(note_idx = 1:num_notes)
   notes(note_idx).audio = audio(note_start:note_stop);
   notes(note_idx).start = note_start_idx;
   notes(note_idx).stop = note_stop_idx;
-  notes(note_idx).duration = note_stop_idx - note_start_idx + 1;
+  notes(note_idx).duration = note_stop_idx - note_start_idx;
   notes(note_idx).pitches_hz = cur_pitches_hz;
   notes(note_idx).mean_pitch_hz = mean(cur_pitches_hz);
 end

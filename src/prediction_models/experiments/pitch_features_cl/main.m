@@ -1,6 +1,7 @@
 path = genpath('../..');
 addpath(path);
 
-p = predictLabels();
+createTrainingData('fake');
+% getAccuracy('fake');
 
 rmpath(path);
