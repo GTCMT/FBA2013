@@ -1,9 +1,23 @@
-function new_notes = noteThinning(notes, min_duration_windows)
+%% Note Thinning
+% CL@GTCMT 2015
+% new_notes = noteThinning(notes, min_dur_windows)
+% objective: Remove suprious notes on note boundaries.
+% algorithm: Any notes shorter than |min_dur_windows| gets merged with the
+%            neighbor closer in pitch.
+%
+% notes: Nx1 struct array of notes, ordered by occurence in time.
+% min_dur_windows: duration threshold. The unit is number of windows.
+% new_notes: Nx1 struct array of thinned notes.
+%
+% See noteSegmentation header comment for description of note struct.
+
+function new_notes = noteThinning(notes, min_dur_windows)
 new_notes = notes;
 num_notes = size(new_notes, 1);
 
+% The shortest note gets thinned first.
 [min_duration, min_idx] = min([new_notes.duration]);
-while(min_duration <= min_duration_windows)
+while(min_duration <= min_dur_windows)
   cur_note = new_notes(min_idx);
   
   % Choose which side to merge with.

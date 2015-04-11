@@ -1,7 +1,17 @@
+%% Merge Notes
+% CL@GTCMT 2015
+% merged_note = mergeNotes(left_note, right_note)
+% objective: Merge two adjacent notes into one. Helper function used in 
+%            noteSegmentation.
+% 
+% left_note: note struct, occurs earlier in time.
+% right_note: note struct, occurs later in time.
+% merged_note: note struct, the result of merging the left and right notes.
+%
+% See noteSegmentation header comment for description of note struct.
 
 function merged_note = mergeNotes(left_note, right_note)
 
-% Merge two notes.
 merged_note = struct();
 
 merged_note.audio = [left_note.audio; right_note.audio];
