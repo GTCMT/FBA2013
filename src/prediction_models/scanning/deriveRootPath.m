@@ -1,4 +1,4 @@
-%% Derive path to /predict_models in runtime.
+%% Derive path to /predict_models at runtime.
 % CL@GTCMT 2015
 % root_path: string, relative path from working directory to
 %            the /predict_models directory.
