@@ -67,6 +67,7 @@ frh	French Horn
 obo 	Oboe
 sna	snare drum
 xyl	xylophone
+tim	timpani
 
 
 3. *_segment.txt
