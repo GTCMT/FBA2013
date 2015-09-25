@@ -1,4 +1,4 @@
-﻿Introduction
+Introduction
 ============
 This dataset contains the annotations and assessments of student performances for the 2013–2014 Florida all-state auditions. The dataset is available on request from the Florida Bandmasters Association (FBA).
 
@@ -65,6 +65,9 @@ flu 	Flute
 axs 	Alto Saxophone
 frh	French Horn
 obo 	Oboe
+sna	snare drum
+xyl	xylophone
+
 
 3. *_segment.txt
 ----------------
