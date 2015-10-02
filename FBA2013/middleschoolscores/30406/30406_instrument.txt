@@ -1,7 +1,7 @@
 // data format: instrument name(str)	activity name(str)
-xyl	etude
-sna	etude
-tim	etude
+xyl	malletEtude
+sna	snareEtude
+tim	timpaniEtude
 xyl	scalesChromatic
 xyl	scalesMajor
 xyl	sightReading
