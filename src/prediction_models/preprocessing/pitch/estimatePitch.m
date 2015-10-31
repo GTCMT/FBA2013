@@ -1,51 +1,55 @@
 %% Estimate Pitch
-% CL@GTCMT, 2015
-% pitches = estimatePitch(audio, Fs, hop_size_samples)
+% AP@GTCMT, 2015
+% [f0, timeInSec] = estimatePitch(audio, Fs, hopSizeSamples, wSize, algo)
 % objective: Estimate pitch (monophonic) from an audio signal.
 %
+% INPUTS
 % audio: Nx1 float array, the mono signal.
 % Fs: int, the sample rate.
-% hop_size_samples: The number of samples between each pitch estimation.
-% pitches: 1xM float: pitch estimates, in hertz.
-%
-% Dependency: yin --> http://www.auditory.org/postings/2002/26.html
+% hop: The number of samples between each pitch estimation.
+% wsize: integration window size
+% algo: string specifying the type of algorithm to be used. Can take the
+%       following values:-
+%       'yin': for the yin algorithm
+%       'acf': standard acf algorithm
+%       'wav': wavelet based pitch tracker
+% 
+% OUTPUTS
+% f0: 1xM float, pitch estimates, in hertz.
+% timeInSec: 1xM float, time stamp for the window
 
-function pitches = estimatePitch(audio, Fs, hop_size_samples)
+function [f0, timeInSec] = estimatePitch(audio, Fs, hop, wSize, algo)
 
-% Yin seems to crash occasionally when its hop size is larger than 128. 
-% To support larger hop sizes, take the median of shorter estimates.
-INTERNAL_HOP_SIZE_SAMPLES = 128;
-num_merge_windows = hop_size_samples / INTERNAL_HOP_SIZE_SAMPLES;
-
-if(ceil(num_merge_windows) ~= floor(num_merge_windows))
-  warning(['Chosen hop size (' num2str(hop_size_samples) ') must be a ' ...
-           'multiple of the internal hop size (' ...
-            num2str(INTERNAL_HOP_SIZE_SAMPLES) ').']);
+switch nargin
+    case 0
+        error('Audio and Fs must be entered as arguments to the function');
+    case 1
+        error('Fs has to be entered as arguments to the function ');
+    case 2
+        hop = 512;
+        wSize = 1024;
+        algo = 'acf';
+    case 3
+        wSize = 1024;
+        algo = 'acf';
+    case 4
+        algo = 'acf';
 end
 
-% Set yin options.
-YIN_OPTIONS = struct();
-YIN_OPTIONS.sr = Fs;
-YIN_OPTIONS.hop = INTERNAL_HOP_SIZE_SAMPLES;
+algoOptions = struct();
+algoOptions.sr = Fs;
+algoOptions.hop = hop;
+algoOptions.wsize = wSize;
 
-% The yin algorithm results. Nan's replaced with 0's.
-YIN_RESULT = yin(audio, YIN_OPTIONS);
-
-% Convert to hertz.
-yin_pitches = pow2(YIN_RESULT.f0) .* 440;
-yin_pitches(isnan(yin_pitches)) = 0;
-
-% Merge internal windows into external windows. Pitch becomes median of 
-% short-time values.
-num_windows = floor(size(yin_pitches, 2) / num_merge_windows);
-pitches = zeros(1, num_windows);
-merge_start = 1;
-merge_stop = merge_start + num_merge_windows - 1;
-for(window_idx = 1:num_windows)
-  pitches(window_idx) = median(yin_pitches(merge_start:merge_stop));
-  merge_start = merge_start + num_merge_windows;
-  merge_stop = merge_start + num_merge_windows - 1;
+if strcmp(algo,'yin') == 1
+    [f0, timeInSec] = yinAlgo(audio,algoOptions);
+elseif strcmp(algo,'acf') == 1
+    [f0, timeInSec] = acf(audio,algoOptions);
+elseif strcmp(algo,'wav') == 1
+    f0 = wavelet(audio,algoOptions);
+else
+    error('Choose algo as "yin", "acf" or "wav" only');
 end
 
-end
 
+end
