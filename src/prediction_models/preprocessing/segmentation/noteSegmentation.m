@@ -52,6 +52,7 @@ for(window_idx = 1:num_windows)
   if(past_pitch ~= cur_pitch)
     boundaries = [boundaries; window_idx];
   end
+  past_pitch=cur_pitch;
 end
 
 % Derive notes from boundaries.
