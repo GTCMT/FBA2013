@@ -3,7 +3,7 @@ close all;
 clc;
 
 DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-write_file_name = 'middleOboe4';
+write_file_name = 'middleOboe2';
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -17,7 +17,7 @@ NUM_FOLDS = 69;
 load([full_data_path write_file_name]);
 
 % Average the assessments to get one label.
-labels = mean(labels, 2);
+labels = mean([labels(:,3),labels(:,5)], 2);
 
 % meanLbl=mean(labels);
 % FinalLabels=zeros(size(labels));

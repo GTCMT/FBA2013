@@ -7,12 +7,16 @@
 % pitchvals: pitch values in Hz of the segmented note
 %
 % OUTPUTS
-% NoteDeviation: single float values showing standard deviation in terms of
-% MIDI notes across the input note
+% NoteDeviation: single float values showing standard deviation in terms of MIDI notes across the input note
+% countGreaterStdDev: number of points in the note deviation that are beyond the 1 * std dev of the note
 
-function [NoteDeviation]=NoteSteadinessMeasure(pitchvals)
+function [NoteDeviation, countGreaterStdDev]=NoteSteadinessMeasure(pitchvals)
 
 pitchvalsMidi=69+12*log2(pitchvals/440);
 NoteDeviation=std(pitchvalsMidi);
+
+% count the number of deviations more than 1 std dev
+countGreaterStdDev=sum(abs(pitchvalsMidi-mean(pitchvalsMidi))>NoteDeviation)/length(pitchvalsMidi);
+
 
 end
