@@ -23,7 +23,7 @@ spec_energy  = sum(abs(fft(frames)));
 nbins = 100;
 amp_hist = hist(spec_energy, nbins);
 amp_hist = smooth(amp_hist);
-% plot(amp_hist);
 
+% plot(amp_hist);
 amp_hist_feature = kurtosis(amp_hist);
 end
