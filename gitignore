@@ -13,6 +13,7 @@
 # Backup Files #
 ################
 *.m~
+*.asv
 
 # Packages #
 ############
@@ -36,9 +37,15 @@
 # OS generated files #
 ######################
 .DS_Store
+desktop.ini
 .DS_Store?
 ._*
 .Spotlight-V100
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# MATLAB path file #
+####################
+pathdef.m
+

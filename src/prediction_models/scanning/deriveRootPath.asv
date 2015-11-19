@@ -22,7 +22,7 @@ absolute_file_path = pwd();
 root_directory_idx = strfind(absolute_file_path, ROOT_DIRECTORY);
 sub_path = absolute_file_path(root_directory_idx:end);
 num_subdirectories = length(strfind(sub_path, slashtype));
-root_path = repmat(['..' slashtype], 1, num_subdirectories);
+root_path = repmat(['..' slash, 1, num_subdirectories);
 
 end
 
