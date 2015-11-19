@@ -52,6 +52,7 @@ for(window_idx = 1:num_windows)
   if(past_pitch ~= cur_pitch)
     boundaries = [boundaries; window_idx];
   end
+  past_pitch=cur_pitch;
 end
 
 % Derive notes from boundaries.
@@ -60,7 +61,7 @@ notes(num_notes) = struct();
 notes = notes.';
 for(note_idx = 1:num_notes)
   note_start_idx = boundaries(note_idx);
-  note_stop_idx = boundaries(note_idx + 1);
+  note_stop_idx = boundaries(note_idx + 1)-1;
   note_start = ((boundaries(note_idx) - 1) * hop_size) + 1;
   note_stop = ((boundaries(note_idx + 1) - 1) * hop_size) + 1;
   cur_pitches_hz = pitches_hz_smooth(1, note_start_idx:note_stop_idx);
@@ -68,7 +69,7 @@ for(note_idx = 1:num_notes)
   notes(note_idx).audio = audio(note_start:note_stop);
   notes(note_idx).start = note_start_idx;
   notes(note_idx).stop = note_stop_idx;
-  notes(note_idx).duration = note_stop_idx - note_start_idx;
+  notes(note_idx).duration = note_stop_idx - note_start_idx+1;
   notes(note_idx).pitches_hz = cur_pitches_hz;
   notes(note_idx).mean_pitch_hz = mean(cur_pitches_hz);
 end
@@ -76,8 +77,41 @@ end
 % Merge adjacent notes which are close in frequency.
 notes = greedyPitchMerge(notes, interval_thresh_cents);
 
+% Remove zero pitch valued notes
+num_notes = size(notes, 1);
+store_notes=notes;
+notes=[];
+for(note_idx = 1:num_notes)
+    if store_notes(note_idx).mean_pitch_hz~=0
+        note=store_notes(note_idx);
+        notes=[notes;note];
+    end
+end
+
+% check for merge criteria in only the contiguous notes
+num_notes = size(notes, 1);
+sub_notes=notes;
+notes=[];
+start_index = 1;
+end_index = 1;
+for note_idx=1:num_notes-1
+    if sub_notes(note_idx).stop+1~=sub_notes(note_idx+1).start
+        end_index = note_idx;
+        dummy = noteThinning(sub_notes(start_index:end_index),min_note_windows);
+        notes = [notes; dummy];
+        start_index = end_index + 1;
+    end
+end
+
+dummy = noteThinning(sub_notes(start_index:end), min_note_windows);
+notes = [notes; dummy];
+
+if isempty(notes)==1
+    notes=sub_notes;
+end
+
 % Thin notes: coalesce spurious notes at boundaries.
-notes = noteThinning(notes, min_note_windows);
+% notes = noteThinning(notes, min_note_windows);
 
 % Remove notes below a power threshold.
 old_notes = notes;
