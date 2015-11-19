@@ -15,9 +15,9 @@ function [Feature]=IOIfeatures (note)
 
 noNotes=10;
 IOIdur=zeros(noNotes-1,1);
-extraNotes=noNotes-floor(size(noNotes)/noNotes);
+extraNotes=noNotes-floor(size(note)/noNotes);
 cnt=0;
-for i= 1:noNotes:floor(size(noNotes)/noNotes)
+for i= 1:noNotes:floor(size(note)/noNotes)
     for j=i:i+noNotes-1
         strt1 = note(j).start;
         strt2 = note(j+1).start;
