@@ -9,8 +9,7 @@
 %
 % OUTPUT:
 % Feature: float value corresponding to fluctuations in the IOI > std dev
-% across number of notes specified by noNotes variable. Lower the value,
-% better the performer
+% across number of notes specified by noNotes variable. Lower the value, b
 
 function [Feature]=IOIfeatures (note)
 
@@ -43,6 +42,6 @@ end
     cnt=cnt+1;
     stdIOIdur=std(IOIdur);
     OutOfRangeStd(cnt)=sum(abs(IOIdur-mean(IOIdur))>stdIOIdur)/noNotes;
-    Feature=mean(OutOfRangeStd);
+Feature=mean(OutOfRangeStd);
 
 end
