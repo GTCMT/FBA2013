@@ -1,6 +1,14 @@
 function getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION)
 
-DATA_PATH = 'experiments/pitched_instrument_regression/data/';
+if ismac
+    % Code to run on Mac plaform
+    slashtype='/';
+elseif ispc
+    % Code to run on Windows platform
+    slashtype='\';
+end
+
+DATA_PATH = ['experiments' slashtype 'pitched_instrument_regression' slashtype 'data' slashtype];
 write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION)];
 
 % Check for existence of path for writing extracted features.
@@ -11,11 +19,11 @@ write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION)];
     error('Error in your file path.');
   end
 
-NUM_FEATURES = 9;
+NUM_FEATURES = 27;
 HOP_SIZE = 512;
 WINDOW_SIZE = 1024;
 % Scanning Options.
-FBA_RELATIVE_PATH = '../../../FBA2013data';
+FBA_RELATIVE_PATH = ['..' slashtype '..' slashtype '..' slashtype 'FBA2013data'];
 % BAND_OPTION = 'middle';
 % INSTRUMENT_OPTION = 'Oboe';
 % SEGMENT_OPTION = 2;
@@ -63,7 +71,6 @@ for student_idx = 1:num_students
   % Store all assessments.
   segment_assessments = student_assessments(1, :);
   segment_assessments = segment_assessments(segment_assessments ~= -1);
-
   labels(student_idx, :) = segment_assessments;
 end
 
