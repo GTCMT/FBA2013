@@ -5,7 +5,7 @@ clc
 BAND_OPTION = 'middle';
 INSTRUMENT_OPTION = 'Oboe';
 
-for i = 5
+for i = 1:4
 
     getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, i);
 
