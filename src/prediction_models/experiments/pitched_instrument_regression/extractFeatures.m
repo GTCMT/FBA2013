@@ -21,18 +21,19 @@ function [features] = extractFeatures(audio, Fs, wSize, hop)
     note = noteSegmentation(audio, f0, Fs, hop, 50, 0.2 , -50);
 
     features(1,1) = PlayingNotes100CntsHist(f0);
-
+    
     for i=1:size(note,1)
         a = note(i).pitches_hz;
         b = note(i).audio;
         [stdDev(i) countGreaterStdDev(i)]=NoteSteadinessMeasure(a);
-
+        
         timbreMeasure(:,i) =timbreDev(note(1).audio,Fs);
 
         amp_hist_feature(i) = ampHist(b,Fs);
 
         ampenv_peaks(i) = ampEnvPeaks(b, Fs);
     end
+    
     
     features(1,2)=mean(stdDev);
     features(1,3)=std(stdDev);
@@ -63,5 +64,7 @@ function [features] = extractFeatures(audio, Fs, wSize, hop)
     features(1,24)=max(ampenv_peaks);
     features(1,25)=min(ampenv_peaks);
     features(1,26)=max(ampenv_peaks)-min(ampenv_peaks);
+    
+    features(1,27) = numGoodNotes(note);
     
 end
