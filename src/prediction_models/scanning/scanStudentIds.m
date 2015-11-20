@@ -31,8 +31,16 @@
 function [student_ids] = scanStudentIds(band_option, instrument_option)
 root_path = deriveRootPath();
 
+if ismac
+    % Code to run on Mac plaform
+    slashtype='/';
+elseif ispc
+    % Code to run on Windows platform
+    slashtype='\';
+end
+
 % path to excel file:
-xls_path = '../../FBA2013';
+xls_path = ['..' slashtype '..' slashtype 'FBA2013'];
 
 switch band_option
     case 'middle'
@@ -46,7 +54,7 @@ switch band_option
         return;
 end
 
-file_path = [[root_path xls_path '/' file_name]];
+file_path = [[root_path xls_path slashtype file_name]];
 [num,text] = xlsread(file_path, 1);
 
 % find index of first id for this instrument:

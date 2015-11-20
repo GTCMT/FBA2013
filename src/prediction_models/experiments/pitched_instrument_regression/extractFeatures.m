@@ -15,6 +15,7 @@
 
 function [features] = extractFeatures(audio, Fs, wSize, hop)
 
+    features=zeros(1,27);
     algo='acf';
 
     [f0, ~] = estimatePitch(audio, Fs, hop, wSize, algo);
