@@ -34,8 +34,10 @@ minOffset = round(fs/1000); % considering 1000Hz as higher freq
 autoCorrelation = smooth(autoCorrelation,'loess');
 % find 1st minimum to further narrow down search region
 [~, indmin] = findpeaks(-autoCorrelation);
-if(minOffset<=indmin(1) && indmin(1)+3<maxOffset )
-    minOffset = indmin(1);
+if(~isempty(indmin))
+    if(minOffset<=indmin(1) && indmin(1)+3<maxOffset )
+        minOffset = indmin(1);
+    end
 end
 
 [maxima, indmax] = findpeaks(autoCorrelation(minOffset:maxOffset));

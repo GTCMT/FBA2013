@@ -11,10 +11,10 @@
 % numGoodNotesFeat: % of good notes in a performance based on deviation
 % from average pitch
 
-function numGoodNotesFeat = numGoodNotes(notes)
+function numGoodNotesFeat = numGoodNotes(note)
 
 numBadNotes = 0;
-L = size(notes,1);
+L = size(note,1);
 for i=1:L
     a = note(i).pitches_hz;
     [~, countGreaterStdDev]=NoteSteadinessMeasure(a);

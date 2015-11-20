@@ -61,9 +61,9 @@ end
 % therefore this hack
 old_path=pwd;
 file_path = [root_path xls_path];
-cd(file_path);
+cd file_path;
 [num,text] = xlsread(file_name, 1);
-cd(old_path);
+cd old_path;
 
 % find index of first id for this instrument:
 index = 1;
