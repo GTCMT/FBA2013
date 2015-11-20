@@ -23,7 +23,7 @@ segments = scanSegments(seg, str2num(FileNumber));
     [f0, timeInSec] = estimatePitch(audio(strtsmpl:endsmpl), Fs, hop, wSize, algo);
     note = noteSegmentation(audio(strtsmpl:endsmpl), f0, Fs, hop, 50, 0.2 , -50);
 
-    [Feature]=IOIfeatures (note);
+    [Feature(seg)]=IOIfeatures (note);
 %     PitchRead=[];
 %     PitchRead(:,1)=timeInSec;
 %     PitchRead(:,2)=f0;
