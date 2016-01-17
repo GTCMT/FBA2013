@@ -11,7 +11,7 @@
 % p: p value.
 % r: correlation coefficient between truth & prediction.
 
-function [Rsq, S, p, r] = crossValidation(labels, features, n_fold)
+function [Rsq, S, p, r, predictions] = crossValidation(labels, features, n_fold)
 
 % Preallocate memory.
 num_data = size(labels, 1);
@@ -35,11 +35,12 @@ for (fold = 1:n_fold)
   train_features = features(train_indices, :);
   
   % Zero-cross whitening.
-  [train_features, test_features] = whiten(train_features, test_features);
+%   [train_features, test_features] = whiten(train_features, test_features);
+  [train_features, test_features] = NormalizeFeatures(train_features, test_features);
   
   % Train the classifier and get predictions for the current fold.
-  svm = svmtrain(train_labels, train_features, '-s 4');
-  cur_predictions = svmpredict(test_labels, test_features, svm);
+  svm = svmtrain(train_labels, train_features, '-s 4 -q');
+  cur_predictions = svmpredict(test_labels, test_features, svm, '-q');
   
   % Store current predictions and their corresponding labels.
   num_test_data = size(test_labels, 1);

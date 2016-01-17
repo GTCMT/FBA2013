@@ -8,7 +8,5 @@ INSTRUMENT_OPTION = 'Oboe';
 addpath(pathdef);
 
 for i = 1:4
-
     getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, i);
-
 end

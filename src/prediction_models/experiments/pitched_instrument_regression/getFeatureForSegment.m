@@ -19,7 +19,7 @@ write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION)];
     error('Error in your file path.');
   end
 
-NUM_FEATURES = 27;
+NUM_FEATURES = 24;
 HOP_SIZE = 512;
 WINDOW_SIZE = 1024;
 % Scanning Options.

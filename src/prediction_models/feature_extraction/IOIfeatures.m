@@ -14,20 +14,25 @@
 
 function [Feature]=IOIfeatures (note)
 
+if isempty(note)~=1
 noNotes=10;
 IOIdur=zeros(noNotes-1,1);
 extraNotes=mod(length(note),noNotes);
 cnt=0;
+idx=0;
 for i= 1:noNotes:length(note)-extraNotes
     for j=i:i+noNotes-2
         strt1 = note(j).start;
         strt2 = note(j+1).start;
         
-        IOIdur(j) = strt2-strt1;
+        idx=idx+1;
+        IOIdur(idx) = strt2-strt1;
     end
     stdIOIdur=std(IOIdur);
     cnt=cnt+1;
-    OutOfRangeStd(cnt)=sum(abs(IOIdur-mean(IOIdur))>stdIOIdur)/noNotes;
+    OutOfRangeStd(cnt)=sum(abs(IOIdur-mean(IOIdur))>stdIOIdur)/(noNotes-1);
+    idx=0;
+    IOIdur=zeros(noNotes-1,1);
     
 end
 
@@ -40,9 +45,19 @@ if extraNotes~=0 && extraNotes>1
         IOIdur(i) = strt2-strt1;
     end
 end
-    cnt=cnt+1;
-    stdIOIdur=std(IOIdur);
-    OutOfRangeStd(cnt)=sum(abs(IOIdur-mean(IOIdur))>stdIOIdur)/noNotes;
-    Feature=mean(OutOfRangeStd);
 
+    if isempty(IOIdur)~=1
+        cnt=cnt+1;
+        stdIOIdur=std(IOIdur);
+        OutOfRangeStd(cnt)=sum(abs(IOIdur-mean(IOIdur))>stdIOIdur)/(extraNotes-1);
+    end
+    
+    if exist('OutOfRangeStd')~=0
+        Feature=mean(OutOfRangeStd);
+    else
+        Feature=0;
+    end
+else
+    Feature=0;
+end
 end

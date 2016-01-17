@@ -88,27 +88,27 @@ for(note_idx = 1:num_notes)
     end
 end
 
-% check for merge criteria in only the contiguous notes
-num_notes = size(notes, 1);
-sub_notes=notes;
-notes=[];
-start_index = 1;
-end_index = 1;
-for note_idx=1:num_notes-1
-    if sub_notes(note_idx).stop+1~=sub_notes(note_idx+1).start
-        end_index = note_idx;
-        dummy = noteThinning(sub_notes(start_index:end_index),min_note_windows);
-        notes = [notes; dummy];
-        start_index = end_index + 1;
-    end
-end
-
-dummy = noteThinning(sub_notes(start_index:end), min_note_windows);
-notes = [notes; dummy];
-
-if isempty(notes)==1
-    notes=sub_notes;
-end
+% % check for merge criteria in only the contiguous notes
+% num_notes = size(notes, 1);
+% sub_notes=notes;
+% notes=[];
+% start_index = 1;
+% end_index = 1;
+% for note_idx=1:num_notes-1
+%     if sub_notes(note_idx).stop+1~=sub_notes(note_idx+1).start
+%         end_index = note_idx;
+%         dummy = noteThinning(sub_notes(start_index:end_index),min_note_windows);
+%         notes = [notes; dummy];
+%         start_index = end_index + 1;
+%     end
+% end
+% 
+% dummy = noteThinning(sub_notes(start_index:end), min_note_windows);
+% notes = [notes; dummy];
+% 
+% if isempty(notes)==1
+%     notes=sub_notes;
+% end
 
 % Thin notes: coalesce spurious notes at boundaries.
 % notes = noteThinning(notes, min_note_windows);
