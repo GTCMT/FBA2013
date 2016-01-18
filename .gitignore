@@ -13,6 +13,7 @@
 # Backup Files #
 ################
 *.m~
+*.asv
 
 # Packages #
 ############
@@ -32,11 +33,13 @@
 *.log
 *.sql
 *.sqlite
+*.mat
  
 # OS generated files #
 ######################
 .DS_Store
 .DS_Store?
+desktop.ini
 ._*
 .Spotlight-V100
 .Trashes
