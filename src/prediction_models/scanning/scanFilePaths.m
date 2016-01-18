@@ -13,9 +13,17 @@ function [file_paths] = scanFilePaths(fba_relative_path, student_ids)
 %   'middleschoolscores/student_id/student_id.mp3'
 %   'symphonicbandscores/student_id/student_id.mp3'
 
-folder_concert      = [fba_relative_path '/concertbandscores'];
-folder_middle       = [fba_relative_path '/middleschoolscores'];
-folder_symphonic    = [fba_relative_path '/symphonicbandscores'];
+if ismac
+    % Code to run on Mac plaform
+    slashtype='/';
+elseif ispc
+    % Code to run on Windows platform
+    slashtype='\';
+end
+
+folder_concert      = [fba_relative_path slashtype 'concertbandscores'];
+folder_middle       = [fba_relative_path slashtype 'middleschoolscores'];
+folder_symphonic    = [fba_relative_path slashtype 'symphonicbandscores'];
 
 N           = size(student_ids,1);
 file_paths  = cell(size(student_ids));
@@ -23,14 +31,14 @@ file_paths  = cell(size(student_ids));
 for i = 1:N
     
     % see if the folder for this id exists:
-    if exist([folder_concert '/' num2str(student_ids(i))]) == 7
-        file_paths{i} = [folder_concert '/' num2str(student_ids(i)) '/' num2str(student_ids(i)) '.mp3'];
+    if exist([folder_concert slashtype num2str(student_ids(i))]) == 7
+        file_paths{i} = [folder_concert slashtype num2str(student_ids(i)) slashtype num2str(student_ids(i)) '.mp3'];
         
-    elseif exist([folder_middle '/' num2str(student_ids(i))]) == 7
-        file_paths{i} = [folder_middle '/' num2str(student_ids(i)) '/' num2str(student_ids(i)) '.mp3'];
+    elseif exist([folder_middle slashtype num2str(student_ids(i))]) == 7
+        file_paths{i} = [folder_middle slashtype num2str(student_ids(i)) slashtype num2str(student_ids(i)) '.mp3'];
         
-	elseif exist([folder_symphonic '/' num2str(student_ids(i))]) == 7
-        file_paths{i} = [folder_symphonic '/' num2str(student_ids(i)) '/' num2str(student_ids(i)) '.mp3'];
+	elseif exist([folder_symphonic slashtype num2str(student_ids(i))]) == 7
+        file_paths{i} = [folder_symphonic slashtype num2str(student_ids(i)) slashtype num2str(student_ids(i)) '.mp3'];
         
     else
         disp(['File not found, id: ' num2str(student_ids(i)) '.']);

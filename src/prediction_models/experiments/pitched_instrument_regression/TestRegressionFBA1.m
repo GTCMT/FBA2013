@@ -5,7 +5,7 @@ clc;
 addpath(pathdef);
 
 DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-write_file_name = 'middleOboe1';
+write_file_name = 'middleOboe4';
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -26,7 +26,9 @@ labels = mean([labels(:,3),labels(:,2)], 2); %labels(:,3),labels(:,5)
 % FinalLabels(labels>meanLbl)=1;
 
 % Evaluate model using cross validation.
-% [FinalAcc] = crossValidationRegression(FinalLabels, features, NUM_FOLDS);
+[Rsq_allFeat, S_allFeat, p_allFeat, r_allFeat] = crossValidation(labels, features, NUM_FOLDS);
+display('With all the features');
+display(r_allFeat);
 
 % greedy feature combination
 [~,numFeat]=size(features);

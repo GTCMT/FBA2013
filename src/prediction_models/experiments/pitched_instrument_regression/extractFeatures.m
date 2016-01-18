@@ -18,7 +18,8 @@ function [features] = extractFeatures(audio, Fs, wSize, hop)
     features=zeros(1,24);
 %     algo='acf';
     algo='acf';
-
+    thresh=0.4;
+    
     [f0, ~] = estimatePitch(audio, Fs, hop, wSize, algo);
     note = noteSegmentation(audio, f0, Fs, hop, 50, 0.2 , -50);
 
@@ -67,7 +68,7 @@ function [features] = extractFeatures(audio, Fs, wSize, hop)
     features(1,21)=min(ampenv_peaks);
     features(1,22)=max(ampenv_peaks)-min(ampenv_peaks);
     
-    features(1,23) = numGoodNotes(note);
+    features(1,23) = numGoodNotes(note,thresh);
     
     features(1,24)=IOIfeatures(note);
     
