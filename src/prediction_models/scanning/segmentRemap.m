@@ -38,6 +38,36 @@ elseif strcmp(instrument_option, 'Bb Clarinet')
     segment_option_remapped(segment_option == 3) = 3;
     segment_option_remapped(segment_option == 4) = 4;
     segment_option_remapped(segment_option == 5) = 5;
+elseif strcmp(instrument_option, 'Oboe')
+    segment_option_remapped(segment_option == 1) = 1;
+    segment_option_remapped(segment_option == 2) = 2;
+    segment_option_remapped(segment_option == 3) = 3;
+    segment_option_remapped(segment_option == 4) = 4;
+    segment_option_remapped(segment_option == 5) = 5;
+elseif strcmp(instrument_option, 'Trumpet')
+    segment_option_remapped(segment_option == 1) = 1;
+    segment_option_remapped(segment_option == 2) = 2;
+    segment_option_remapped(segment_option == 3) = 3;
+    segment_option_remapped(segment_option == 4) = 4;
+    segment_option_remapped(segment_option == 5) = 5;
+elseif strcmp(instrument_option, 'Flute')
+    segment_option_remapped(segment_option == 1) = 1;
+    segment_option_remapped(segment_option == 2) = 2;
+    segment_option_remapped(segment_option == 3) = 3;
+    segment_option_remapped(segment_option == 4) = 4;
+    segment_option_remapped(segment_option == 5) = 5;
+elseif strcmp(instrument_option, 'Trombone')
+    segment_option_remapped(segment_option == 1) = 1;
+    segment_option_remapped(segment_option == 2) = 2;
+    segment_option_remapped(segment_option == 3) = 3;
+    segment_option_remapped(segment_option == 4) = 4;
+    segment_option_remapped(segment_option == 5) = 5;
+elseif strcmp(instrument_option, 'Alto Saxophone')
+    segment_option_remapped(segment_option == 1) = 1;
+    segment_option_remapped(segment_option == 2) = 2;
+    segment_option_remapped(segment_option == 3) = 3;
+    segment_option_remapped(segment_option == 4) = 4;
+    segment_option_remapped(segment_option == 5) = 5;
 else
   warning(['Segments for ' instrument_option ' have not been mapped ' ...
            'yet. Define the mapping yourself in '...
