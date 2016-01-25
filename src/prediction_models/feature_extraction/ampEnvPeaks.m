@@ -19,7 +19,7 @@ frames = Windows(audio_segment,wSize,hop,fs);
 N = size(frames,2);
 
 % calculation of frame energy
-spec_energy  = sum(abs(fft(frames)));
+spec_energy  = max(abs((frames)));
 
 %calculation of delta energy
 spec_energy_shifted = circshift(spec_energy,1,2);
@@ -29,7 +29,5 @@ del_energy = smooth(del_energy);
 [~, locs] = findpeaks(del_energy);
 % plot(del_energy);
 ampenv_peaks = length(locs)/N;
-
-
 
 end

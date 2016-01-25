@@ -37,7 +37,7 @@ for i= 1:noNotes:length(note)-extraNotes
 end
 
 IOIdur=zeros(extraNotes-1,1);
-if extraNotes~=0 && extraNotes>1
+if extraNotes>1
     for i=1:extraNotes-1
         strt1 = note(i).start;
         strt2 = note(i+1).start;

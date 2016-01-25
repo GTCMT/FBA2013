@@ -39,7 +39,7 @@ for (fold = 1:n_fold)
   [train_features, test_features] = NormalizeFeatures(train_features, test_features);
   
   % Train the classifier and get predictions for the current fold.
-  svm = svmtrain(train_labels, train_features, '-s 4 -q');
+  svm = svmtrain(train_labels, train_features, '-s 3 -q');
   cur_predictions = svmpredict(test_labels, test_features, svm, '-q');
   
   % Store current predictions and their corresponding labels.

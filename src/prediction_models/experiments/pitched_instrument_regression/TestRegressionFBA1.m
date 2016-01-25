@@ -4,8 +4,8 @@ clc;
 
 addpath(pathdef);
 
-DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-write_file_name = 'middleOboe4';
+DATA_PATH = 'experiments/pitched_instrument_regression/data_wavelet/';
+write_file_name = 'middleOboe1';
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -29,6 +29,7 @@ labels = mean([labels(:,3),labels(:,2)], 2); %labels(:,3),labels(:,5)
 [Rsq_allFeat, S_allFeat, p_allFeat, r_allFeat] = crossValidation(labels, features, NUM_FOLDS);
 display('With all the features');
 display(r_allFeat);
+display(p_allFeat);
 
 % greedy feature combination
 [~,numFeat]=size(features);
@@ -78,6 +79,8 @@ plot(AccuList);
 
 display('Single feature ranking result');
 display(val1);
+display('P value');
+display(p(loc1));
 display('corresponding to feature number');
 display(loc1);
 
