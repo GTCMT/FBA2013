@@ -17,7 +17,7 @@ function [features] = extractFeatures(audio, Fs, wSize, hop)
 
     features=zeros(1,24);
 %     algo='acf';
-    algo='acf';
+    algo='wav';
     thresh1=0.1;
     thresh2=0.4;
     

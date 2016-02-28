@@ -28,10 +28,12 @@ while(i<=wSize);
     i = i+1;
 end
 
+autoCorrelation = autoCorrelation/autoCorrelation(1);
+
 maxOffset = round(fs/100); % considering 100Hz as lower freq
 minOffset = round(fs/1000); % considering 1000Hz as higher freq
 
-autoCorrelation = smooth(autoCorrelation,'loess');
+autoCorrelation = smooth(autoCorrelation,'moving',5);
 % find 1st minimum to further narrow down search region
 [~, indmin] = findpeaks(-autoCorrelation);
 if(~isempty(indmin))
@@ -48,6 +50,17 @@ end
 [~,ind1] = max(maxima);
 idx1 = indmax(ind1)+minOffset-1;
 f0 = fs/idx1;
+
+% spectra = abs(fft(frame));
+% spectra = spectra(1:wSize/2);
+% [maxSpectra, ind] = findpeaks(spectra);
+% [~,maxInd] = max(maxSpectra);
+% indMax = ind(maxInd);
+% f0dash = fs*(indMax-1)/wSize;
+% 
+% if(abs(f0dash-f0) < 10)
+%     f0 = f0dash;
+% end
 
 
 end

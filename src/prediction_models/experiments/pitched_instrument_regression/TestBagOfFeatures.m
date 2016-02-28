@@ -5,7 +5,7 @@ clear all;
 clc
 
 BAND_OPTION = 'middle';
-INSTRUMENT_OPTION = 'Oboe';
+INSTRUMENT_OPTION = 'Alto Saxophone';
 
 addpath(pathdef);
 

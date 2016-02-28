@@ -3,10 +3,10 @@ clear all;
 clc
 
 BAND_OPTION = 'middle';
-INSTRUMENT_OPTION = 'Oboe';
+INSTRUMENT_OPTION = 'Alto Saxophone';
 
 addpath(pathdef);
 
-for i = 1:4
+for i = 5
     getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, i);
 end
