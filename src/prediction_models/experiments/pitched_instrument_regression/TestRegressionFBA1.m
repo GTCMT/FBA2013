@@ -69,7 +69,6 @@ while Accu_past<Accu_present && isempty(featureList)~=1
     
 end
 
-% final feature combination confusion matrix
 [~,loc2]=max(AccuArr);
 
 %forward selection plot
@@ -88,48 +87,39 @@ display('and the corresponding accuracy')
 display(AccuList(end));
 
 % greedy feature combination: backward direction
-[~,numFeat]=size(features);
-for i=1:numFeat
-    [Rsq(i), S(i), p(i), r(i)] = crossValidation(labels, features(:,i), NUM_FOLDS);
-end
+[val]=r_allFeat;
+[val1]=r_allFeat;
 
-[val,loc]=max(r);
-[val1,loc1]=max(r);
-
-featureList=1:numFeat;
-NewList=[];
-NewList=[NewList;featureList(loc)];
-AccuList=[val];
+featureListBack=1:numFeat;
+AccuListBack=[val];
 Accu_past=val;
 
-
-featureList(loc)=[];
 Accu_present=Accu_past+0.0001;
 
-while Accu_past<Accu_present && isempty(featureList)~=1
+while Accu_past<Accu_present && isempty(featureListBack)~=1
     Accu_past=Accu_present;
-    AccuArr=zeros(length(featureList),1);
+    AccuArrBack=zeros(length(featureListBack),1);
     
-    for iter=1:length(featureList)
-        [Rsq(iter), S(iter), p(iter), AccuArr(iter)]=crossValidation(labels, [features(:,featureList(iter));features(:,NewList)],NUM_FOLDS);
-    
+    for iter=1:length(featureListBack)
+        TempFeatList=featureListBack;
+        TempFeatList(:,iter)=[];
+        [Rsq(iter), S(iter), p(iter), AccuArrBack(iter)]=crossValidation(labels,features(:,TempFeatList),NUM_FOLDS);
     end
     
-    Accu_present=max(AccuArr);
+    Accu_present=max(AccuArrBack);
     if Accu_past<Accu_present
-        [Accu_present,loc]=max(AccuArr);
-        AccuList=[AccuList,Accu_present];
-        NewList=[NewList;featureList(loc)];
-        featureList(loc)=[];
+        [Accu_present,loc]=max(AccuArrBack);
+        AccuListBack=[AccuListBack,Accu_present];
+        featureListBack(loc)=[];
     end
     
 end
 
 % final feature combination confusion matrix
-[~,loc2]=max(AccuArr);
+[~,loc2]=max(AccuArrBack);
 
 %forward selection plot
-plot(AccuList);
+figure; plot(AccuListBack);
 
 display('Single feature ranking result');
 display(val1);
@@ -139,7 +129,7 @@ display('corresponding to feature number');
 display(loc1);
 
 display('Best feature combination with')
-display(NewList)
+display(NewListBack)
 display('and the corresponding accuracy')
-display(AccuList(end));
+display(AccuListBack(end));
 
