@@ -2,10 +2,20 @@ clear all;
 close all;
 clc;
 
+% AV@GTCMT
+% Objective: Test if removing top 5% of features is helping to improve the
+% correlation. Testing is done on the feature mat files stored from
+% TestRunFBA1.m code
+% So the DATA_PATH holds the path of the mat file i.e. the 'data' folder
+% and the write_file_name has the name of the mat file
+% Specify the number of folds for the crossvalidation in NUM_FOLDS
+% variable. Here I have done a leave one song out validation
+
 addpath(pathdef);
 
 DATA_PATH = 'experiments/pitched_instrument_regression/data/';
 write_file_name = 'middleOboe4';
+NUM_FOLDS = 69;
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -15,11 +25,10 @@ write_file_name = 'middleOboe4';
     error('Error in your file path.');
   end
   
-NUM_FOLDS = 69;
 load([full_data_path write_file_name]);
 
 % Average the assessments to get one label.
-labels = mean([labels(:,3),labels(:,2)], 2); %labels(:,3),labels(:,5)
+labels = labels(:,1); %labels(:,3),labels(:,5)
 
 % remove top 5% features and test
 [Rsq, S, p, r, predictions] = crossValidation(labels, features, NUM_FOLDS);

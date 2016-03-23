@@ -1,3 +1,14 @@
+% Function to store designed features for each student in the specified
+% segment
+% Inputs: 
+% BAND_OPTION: band name i.e. concert band, middle school or
+% symphonic band
+% INSTRUMENT_OPTION: eg. alto sax, oboe
+% segment option: eg. 1-5
+% Output: Extracted features and labels get stored in 'data' folder with
+% the name in variable write_file_name which includes the band option,
+% instrument option and segment name
+
 function getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION)
 
 if ismac

@@ -1,12 +1,13 @@
-%Code to test the features
-
 clear all;
 close all;
 clc;
 
+% AV@GTCMT
+% Objective: Generate test signals and check the feature values are as expected
+
 addpath(pathdef);
 
-FileNumber='28610';
+% FileNumber='28610';
 % data path on machine
 % pathchk=['M:\My Documents\FBA2013data\middleschoolscores\' FileNumber '\'];
 % pathchk=['/Users/Amruta/Documents/MS GTCMT/GRA work/FBA2013data/concertbandscores/' FileNumber '/'];

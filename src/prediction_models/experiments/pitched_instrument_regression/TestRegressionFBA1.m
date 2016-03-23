@@ -2,6 +2,11 @@ clear all;
 close all;
 clc;
 
+% AV@GTCMT
+% Objective: To perform feature selection using forward and backward
+% feature selection procedure. Maximum accuracy at each feature combination
+% is plotted in the end.
+
 addpath(pathdef);
 
 DATA_PATH = 'experiments\pitched_instrument_regression\data_acf_altosax\';
