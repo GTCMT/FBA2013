@@ -24,8 +24,10 @@ function [features] = extractFeatures(audio, Fs, wSize, hop)
     [f0, ~] = estimatePitch(audio, Fs, hop, wSize, algo);
     note = noteSegmentation(audio, f0, Fs, hop, 50, 0.2 , -50);
 
+    % feature over entire segment
     features(1,1) = PlayingNotes100CntsHist(f0);
     
+    % feature over each individual note and then its derived statistical features
     for i=1:size(note,1)
         a = note(i).pitches_hz;
         b = note(i).audio;
