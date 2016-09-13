@@ -8,16 +8,16 @@
 % 3. segment_option: int, the index of segment of interest (see below)
 % The segment number in the assessment table: 
 % Rows (10 segments):
-% 1. lyricalEtude
-% 2. technicalEtude
-% 3. scalesChromatic
-% 4. scalesMajor
-% 5. sightReading
-% 6. malletEtude
-% 7. snareEtude
-% 8. timpaniEtude
-% 9. readingMallet
-% 10. readingSnare
+%   1. lyricalEtude
+%   2. technicalEtude
+%   3. scalesChromatic
+%   4. scalesMajor
+%   5. sightReading
+%   6. malletEtude
+%   7. snareEtude
+%   8. timpaniEtude
+%   9. readingMallet
+%   10. readingSnare
 % 4. categoryInd: int, the index of category of interest (see README.txt)
 clear all; close all; clc;
 
@@ -29,11 +29,11 @@ band_list = {
     };
 
 instrument_list = {
-    'Alto Saxophone';
-    'Bb Clarinet';
-    'Flute';
-    'Trumpet';
-    'Trombone';
+    %'Alto Saxophone';
+    %'Bb Clarinet';
+    %'Flute';
+    %'Trumpet';
+    %'Trombone';
     'Percussion';
     };
 
@@ -51,7 +51,7 @@ for i = 1:length(band_list)
         % get segment
         if strcmp(instrument_option, 'Percussion')
             segment_option = 7; 
-            categoryInd = 1; %1)musicality 2)noteAccu 3)rhythmicAccu
+            categoryInd = 3; %1)musicality 2)noteAccu 3)rhythmicAccu
         else
             segment_option = 2; 
             categoryInd = 2; %2)musicality 3)noteAccu 4)rhythmicAccu
@@ -61,7 +61,7 @@ for i = 1:length(band_list)
         % get information 
         [assessments, categoryName, idx] = getDistributionInfo(band_option, instrument_option, segment_option);
         subplot(length(band_list), length(instrument_list), count);
-        histogram(assessments(:, categoryInd));
+        histogram(assessments(:, categoryInd), 10);
         axis([0 1 0 100]);
         legend(instrument_list{j});
         title(strcat(band_list{i}, ',', categoryName{categoryInd}, ',', segmentName));
