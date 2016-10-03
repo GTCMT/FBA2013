@@ -11,9 +11,17 @@
 
 function [assessments, categoryName, idx] = getDistributionInfo(band_option, instrument_option, segment_option)
 
+if ismac
+    % Code to run on Mac plaform
+    slashtype='/';
+elseif ispc
+    % Code to run on Windows platform
+    slashtype='\';
+end
+
 % set parameter 
-addpath('../../scanning/');
-fba_relative_path = '../../../FBA2013/';
+addpath(['..' slashtype '..' slashtype 'scanning' slashtype]);
+fba_relative_path = ['..' slashtype '..' slashtype '..' slashtype 'FBA2013' slashtype];
 score_option = [];
 
 % get assessments 

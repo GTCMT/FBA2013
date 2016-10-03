@@ -2,11 +2,6 @@ clear all;
 close all;
 clc;
 
-% AV@GTCMT
-% Objective: To perform feature selection using forward and backward
-% feature selection procedure. Maximum accuracy at each feature combination
-% is plotted in the end.
-
 addpath(pathdef);
 
 DATA_PATH = 'experiments\pitched_instrument_regression\data_acf_altosax\';
@@ -24,8 +19,8 @@ NUM_FOLDS = 122;
 load([full_data_path write_file_name]);
 
 % featuresCombined = features;
-% 
-% % Load Bag Of Features
+
+% Load Bag Of Features
 % DATA_PATH = 'experiments\pitched_instrument_regression\BagOfFeatures_altosax\';
 % write_file_name = 'middleAlto Saxophone4';
 % 
@@ -39,7 +34,7 @@ load([full_data_path write_file_name]);
 % 
 % load([full_data_path write_file_name]);
 % featuresCombined = [featuresCombined features];
-% features=featuresCombined;
+% % features=featuresCombined;
 
 % Average the assessments to get one label.
 labels = labels(:,1); %labels(:,3),labels(:,5)
@@ -84,23 +79,23 @@ p_max=p(loc);
 featureList(loc)=[];
 Accu_present=Accu_past+0.0001;
 
-while  Accu_past<Accu_present && isempty(featureList)~=1
+while isempty(featureList)~=1
     Accu_past=Accu_present;
     AccuArr=zeros(length(featureList),1);
     
     for iter=1:length(featureList)
-        [Rsq(iter), S(iter), p(iter), AccuArr(iter)]=crossValidation(labels, [features(:,featureList(iter)) features(:,NewList)],NUM_FOLDS);
+        [Rsq(iter), S(iter), p(iter), AccuArr(iter)]=crossValidation(labels, [features(:,featureList(iter)) features(:,NewList')],NUM_FOLDS);
     
     end
     
     Accu_present=max(AccuArr);
-    if Accu_past<Accu_present
+%     if Accu_past<Accu_present
         [Accu_present,loc]=max(AccuArr);
         AccuList=[AccuList,Accu_present];
         NewList=[NewList;featureList(loc)];
         featureList(loc)=[];
         p_max=p(loc);
-    end
+%     end
     
 end
 
@@ -123,10 +118,10 @@ Regr(2,3)=p_max;
 featureListBack=1:numFeat;
 AccuListBack=[val];
 Accu_past=val;
-
+BackFeatDrop=[];
 Accu_present=Accu_past+0.0001;
 
-while Accu_past<Accu_present && isempty(featureListBack)~=1
+while isempty(featureListBack)~=1
     Accu_past=Accu_present;
     AccuArrBack=zeros(length(featureListBack),1);
     
@@ -137,11 +132,12 @@ while Accu_past<Accu_present && isempty(featureListBack)~=1
     end
     
     Accu_present=max(AccuArrBack);
-    if Accu_past<Accu_present
+%     if Accu_past<Accu_present
         [Accu_present,loc]=max(AccuArrBack);
         AccuListBack=[AccuListBack,Accu_present];
+        BackFeatDrop=[BackFeatDrop;featureListBack(loc)];
         featureListBack(loc)=[];
-    end
+%     end
     
 end
 
