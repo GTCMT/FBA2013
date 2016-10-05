@@ -1,6 +1,0 @@
-// data format: instrument name(str)	activity name(str)
-axs	lyricalEtude
-axs	technicalEtude
-axs	scalesChromatic
-axs	scalesMajor
-axs	sightReading
