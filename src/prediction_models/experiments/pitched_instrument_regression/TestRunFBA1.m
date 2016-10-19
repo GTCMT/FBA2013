@@ -14,6 +14,6 @@ INSTRUMENT_OPTION = 'Alto Saxophone';
 
 addpath(pathdef);
 
-for segment = 5
+for segment = 2
     getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, segment);
 end

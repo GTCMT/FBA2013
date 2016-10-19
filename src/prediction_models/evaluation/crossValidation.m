@@ -22,13 +22,13 @@ sorted_labels = zeros(num_data, 1);
 folds = cvpartition(labels, 'KFold', n_fold);
 
 % Evaluate one fold at a time.
-data_start_idx = 1;
+%data_start_idx = 1;
 for (fold = 1:n_fold)
   % Grab the test data.
   test_indices = folds.test(fold);
   test_labels = labels(test_indices, :);
   test_features = features(test_indices, :);
-  
+  data_start_idx = find(test_indices == 1);
   % Get training data.
   train_indices = folds.training(fold);
   train_labels = labels(train_indices, :);
@@ -39,7 +39,7 @@ for (fold = 1:n_fold)
   [train_features, test_features] = NormalizeFeatures(train_features, test_features);
   
   % Train the classifier and get predictions for the current fold.
-  svm = svmtrain(train_labels, train_features, '-s 4 -q');
+  svm = svmtrain(train_labels, train_features, '-s 4 -t 0 -q');
   cur_predictions = svmpredict(test_labels, test_features, svm, '-q');
   
   % Store current predictions and their corresponding labels.

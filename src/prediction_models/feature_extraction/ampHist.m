@@ -13,7 +13,7 @@ function amp_hist_feature = ampHist(audio_segment,fs)
 
 % initializations
 wSize = 1024; 
-hop = 512;
+hop = 256;
 frames = Windows(audio_segment,wSize,hop,fs);
 
 % calculation of frame energy

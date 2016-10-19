@@ -28,7 +28,7 @@
 %
 % output:
 %   N-by-1 vector of student ids
-function [student_ids] = scanStudentIds(band_option, instrument_option)
+function [student_ids] = scanStudentIds(band_option, instrument_option, year_option)
 root_path = deriveRootPath();
 
 if ismac
@@ -40,7 +40,7 @@ elseif ispc
 end
 
 % path to excel file:
-xls_path = ['..' slashtype '..' slashtype 'FBA2013'];
+xls_path = ['..' slashtype '..' slashtype 'FBA' year_option];
 
 switch band_option
     case 'middle'

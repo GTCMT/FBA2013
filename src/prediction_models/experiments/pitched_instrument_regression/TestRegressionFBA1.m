@@ -10,7 +10,7 @@ clc;
 addpath(pathdef);
 
 DATA_PATH = 'experiments\pitched_instrument_regression\data_acf_altosax\';
-write_file_name = 'middleAlto Saxophone2';
+write_file_name = 'middleAlto Saxophone1';
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -42,7 +42,7 @@ load([full_data_path write_file_name]);
 % features=featuresCombined;
 
 % Average the assessments to get one label.
-labels = labels(:,1); %labels(:,3),labels(:,5)
+labels = labels(:,2); %labels(:,3),labels(:,5)
 
 % meanLbl=mean(labels);
 % FinalLabels=zeros(size(labels));

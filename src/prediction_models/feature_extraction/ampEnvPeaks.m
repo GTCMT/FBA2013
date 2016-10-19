@@ -14,7 +14,7 @@ function ampenv_peaks = ampEnvPeaks(audio_segment, fs)
 
 % initializations
 wSize = 1024; 
-hop = 512;
+hop = 256;
 frames = Windows(audio_segment,wSize,hop,fs);
 N = size(frames,2);
 

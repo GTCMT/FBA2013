@@ -1,4 +1,4 @@
-function [file_paths] = scanFilePaths(fba_relative_path, student_ids)
+function [file_paths] = scanFilePaths(fba_relative_path, student_ids, year_option)
 %SCANFILEPATHS Return the path to the audio file for each student id.
 % 
 % Input:
@@ -21,9 +21,15 @@ elseif ispc
     slashtype='\';
 end
 
-folder_concert      = [fba_relative_path slashtype 'concertbandscores'];
-folder_middle       = [fba_relative_path slashtype 'middleschoolscores'];
-folder_symphonic    = [fba_relative_path slashtype 'symphonicbandscores'];
+if strcmp(year_option,'2013')
+    folder_concert      = [fba_relative_path slashtype 'concertbandscores'];
+    folder_middle       = [fba_relative_path slashtype 'middleschoolscores'];
+    folder_symphonic    = [fba_relative_path slashtype 'symphonicbandscores'];
+else
+    folder_concert      = [fba_relative_path slashtype 'concertband'];
+    folder_middle       = [fba_relative_path slashtype 'middleschool'];
+    folder_symphonic    = [fba_relative_path slashtype 'symphonicband'];
+end
 
 N           = size(student_ids,1);
 file_paths  = cell(size(student_ids));

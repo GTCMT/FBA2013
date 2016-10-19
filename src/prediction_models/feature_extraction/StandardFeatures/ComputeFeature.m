@@ -33,7 +33,7 @@
 %> @retval v feature value
 %> @retval t time stamp for the feature value
 % ======================================================================
-function [v, t] = ComputeFeature (cFeatureName, afAudioData, f_s, afWindow, iBlockLength, iHopLength)
+function [v, s, t] = ComputeFeature (cFeatureName, afAudioData, f_s, afWindow, iBlockLength, iHopLength)
 
     % set feature function handle
     hFeatureFunc    = str2func (['Feature' cFeatureName]);
@@ -76,14 +76,22 @@ function [v, t] = ComputeFeature (cFeatureName, afAudioData, f_s, afWindow, iBlo
         X           = abs(X)*2/iBlockLength;
         
         % compute feature
-        v           = hFeatureFunc(X, f_s);
-        v=mean(v);
+        v_tmp           = hFeatureFunc(X, f_s);
+        if sum(isnan(v_tmp))>1
+            v_tmp(isnan(v_tmp))=0;
+        end
+        v=mean(v_tmp,2);
+        s=std(v_tmp,[],2);
     end %if (IsSpectral(cFeatureName))
     
     if (IsTemporal(cFeatureName))
         % compute feature
-        [v,t]       = hFeatureFunc(afAudioData, iBlockLength, iHopLength, f_s);
-        v=mean(v);
+        [v_tmp,t]       = hFeatureFunc(afAudioData, iBlockLength, iHopLength, f_s);
+        if sum(isnan(v_tmp))>0
+            v_tmp(isnan(v_tmp))=0;
+        end
+        v=mean(v_tmp);
+        s=std(v_tmp);
     end %if (IsTemporal(cFeatureName))
 end
 

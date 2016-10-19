@@ -27,18 +27,18 @@
 % student.
 function audition_metadata = scanFBA(fba_relative_path, band_option, ...
                                      instrument_option, segment_option, ...
-                                     score_option)
+                                     score_option, year_option)
 root_path = deriveRootPath();
 full_fba_relative_path = [root_path fba_relative_path];
 % Figure out which students we retrive metadata for.
 % student_ids is a N X 1 vector.
-student_ids = scanStudentIds(band_option, instrument_option);
+student_ids = scanStudentIds(band_option, instrument_option, year_option);
 
 % Gather metadata.
 file_paths = scanFilePaths(full_fba_relative_path, student_ids);
 segments = scanSegments(segment_option, student_ids);
 segment_option_remapped = segmentRemap(segment_option, instrument_option);
-assessments = scanAssessments(segment_option_remapped, student_ids);
+assessments = scanAssessments(segment_option_remapped, student_ids, year_option);
 % TODO(Yujia)
 % score = scanScore(instrument_option, score_option);
 score = [];
