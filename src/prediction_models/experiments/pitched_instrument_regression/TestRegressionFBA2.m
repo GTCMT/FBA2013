@@ -13,9 +13,8 @@ clc;
 
 addpath(pathdef);
 
-DATA_PATH = 'experiments\pitched_instrument_regression\ICMPC_designed_acf_altosax_middleschool\';
-write_file_name = 'FinalFeatures';
-NUM_FOLDS = 122;
+DATA_PATH = 'experiments/pitched_instrument_regression/data/';
+write_file_name = 'middleAlto Saxophone2_designedFeatures_AllYrs_Musicality';
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -26,7 +25,7 @@ NUM_FOLDS = 122;
   end
   
 load([full_data_path write_file_name]);
-features= [features(:,1:9),features(:,14:22)];%,features(:,24:end)];
+
 % features_designed=features;
 % 
 % DATA_PATH = 'experiments\pitched_instrument_regression\ICMPC_baseline_altosax_middleschool\';
@@ -44,7 +43,8 @@ features= [features(:,1:9),features(:,14:22)];%,features(:,24:end)];
 % features=[features,features_designed];
 
 % Average the assessments to get one label.
-labels = labels(:,5); %labels(:,3),labels(:,5)
+labels = labels(:,1); %labels(:,3),labels(:,5)
+NUM_FOLDS = length(labels);
 
 % remove top 5% features and test
 [Rsq, S, p, r, predictions] = crossValidation(labels, features, NUM_FOLDS);

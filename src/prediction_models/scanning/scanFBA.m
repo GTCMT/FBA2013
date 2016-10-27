@@ -35,8 +35,8 @@ full_fba_relative_path = [root_path fba_relative_path];
 student_ids = scanStudentIds(band_option, instrument_option, year_option);
 
 % Gather metadata.
-file_paths = scanFilePaths(full_fba_relative_path, student_ids);
-segments = scanSegments(segment_option, student_ids);
+file_paths = scanFilePaths(full_fba_relative_path, student_ids, year_option);
+segments = scanSegments(segment_option, student_ids, year_option);
 segment_option_remapped = segmentRemap(segment_option, instrument_option);
 assessments = scanAssessments(segment_option_remapped, student_ids, year_option);
 % TODO(Yujia)

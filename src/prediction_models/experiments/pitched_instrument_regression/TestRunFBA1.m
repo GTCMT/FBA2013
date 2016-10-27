@@ -11,9 +11,12 @@ clc
 
 BAND_OPTION = 'middle';
 INSTRUMENT_OPTION = 'Alto Saxophone';
+year_option = '2013';
+NUM_FEATURES = 25;
 
 addpath(pathdef);
 
 for segment = 2
-    getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, segment);
+%     getStdFeaturesForSegment(BAND_OPTION, INSTRUMENT_OPTION, segment, year_option);
+    getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, segment, year_option, NUM_FEATURES);
 end

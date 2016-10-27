@@ -5,11 +5,12 @@
 % symphonic band
 % INSTRUMENT_OPTION: eg. alto sax, oboe
 % segment option: eg. 1-5
+% YEAR_OPTION: eg. 2013, 2014, 2015
 % Output: Extracted features and labels get stored in 'data' folder with
 % the name in variable write_file_name which includes the band option,
 % instrument option and segment name
 
-function getStdFeaturesForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION)
+function getStdFeaturesForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION, YEAR_OPTION)
 
 if ismac
     % Code to run on Mac plaform
@@ -34,7 +35,17 @@ NUM_FEATURES = 68;
 HOP_SIZE = 256;
 WINDOW_SIZE = 1024;
 % Scanning Options.
-FBA_RELATIVE_PATH = ['..' slashtype '..' slashtype '..' slashtype 'FBA2013data'];
+if YEAR_OPTION == '2013'
+    year_folder = '2013-2014';
+elseif YEAR_OPTION == '2014'
+    year_folder = '2014-2015';
+elseif YEAR_OPTION == '2015'
+    year_folder = '2015-2016';
+else
+    disp('Error in year option');
+end
+    
+FBA_RELATIVE_PATH = ['..' slashtype '..' slashtype '..' slashtype 'FBA2013data' slashtype year_folder];
 % BAND_OPTION = 'middle';
 % INSTRUMENT_OPTION = 'Oboe';
 % SEGMENT_OPTION = 2;
@@ -44,7 +55,7 @@ SCORE_OPTION = [];
 disp('Scanning database for files and metadata...');
 audition_metadata = scanFBA(FBA_RELATIVE_PATH, ...
                             BAND_OPTION, INSTRUMENT_OPTION, ...
-                            SEGMENT_OPTION, SCORE_OPTION);
+                            SEGMENT_OPTION, SCORE_OPTION, YEAR_OPTION);
 disp('Done scanning database.');
                           
 % Figure out size of data, for preallocating memory.

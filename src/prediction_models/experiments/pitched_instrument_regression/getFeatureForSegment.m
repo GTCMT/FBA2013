@@ -10,7 +10,7 @@
 % the name in variable write_file_name which includes the band option,
 % instrument option and segment name
 
-function getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION, YEAR_OPTION)
+function getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION, YEAR_OPTION, NUM_FEATURES)
 
 if ismac
     % Code to run on Mac plaform
@@ -31,7 +31,7 @@ write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION)];
     error('Error in your file path.');
   end
 
-NUM_FEATURES = 23;
+% NUM_FEATURES = 25;
 HOP_SIZE = 256;
 WINDOW_SIZE = 1024;
 % Scanning Options.

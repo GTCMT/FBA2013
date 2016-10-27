@@ -41,18 +41,18 @@ for (student_idx = 1:num_students)
           case 1 
             band_folder = [slashtype 'concertbandscores'];
           case 2
-            band_folder = [slashtype '/middleschoolscores'];
+            band_folder = [slashtype 'middleschoolscores'];
           case 3
-            band_folder = [slashtype '/symphonicbandscores'];
+            band_folder = [slashtype 'symphonicbandscores'];
         end
       else
          switch (band_idx)
           case 1 
-            band_folder = [slashtype '/concertband'];
+            band_folder = [slashtype 'concertband'];
           case 2
-            band_folder = [slashtype '/middleschool'];
+            band_folder = [slashtype 'middleschool'];
           case 3
-            band_folder = [slashtype '/symphonicband'];
+            band_folder = [slashtype 'symphonicband'];
         end 
       end
     
