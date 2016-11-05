@@ -14,7 +14,7 @@ clc;
 addpath(pathdef);
 
 DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-write_file_name = 'middleAlto Saxophone2_designedFeatures_AllYrs_Musicality';
+write_file_name = 'middleAlto Saxophone2_baseline_2013';
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -43,7 +43,7 @@ load([full_data_path write_file_name]);
 % features=[features,features_designed];
 
 % Average the assessments to get one label.
-labels = labels(:,1); %labels(:,3),labels(:,5)
+labels = labels(:,2); %labels(:,3),labels(:,5)
 NUM_FOLDS = length(labels);
 
 % remove top 5% features and test

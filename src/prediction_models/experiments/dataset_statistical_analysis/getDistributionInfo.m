@@ -4,12 +4,13 @@
 %   band_option = string: 'middle', 'concert', or 'symphonic' 
 %   instrument_option = string: full name of the instrument (ex. 'Flute') 
 %   segment_option = string to specify the segment (10 in total)
+%   year_option = which year do you want to plot for (2013, 2014, 2015)
 % Output:
 %   assessments = float matrix, numStudents by numCategories
 %   categoryName = string cell vector, numCategories by 1
 %   idx = int vector, corresponding category index
 
-function [assessments, categoryName, idx] = getDistributionInfo(band_option, instrument_option, segment_option)
+function [assessments, categoryName, idx] = getDistributionInfo(band_option, instrument_option, segment_option, year_option)
 
 if ismac
     % Code to run on Mac plaform
@@ -21,13 +22,13 @@ end
 
 % set parameter 
 addpath(['..' slashtype '..' slashtype 'scanning' slashtype]);
-fba_relative_path = ['..' slashtype '..' slashtype '..' slashtype 'FBA2013' slashtype];
+fba_relative_path = ['..' slashtype '..' slashtype '..' slashtype 'FBA' year_option slashtype];
 score_option = [];
 
 % get assessments 
 audition_metadata = scanFBA(fba_relative_path, band_option, ...
                                      instrument_option, segment_option, ...
-                                     score_option);
+                                     score_option, year_option);
                                  
 % organize information 
 numStudents = length(audition_metadata.assessments);                                 
