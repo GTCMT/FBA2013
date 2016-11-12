@@ -1,6 +1,6 @@
 % AV@GTCMT
-% Objective: Use the 2013 model (after removing top 5% of features) to test
-% for 2014 and 2015 data
+% Objective: Use the model of 2 years (after removing top 5% of features)
+% to test on remaining year data
 
 close all;
 fclose all;
@@ -10,7 +10,7 @@ clc;
 addpath(pathdef);
 
 DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-write_file_name = 'middleAlto Saxophone2_designedFeatures_2015';
+write_file_name = 'middleAlto Saxophone2_designedFeatures_2013';
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -21,12 +21,19 @@ write_file_name = 'middleAlto Saxophone2_designedFeatures_2015';
   end
   
 load([full_data_path write_file_name]);
-
+features1 =features;
 
 % Average the assessments to get one label.
-labels = labels(:,1); %labels(:,3),labels(:,5)
-NUM_FOLDS = length(labels);
+labels1 = labels(:,2); %labels(:,3),labels(:,5)
 
+write_file_name = 'middleAlto Saxophone2_designedFeatures_2015';
+load([full_data_path write_file_name]);
+
+features = [features; features1];
+labels = labels(:,1); %labels(:,3),labels(:,5)
+labels = [labels; labels1];
+
+NUM_FOLDS = length(labels);
 % remove top 5% features and test
 [Rsq, S, p, r, predictions] = crossValidation(labels, features, NUM_FOLDS);
 err=abs(labels-predictions);
@@ -51,6 +58,7 @@ for i=1:floor(0.05*length(labels))
          '\nCorrelation coefficient: ' num2str(r) '\n']);
 end
 
+figure; plot(labels,new_predictions,'*'); xlabel('Test Labels'); ylabel('Prediction');
 % training features from 2013
 train_features = new_features;
 train_labels = labels;
@@ -68,17 +76,13 @@ clear labels; clear features;
 % Normalize
 [train_features, test_features] = NormalizeFeatures(train_features, test_features);
 % feature truncation
-% test_features(test_features >= 1) = 1;
-% test_features(test_features <= 0) = 0;
-% locations_truncated = (test_features >= 1) + (test_features <= 0);
+test_features(test_features >= 1) = 1;
+test_features(test_features <= 0) = 0;
+locations_truncated = (test_features >= 1) + (test_features <= 0);
 % Train the classifier and get predictions for the current fold.
 svm = svmtrain(train_labels, train_features, '-s 4 -t 0 -q');
 predictions = svmpredict(test_labels, test_features, svm, '-q');
   
-% prediction truncation
-predictions(predictions>=1) = 1;
-predictions(predictions<=0) = 0;
-
 [Rsq, S, p, r] = myRegEvaluation(test_labels, predictions);  
 
 fprintf(['\nResults complete.\nR squared: ' num2str(Rsq) ...
