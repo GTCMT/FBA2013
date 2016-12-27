@@ -14,7 +14,7 @@ clc;
 addpath(pathdef);
 
 DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-write_file_name = 'middleAlto Saxophone2_baseline_2013';
+write_file_name = 'middleAlto Saxophone2_designedFeatures_2015';
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -43,26 +43,41 @@ load([full_data_path write_file_name]);
 % features=[features,features_designed];
 
 % Average the assessments to get one label.
-labels = labels(:,2); %labels(:,3),labels(:,5)
+labels = labels(:,1); %labels(:,3),labels(:,5)
 NUM_FOLDS = length(labels);
 
+% for PCA
+[row,col]=size(features);
+dummy = ones(1,col);
+[normFeat, dum] = NormalizeFeatures(features,dummy);
+[coeff,score,latent,tsquared,explained,mu]=pca(normFeat);
+for i =1:length(explained)
+    if sum(explained(1:i))>=95
+        featNum=i;
+        break;
+    end
+end
+
 % remove top 5% features and test
-[Rsq, S, p, r, predictions] = crossValidation(labels, features, NUM_FOLDS);
+[Rsq, S, p, r, predictions] = crossValidation(labels, score, NUM_FOLDS);
+% for PCA
+[Rsq, S, p, r, predictions] = crossValidation(labels, score(:,1:featNum), NUM_FOLDS);
 err=abs(labels-predictions);
 [sort_err,idx_err]=sort(err,'descend');
-new_features=features;
-%new_labels=predictions;
-% new_labels = labels;
+% new_features=features;
+% for PCA
+new_features=score(:,1:featNum);
+new_labels = labels;
 
 for i=1:floor(0.05*length(labels))
     
       new_features(idx_err(1),:)=[];
-      labels(idx_err(1)) = [];
+      new_labels(idx_err(1)) = [];
       
       NUM_FOLDS=NUM_FOLDS-1;
-      [Rsq, S, p, r, new_predictions] = crossValidation(labels, new_features, NUM_FOLDS);
+      [Rsq, S, p, r, new_predictions] = crossValidation(new_labels, new_features, NUM_FOLDS);
       
-      err=abs(labels-new_predictions);
+      err=abs(new_labels-new_predictions);
     [sort_err,idx_err]=sort(err,'descend');
     
     fprintf(['\nResults complete.\nR squared: ' num2str(Rsq) ...
