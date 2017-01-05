@@ -11,53 +11,48 @@
 
 function goodness_measure = PlayingNotes100CntsHist(PitchRead)
 
-% PitchInCents(:,1)=PitchRead(:,1);
 PitchInCents=1200*log2(PitchRead/440);
 
-% Folding in a single note
-FoldingPInNote=PitchInCents;
+% Folding in a single note of the pitch contour
+FoldingInNote=PitchInCents;
 for i=1:length(PitchInCents)
     k=abs(mod(PitchInCents(i),100));
-    FoldingPInNote(i)=k;
+    FoldingInNote(i)=k;
 end
 
-stpNote=10; % 10cent bin intervals
-arrylen=0:(stpNote/2):100;
-ffldh1_Note=zeros(length(arrylen),2);
-ffldh1_Note(:,1)=arrylen;
+stpSize=10; % 10cent bin intervals
+NoteSpan=0:(stpSize/2):100;  % one note spans 100cents and this array specifies the boundaries for comparing and binning values within a note into a histogram
+HistFoldedToSingleNote=zeros(length(NoteSpan),2);
+HistFoldedToSingleNote(:,1)=NoteSpan;
 
-ffldh1=zeros(floor(length(arrylen)/2),2);
-ffldh_row=(stpNote/2):stpNote:(100-stpNote/2);
-ffldh1(:,1)=ffldh_row';
+HistFinal=zeros(floor(length(NoteSpan)/2),2);
+ffldh_row=(stpSize/2):stpSize:(100-stpSize/2);
+HistFinal(:,1)=ffldh_row';
 
-FoldingPInC=FoldingPInNote;
-
-for i=1:length(FoldingPInC)
-    if isnan(FoldingPInC(i))~=1
-        for j=1:2:length(ffldh1_Note)-1
-            if FoldingPInC(i)>ffldh1_Note(j,1) && FoldingPInC(i)<=ffldh1_Note(j+2,1) 
-               ffldh1_Note((j+1),2)=ffldh1_Note((j+1),2)+1;
+for i=1:length(FoldingInNote)              % compare the values in the input pitch contour with the boundaries in the NoteSpan array.
+    if isnan(FoldingInNote(i))~=1
+        for j=1:2:length(HistFoldedToSingleNote)-1
+            if FoldingInNote(i)>HistFoldedToSingleNote(j,1) && FoldingInNote(i)<=HistFoldedToSingleNote(j+2,1)  % if the value lies between values at odd locations of NoteSpan the put them in the even value between these values
+               HistFoldedToSingleNote((j+1),2)=HistFoldedToSingleNote((j+1),2)+1;
             end
         end
               
     end
 end
 
-ffldh1(:,2)=ffldh1_Note(2:2:length(ffldh1_Note),2);
-% figure; plot(ffldh1(:,1),ffldh1(:,2));
+HistFinal(:,2)=HistFoldedToSingleNote(2:2:length(HistFoldedToSingleNote),2);   % since in the previous step we have a histogram with values at even locations, here we put those together
 
-[~,locshiftInCent]=max(ffldh1(:,2));
-shiftInCent=ffldh1(locshiftInCent,1);
+[~,locshiftInCent]=max(HistFinal(:,2));
 
 % area 10cents before and after the maximum peak location / total area will
 % give the godness_measure
 
-if locshiftInCent-1~=0 && locshiftInCent+1<length(ffldh1)
-    goodness_measure=sum(ffldh1(locshiftInCent-1:locshiftInCent+1,2))/sum(ffldh1(:,2));
+if locshiftInCent-1~=0 && locshiftInCent+1<length(HistFinal)
+    goodness_measure=sum(HistFinal(locshiftInCent-1:locshiftInCent+1,2))/sum(HistFinal(:,2));
 elseif locshiftInCent-1==0
-    goodness_measure=(sum(ffldh1(locshiftInCent:locshiftInCent+1,2))+ffldh1(end,2))/sum(ffldh1(:,2));
+    goodness_measure=(sum(HistFinal(locshiftInCent:locshiftInCent+1,2))+HistFinal(end,2))/sum(HistFinal(:,2));
 else
-   goodness_measure=(sum(ffldh1(locshiftInCent-1:locshiftInCent,2))+ffldh1(1,2))/sum(ffldh1(:,2)); 
+   goodness_measure=(sum(HistFinal(locshiftInCent-1:locshiftInCent,2))+HistFinal(1,2))/sum(HistFinal(:,2)); 
 end
 
 end

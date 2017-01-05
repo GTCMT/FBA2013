@@ -6,30 +6,50 @@
 % student_ids = N*1 int vector of student ids
 % segments = N*1 cell vector, each cell is a m*2 matrix,
 %            1st column = starting time, 2nd column is duration
+% year_option = string mentioning the year for which segments are to be
+% scanned
 
-function segments = scanSegments(segment_option, student_ids)
+function segments = scanSegments(segment_option, student_ids, year_option)
 root_path = deriveRootPath();
 
-% //initialization 
-annPath = [root_path '../../FBA2013'];
+if ismac
+    % Code to run on Mac plaform
+    slashtype='/';
+elseif ispc
+    % Code to run on Windows platform
+    slashtype='\';
+end
+    % //initialization 
+annPath = [root_path '..' slashtype '..' slashtype 'FBA' year_option];
 N = length(student_ids);
 segments = cell(N, 1);
 
 for i = 1:3
-    switch i
-        case 1
-            bandFolder = '/concertbandscores';
-        case 2
-            bandFolder = '/middleschoolscores';
-        case 3
-            bandFolder = '/symphonicbandscores';
+    if year_option == '2013'
+        switch i
+            case 1
+                bandFolder = [slashtype 'concertbandscores'];
+            case 2
+                bandFolder = [slashtype 'middleschoolscores'];
+            case 3
+                bandFolder = [slashtype 'symphonicbandscores'];
+        end
+    else
+        switch i
+            case 1
+                bandFolder = [slashtype 'concertband'];
+            case 2
+                bandFolder = [slashtype 'middleschool'];
+            case 3
+                bandFolder = [slashtype 'symphonicband'];
+        end
     end
     
     for j = 1:N
         % //create file path
         current_id = num2str(student_ids(j));
-        file_name  = strcat('/', current_id, '_', 'segment.txt'); 
-        filePath   = strcat(annPath, bandFolder, '/', current_id, file_name);
+        file_name  = strcat(slashtype, current_id, '_', 'segment.txt'); 
+        filePath   = strcat(annPath, bandFolder, slashtype, current_id, file_name);
         
         % //read segment file
         if exist(filePath, 'file') == 2
@@ -40,3 +60,5 @@ for i = 1:3
        
     end 
 end
+
+ 

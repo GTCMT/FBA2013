@@ -34,10 +34,14 @@
 *.sql
 *.sqlite
 *.mat
+pathdef.m
+*.wav
+*.mid
  
 # OS generated files #
 ######################
 .DS_Store
+desktop.ini
 .DS_Store?
 desktop.ini
 ._*

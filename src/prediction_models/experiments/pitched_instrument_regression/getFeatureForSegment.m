@@ -1,6 +1,26 @@
-function getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION)
+% Objective: Store (non-score based) designed features for each student for the specified
+% segment 
+% Inputs: 
+% BAND_OPTION: band name i.e. concert band, middle school or
+% symphonic band
+% INSTRUMENT_OPTION: eg. alto sax, oboe
+% SEGMENT_OPTION: eg. 1-5
+% YEAR_OPTION: eg. 2013, 2014, 2015
+% Output: Extracted features and labels get stored in 'data' folder with
+% the name in variable write_file_name which includes the band option,
+% instrument option and segment name
 
-DATA_PATH = 'experiments/pitched_instrument_regression/data/';
+function getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION, YEAR_OPTION, NUM_FEATURES)
+
+if ismac
+    % Code to run on Mac plaform
+    slashtype='/';
+elseif ispc
+    % Code to run on Windows platform
+    slashtype='\';
+end
+
+DATA_PATH = ['experiments' slashtype 'pitched_instrument_regression' slashtype 'data' slashtype];
 write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION)];
 
 % Check for existence of path for writing extracted features.
@@ -11,11 +31,21 @@ write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION)];
     error('Error in your file path.');
   end
 
-NUM_FEATURES = 9;
-HOP_SIZE = 512;
+% NUM_FEATURES = 25;
+HOP_SIZE = 256;
 WINDOW_SIZE = 1024;
 % Scanning Options.
-FBA_RELATIVE_PATH = '../../../FBA2013data';
+if YEAR_OPTION == '2013'
+    year_folder = '2013-2014';
+elseif YEAR_OPTION == '2014'
+    year_folder = '2014-2015';
+elseif YEAR_OPTION == '2015'
+    year_folder = '2015-2016';
+else
+    disp('Error in year option');
+end
+    
+FBA_RELATIVE_PATH = ['..' slashtype '..' slashtype '..' slashtype 'FBA2013data' slashtype year_folder];
 % BAND_OPTION = 'middle';
 % INSTRUMENT_OPTION = 'Oboe';
 % SEGMENT_OPTION = 2;
@@ -25,7 +55,7 @@ SCORE_OPTION = [];
 disp('Scanning database for files and metadata...');
 audition_metadata = scanFBA(FBA_RELATIVE_PATH, ...
                             BAND_OPTION, INSTRUMENT_OPTION, ...
-                            SEGMENT_OPTION, SCORE_OPTION);
+                            SEGMENT_OPTION, SCORE_OPTION, YEAR_OPTION);
 disp('Done scanning database.');
                           
 % Figure out size of data, for preallocating memory.
@@ -63,7 +93,6 @@ for student_idx = 1:num_students
   % Store all assessments.
   segment_assessments = student_assessments(1, :);
   segment_assessments = segment_assessments(segment_assessments ~= -1);
-
   labels(student_idx, :) = segment_assessments;
 end
 

@@ -21,7 +21,7 @@ N = length(zeropadaudio); %length of audio file
 % creating frames based on wSize and hop
 idx = 1; % sample index 
 i = 1;
-numWindows = ceil((N-wSize)/hop)+1;
+numWindows = ceil((N-wSize)/hop);
 frames = zeros(wSize,numWindows);
 timeInSec = zeros(1,numWindows);
 

@@ -46,7 +46,7 @@ if strcmp(algo,'yin') == 1
 elseif strcmp(algo,'acf') == 1
     [f0, timeInSec] = acf(audio,algoOptions);
 elseif strcmp(algo,'wav') == 1
-    f0 = wavelet(audio,algoOptions);
+    [f0, timeInSec] = wavelet(audio,algoOptions);
 else
     error('Choose algo as "yin", "acf" or "wav" only');
 end

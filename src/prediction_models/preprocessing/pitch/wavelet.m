@@ -34,7 +34,7 @@ if isempty(wSize) wSize = 1024; end
 
 % Frame wise pitch detection using wavepitch
 [frames, timeInSec] = Windows(audio, wSize, hop, sr);
-f0 = zeros(1,length(frames));
+f0 = zeros(1,size(frames,2));
 
 for i = 1:length(f0)
    if(i==1)

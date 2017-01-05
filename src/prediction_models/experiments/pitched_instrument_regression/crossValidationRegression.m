@@ -1,3 +1,6 @@
+% Function to give average accuracy after n_fold cross validation using
+% regression from libsvm
+
 function [FinalAccu] = crossValidationRegression(labels, features, n_fold)
 
 % Preallocate memory.
@@ -41,6 +44,6 @@ acc(fold)=sum(cur_predictions==test_labels)/length(test_labels);
 end
 
 % [Rsq, S, p, r] = myRegEvaluation(sorted_labels, predictions);
-FinalAccu=mean(acc)
+FinalAccu=mean(acc);
 
 end

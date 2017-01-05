@@ -28,11 +28,19 @@
 %
 % output:
 %   N-by-1 vector of student ids
-function [student_ids] = scanStudentIds(band_option, instrument_option)
+function [student_ids] = scanStudentIds(band_option, instrument_option, year_option)
 root_path = deriveRootPath();
 
+if ismac
+    % Code to run on Mac plaform
+    slashtype='/';
+elseif ispc
+    % Code to run on Windows platform
+    slashtype='\';
+end
+
 % path to excel file:
-xls_path = '../../FBA2013';
+xls_path = ['..' slashtype '..' slashtype 'FBA' year_option];
 
 switch band_option
     case 'middle'
@@ -46,8 +54,16 @@ switch band_option
         return;
 end
 
-file_path = [[root_path xls_path '/' file_name]];
-[num,text] = xlsread(file_path, 1);
+%these lines not working for virtual lab / Windows environment somehow
+% file_path = [root_path xls_path slashtype file_name];
+% [num,text] = xlsread(file_path, 1);
+
+% therefore this hack
+old_path=pwd;
+file_path = [root_path xls_path];
+cd(file_path);
+[num,text] = xlsread(file_name, 1);
+cd(old_path);
 
 % find index of first id for this instrument:
 index = 1;

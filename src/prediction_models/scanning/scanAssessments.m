@@ -10,13 +10,21 @@
 %               N -> student_id's, F -> segment, G -> category (all 26).
 %               For segment and category indices, see /FBA/README.txt.
 %               Segments returned in order specified by segment_option.
-function assessments = scanAssessments(segment_option, student_ids)
+function assessments = scanAssessments(segment_option, student_ids, year_option)
 
 NUM_SEGMENTS = 10; % Rows.
 NUM_CATEGORIES = 26; % Columns.
 
+if ismac
+    % Code to run on Mac plaform
+    slashtype='/';
+elseif ispc
+    % Code to run on Windows platform
+    slashtype='\';
+end
+
 root_path = deriveRootPath();
-annotation_path = [root_path '../../FBA2013'];
+annotation_path = [root_path '..' slashtype '..' slashtype 'FBA' year_option];
 num_chosen_segments = size(segment_option, 1);
 num_students = length(student_ids);
 assessments = cell(num_students,1);
@@ -28,16 +36,28 @@ for (student_idx = 1:num_students)
   % Search all bands for student.
   found_student = false;
   for (band_idx = 1:3)
-    switch (band_idx)
-      case 1 
-        band_folder = '/concertbandscores';
-      case 2
-        band_folder = '/middleschoolscores';
-      case 3
-        band_folder = '/symphonicbandscores';
-    end
-    file_name = ['/' current_id '_' 'assessments.txt']; 
-    file_path = [annotation_path band_folder '/' current_id file_name];
+      if year_option == '2013'
+        switch (band_idx)
+          case 1 
+            band_folder = [slashtype 'concertbandscores'];
+          case 2
+            band_folder = [slashtype 'middleschoolscores'];
+          case 3
+            band_folder = [slashtype 'symphonicbandscores'];
+        end
+      else
+         switch (band_idx)
+          case 1 
+            band_folder = [slashtype 'concertband'];
+          case 2
+            band_folder = [slashtype 'middleschool'];
+          case 3
+            band_folder = [slashtype 'symphonicband'];
+        end 
+      end
+    
+    file_name = [slashtype current_id '_' 'assessments.txt']; 
+    file_path = [annotation_path band_folder slashtype current_id file_name];
 
     % Read assessment file.
     if (exist(file_path, 'file') == 2)

@@ -17,7 +17,7 @@ num_notes = size(new_notes, 1);
 
 % The shortest note gets thinned first.
 [min_duration, min_idx] = min([new_notes.duration]);
-while(min_duration <= min_dur_windows)
+while(min_duration <= min_dur_windows) && num_notes>1
   cur_note = new_notes(min_idx);
   
   % Choose which side to merge with.
@@ -54,7 +54,7 @@ while(min_duration <= min_dur_windows)
   new_notes(left_idx) = new_note;
   new_notes(right_idx) = [];
   num_notes = size(new_notes, 1);
-
+    
   % Find next minimum pitch difference.
   [min_duration, min_idx] = min([new_notes.duration]);
 end

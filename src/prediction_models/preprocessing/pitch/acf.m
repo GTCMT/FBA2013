@@ -35,11 +35,13 @@ if isempty(wSize) wSize = 1024; end
 f0 = zeros(1, wid); %fundamental frequency matrix
 
 % voicing detection
-voicingThres = 10;
-spectra = abs(fft(frames));
+audioEnergy = sqrt(sum(audio.*audio)/length(audio));
+voicingThres = 0.1;
+
 
 for i = 1:wid
-    if spectra(:,i) < voicingThres
+    frameEnergy  = sqrt(sum(frames(:,i).*frames(:,i))/wSize);
+    if frameEnergy < audioEnergy*voicingThres
         f0(i) = 0;
     else
         f0(i) = autoCorr(frames(:,i),sr);
