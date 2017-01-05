@@ -1,5 +1,6 @@
-% Separate function for the general features to be extracted to avoid confusion... 
-% apart from the function to test the designed features 'getFeatureForSegment' 
+% AV@GTCMT
+% Objective: Extract and store the standard audio features
+% This function is separate from the function to test the designed features 'getFeatureForSegment' 
 % Inputs: 
 % BAND_OPTION: band name i.e. concert band, middle school or
 % symphonic band

@@ -3,7 +3,8 @@ close all;
 clc;
 
 % AV@GTCMT
-% Objective: Generate test signals and check the feature values are as expected
+% Objective: Generate test signals and check the feature values are as
+% expected. Code similar to TestFeatures.m
 
 addpath(pathdef);
 
@@ -43,7 +44,7 @@ for seg =1
     [f0, timeInSec] = estimatePitch(audio(strtsmpl:endsmpl), Fs, hop, wSize, algo);
     note = noteSegmentation(audio(strtsmpl:endsmpl), f0, Fs, hop, 50, 0.2 , -50);
 
- features(1,1) = PlayingNotes100CntsHist(f0);
+    features(1,1) = PlayingNotes100CntsHist(f0);
     
     for i=1:size(note,1)
         a = note(i).pitches_hz;
@@ -61,14 +62,10 @@ for seg =1
     features(1,2)=mean(stdDev);
     features(1,3)=std(stdDev);
     features(1,4)=max(stdDev);
-%     features(1,5)=min(stdDev);  %min is always 0
-%     features(1,6)=max(stdDev)-min(stdDev);
     
     features(1,5)=mean(countGreaterStdDev);
     features(1,6)=std(countGreaterStdDev);
     features(1,7)=max(countGreaterStdDev);
-%     features(1,10)=min(countGreaterStdDev);   %min is always 0
-%     features(1,11)=max(countGreaterStdDev)-min(countGreaterStdDev);
     
     features(1,8)=mean(timbreMeasure(2,:)); % take 2nd MFCC
     features(1,9)=std(timbreMeasure(2,:));

@@ -1,8 +1,7 @@
 %% Feature vector creation
 % AV@GTCMT and AP@GTCMT, 2015
-% [features] = extractFeatures(audio, Fs, wSize, hop)
-% objective: Create a feature vector of all the features called inside this
-% function
+% objective: Create a feature vector of all the Inter-onset-interval features called inside this
+% function (This is just wraper code for pitched instruments to call Chihwei's IOI feature extraction code)
 %
 % INPUTS
 % audio: samples
@@ -27,6 +26,7 @@ function [features] = extractIOIFeaturesCW(audio, Fs, wSize, hop)
         noteTiming(i) = note(i).start/Fs;
     end
     
+%     Chihwei's function to extract IOI features
     [features] = extractIoiFeatures(noteTiming)';
     
       

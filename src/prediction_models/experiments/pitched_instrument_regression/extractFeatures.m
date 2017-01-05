@@ -1,7 +1,7 @@
 %% Feature vector creation
 % AV@GTCMT and AP@GTCMT, 2015
 % [features] = extractFeatures(audio, Fs, wSize, hop)
-% objective: Create a feature vector of all the features called inside this
+% objective: Create a feature vector of all the non score based features called inside this
 % function
 %
 % INPUTS

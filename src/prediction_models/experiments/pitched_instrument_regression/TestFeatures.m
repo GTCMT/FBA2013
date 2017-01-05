@@ -1,20 +1,18 @@
 % AV@GTCMT
-%Code to test the features for single audio files to see the feature values
+% Code to inspect the feature values for a single audio file
 
 clear all;
 close all;
 clc;
 
-addpath(pathdef);
-
+% student id number 
 FileNumber='28610';
 % data path on machine
 pathchk=['M:\My Documents\FBA2013data\middleschoolscores\' FileNumber '\'];
-% pathchk=['/Users/Amruta/Documents/MS GTCMT/GRA work/FBA2013data/concertbandscores/' FileNumber '/'];
 [audio,Fs]=audioread([pathchk FileNumber '.mp3']);
 
 for seg =1:5
-segments = scanSegments(seg, str2num(FileNumber));
+    segments = scanSegments(seg, str2num(FileNumber));
 
     hop=512; wSize=1024; algo='wav'; thresh1=0.1; thresh2=0.4;
 
@@ -44,14 +42,10 @@ segments = scanSegments(seg, str2num(FileNumber));
     features(1,2)=mean(stdDev);
     features(1,3)=std(stdDev);
     features(1,4)=max(stdDev);
-%     features(1,5)=min(stdDev);  %min is always 0
-%     features(1,6)=max(stdDev)-min(stdDev);
     
     features(1,5)=mean(countGreaterStdDev);
     features(1,6)=std(countGreaterStdDev);
     features(1,7)=max(countGreaterStdDev);
-%     features(1,10)=min(countGreaterStdDev);   %min is always 0
-%     features(1,11)=max(countGreaterStdDev)-min(countGreaterStdDev);
     
     features(1,8)=mean(timbreMeasure(2,:)); % take 2nd MFCC
     features(1,9)=std(timbreMeasure(2,:));

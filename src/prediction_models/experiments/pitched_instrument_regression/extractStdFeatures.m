@@ -34,7 +34,7 @@
 %>  'TimeStd',
 %>  'TimeZeroCrossingRate',
 function [features] = extractStdFeatures(audio, Fs, wSize, hop)
-
+% only spectral features are needed, hence others are commented
     FeatureNames={'SpectralCentroid',
   'SpectralRolloff',
     'SpectralFlux',
@@ -65,7 +65,7 @@ function [features] = extractStdFeatures(audio, Fs, wSize, hop)
     tmp_v = zeros(size(note, 1), length(FeatureNames)-1);
     tmp_s = zeros(size(note, 1), length(FeatureNames)-1);
     for i=1:size(note,1)
-        
+%         ComputeFeature contains Prof. Lerch's code from Audio Content Analysis
         for j=1:length(FeatureNames)
             if j~=5
                 [tmp_v(i,j),tmp_s(i,j), ~] = ComputeFeature (FeatureNames{j}, note(i).audio, Fs, [], wSize, hop);

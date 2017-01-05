@@ -1,5 +1,5 @@
-% Function to store designed features for each student in the specified
-% segment
+% Objective: Store (non-score based) designed features for each student for the specified
+% segment 
 % Inputs: 
 % BAND_OPTION: band name i.e. concert band, middle school or
 % symphonic band

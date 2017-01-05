@@ -7,46 +7,35 @@ clc;
 % feature selection procedure. Maximum accuracy at each feature combination
 % is plotted in the end.
 
-addpath(pathdef);
-
 DATA_PATH = 'experiments\pitched_instrument_regression\data_acf_altosax\';
 write_file_name = 'middleAlto Saxophone1';
 
-% Check for existence of path for writing extracted features.
-  root_path = deriveRootPath();
-  full_data_path = [root_path DATA_PATH];
-  
-  if(~isequal(exist(full_data_path, 'dir'), 7))
+% Check for existence of path for reading stored features and labels.
+root_path = deriveRootPath();
+full_data_path = [root_path DATA_PATH];
+
+if(~isequal(exist(full_data_path, 'dir'), 7))
     error('Error in your file path.');
-  end
+end
   
+% select the size of the data to perform leave one file out validation
 NUM_FOLDS = 122;
 load([full_data_path write_file_name]);
 
+% % To perform the same experiment with bag of features plus the designed 
+% % features uncomment the code below
 % featuresCombined = features;
 % 
 % % Load Bag Of Features
 % DATA_PATH = 'experiments\pitched_instrument_regression\BagOfFeatures_altosax\';
 % write_file_name = 'middleAlto Saxophone4';
 % 
-% % Check for existence of path for writing extracted features.
-%   root_path = deriveRootPath();
-%   full_data_path = [root_path DATA_PATH];
-%   
-%   if(~isequal(exist(full_data_path, 'dir'), 7))
-%     error('Error in your file path.');
-%   end
-% 
 % load([full_data_path write_file_name]);
 % featuresCombined = [featuresCombined features];
-% features=featuresCombined;
+% % features=featuresCombined;
 
-% Average the assessments to get one label.
+% Choose the label on which assessment is needed.
 labels = labels(:,2); %labels(:,3),labels(:,5)
-
-% meanLbl=mean(labels);
-% FinalLabels=zeros(size(labels));
-% FinalLabels(labels>meanLbl)=1;
 
 % Evaluate model using cross validation.
 [Rsq_allFeat, S_allFeat, p_allFeat, r_allFeat] = crossValidation(labels, features, NUM_FOLDS);
@@ -56,10 +45,15 @@ display(p_allFeat);
 
 % greedy feature combination: forward direction
 [~,numFeat]=size(features);
+Rsq = zeros(numFeat,1);
+S = zeros(numFeat,1);
+p = zeros(numFeat,1);
+r = zeros(numFeat,1);
 for i=1:numFeat
     [Rsq(i), S(i), p(i), r(i)] = crossValidation(labels, features(:,i), NUM_FOLDS);
 end
 
+% first select feature with maximum correlation coefficient
 [val,loc]=max(r);
 display('Single feature ranking result');
 display(val);
@@ -80,31 +74,31 @@ AccuList=[val];
 Accu_past=val;
 p_max=p(loc);
 
+Rsq = zeros(numFeat,1);
+S = zeros(numFeat,1);
+p = zeros(numFeat,1);
+r = zeros(numFeat,1);
 
 featureList(loc)=[];
-Accu_present=Accu_past+0.0001;
+Accu_present=Accu_past;
 
-while  Accu_past<Accu_present && isempty(featureList)~=1
+while isempty(featureList)~=1
     Accu_past=Accu_present;
     AccuArr=zeros(length(featureList),1);
     
     for iter=1:length(featureList)
-        [Rsq(iter), S(iter), p(iter), AccuArr(iter)]=crossValidation(labels, [features(:,featureList(iter)) features(:,NewList)],NUM_FOLDS);
+        [Rsq(iter), S(iter), p(iter), AccuArr(iter)]=crossValidation(labels, [features(:,featureList(iter)) features(:,NewList')],NUM_FOLDS);
     
     end
     
     Accu_present=max(AccuArr);
-    if Accu_past<Accu_present
-        [Accu_present,loc]=max(AccuArr);
-        AccuList=[AccuList,Accu_present];
-        NewList=[NewList;featureList(loc)];
-        featureList(loc)=[];
-        p_max=p(loc);
-    end
+    [Accu_present,loc]=max(AccuArr);
+    AccuList=[AccuList,Accu_present];
+    NewList=[NewList;featureList(loc)];
+    featureList(loc)=[];
+    p_max=p(loc);
     
 end
-
-% [~,loc2]=max(AccuArr);
 
 %forward selection plot
 plot(AccuList);
@@ -123,10 +117,10 @@ Regr(2,3)=p_max;
 featureListBack=1:numFeat;
 AccuListBack=[val];
 Accu_past=val;
+BackFeatDrop=[];
+Accu_present=Accu_past;
 
-Accu_present=Accu_past+0.0001;
-
-while Accu_past<Accu_present && isempty(featureListBack)~=1
+while isempty(featureListBack)~=1
     Accu_past=Accu_present;
     AccuArrBack=zeros(length(featureListBack),1);
     
@@ -137,18 +131,14 @@ while Accu_past<Accu_present && isempty(featureListBack)~=1
     end
     
     Accu_present=max(AccuArrBack);
-    if Accu_past<Accu_present
-        [Accu_present,loc]=max(AccuArrBack);
-        AccuListBack=[AccuListBack,Accu_present];
-        featureListBack(loc)=[];
-    end
+    [Accu_present,loc]=max(AccuArrBack);
+    AccuListBack=[AccuListBack,Accu_present];
+    BackFeatDrop=[BackFeatDrop;featureListBack(loc)];
+    featureListBack(loc)=[];
     
 end
 
-% final feature combination confusion matrix
-% [~,loc2]=max(AccuArrBack);
-
-%forward selection plot
+%backward selection plot
 figure; plot(AccuListBack);
 
 display('Best feature combination with')
