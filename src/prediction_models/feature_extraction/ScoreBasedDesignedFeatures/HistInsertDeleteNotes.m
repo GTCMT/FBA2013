@@ -23,9 +23,10 @@
 % OUTPUTS
 % insNote: number of insertions of notes by the student compared to the score
 % delNote: number of deletion of notes by the student compared to the score
+% HistVec: vector with features like skewness, kurtosis etc on the
+% histogram subraction of reference score and student's notes
 
-
-function [insNote, delNote] = HistInsertDeleteNotes(f0, fs, hop, aligndMid, scoreMid)
+function [insNote, delNote, HistVec] = HistInsertDeleteNotes(f0, fs, hop, aligndMid, scoreMid)
 
 timeStep = hop/fs;
 [rwSdnt,colSdnt] = size(aligndMid);
@@ -48,7 +49,7 @@ for i = 1:rwSc
 end
 
 [Nstudent]=histcounts(meanPitchInCents_student,edgesHist);
-[Nscore]=histcounts(meanPitchInCents_score,edgesHist);
+[HistScore]=histcounts(meanPitchInCents_score,edgesHist);
 
 % HistSubtr = Nscore - Nstudent;
 % insNote = abs(sum(HistSubtr(HistSubtr<0)));
@@ -56,8 +57,8 @@ end
 
 minIns = Inf; minDel = Inf; amtShift = 0;
 for i = 0:length(Nstudent)-1
-    ShiftNstudent = circshift(Nstudent,i,2);
-    HistSubtrTemp = Nscore - ShiftNstudent;
+    ShiftHistStudent = circshift(Nstudent,i,2);
+    HistSubtrTemp = HistScore - ShiftHistStudent;
     insTemp = abs(sum(HistSubtrTemp(HistSubtrTemp<0)));
     delTemp = abs(sum(HistSubtrTemp(HistSubtrTemp>0)));
     if ((insTemp+delTemp)<(minIns+minDel))
@@ -67,10 +68,27 @@ for i = 0:length(Nstudent)-1
     end
 end
 
+ShiftHistStudent = circshift(Nstudent,amtShift,2);
 insNote = minIns;
 delNote = minDel;
 
 % ShiftNstudent = circshift(Nstudent,amtShift,2);
 % figure; bar(Nscore); hold on; bar(ShiftNstudent,'r');
+
+HistSubtr = abs(HistScore - ShiftHistStudent);
+
+TotVal = sum(HistSubtr);
+NormHistSubtr = HistSubtr ./ TotVal;
+
+HistpeakCrest = IOIPeakCrest(NormHistSubtr, edgesHist(1:end-1)+0.5);
+Histskew = FeatureSpectralSkewness(NormHistSubtr', fs);
+Histkurto = FeatureSpectralKurtosis(NormHistSubtr', fs);
+Histrolloff = FeatureSpectralRolloff(NormHistSubtr', fs, 0.85);
+Histflatness = FeatureSpectralFlatness(NormHistSubtr', fs);
+HisttonalPower = FeatureSpectralTonalPowerRatio(NormHistSubtr', fs);
+
+HistVec = [HistpeakCrest; Histskew; Histkurto; Histrolloff; ...
+        Histflatness; HisttonalPower];
+
 
 
