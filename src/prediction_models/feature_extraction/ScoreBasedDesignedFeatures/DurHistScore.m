@@ -11,10 +11,7 @@ function [durFeats] = DurHistScore(midi_mat_aligned, note_indices, note_onsets,f
 %                   second most occuring notes (14 dimensional)
 
 %pre-process midi_mat_aligned and remove the insertions
-for i=1:length(note_onsets)
-    ins_note_index = note_onsets(i);
-    midi_mat_aligned = [midi_mat_aligned(1:ins_note_index,:); midi_mat_aligned(ins_note_index+2:end,:)];
-end
+midi_mat_aligned(note_onsets,:) = [];
 
 note1_indices = note_indices{1};
 note2_indices = note_indices{2};
