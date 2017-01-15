@@ -43,12 +43,21 @@ if flag == 0
     
     % features over each individual note and then its derived statistical features
     NoteAvgDevFromRef = zeros(1,rwStu); NoteStdDevFromRef = zeros(1,rwStu); NormCountGreaterStdDev = zeros(1,rwStu);
+    ShortNotes = [];
     for i=1:rwStu
         strtTime = round(algndmid(i,6)/timeStep);
-        endTime = round(algndmid(i,6)/timeStep + algndmid(i,7)/timeStep + 1);
+        endTime = round(algndmid(i,6)/timeStep + algndmid(i,7)/timeStep-1);
         pitchvals=(tfCompnstdF0(strtTime:endTime));
-        [NoteAvgDevFromRef(1,i),NoteStdDevFromRef(1,i),NormCountGreaterStdDev(1,i)]=NoteSteadinessMeasureWithRefScore(pitchvals(pitchvals~=0), algndmid(i,4));
+        if (numel(pitchvals) < 3) %note played is too short i.e. around 10 ms
+            ShortNotes = [ShortNotes, i];
+        else
+            [NoteAvgDevFromRef(1,i),NoteStdDevFromRef(1,i),NormCountGreaterStdDev(1,i)]=NoteSteadinessMeasureWithRefScore(pitchvals(pitchvals~=0), algndmid(i,4));
+        end
     end
+    % Remove Short Notes
+    NoteAvgDevFromRef(ShortNotes) = [];
+    NoteStdDevFromRef(ShortNotes) = [];
+    NormCountGreaterStdDev(ShortNotes) = [];
     
     features(1,1) = abs(rwSc-rwStu);  % difference between the number of notes in the score and the student (inserted notes)
     features(1,2)=mean(NoteAvgDevFromRef);
