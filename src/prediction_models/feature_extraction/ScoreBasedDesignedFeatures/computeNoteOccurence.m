@@ -19,6 +19,6 @@ dur_norm = round(dur_norm);
 note1_indices = find(dur_norm==note1);
 note2_indices = find(dur_norm==note2);
 
-note_indices = [note1_indices; note2_indices];
+note_indices = {note1_indices; note2_indices};
 
 end

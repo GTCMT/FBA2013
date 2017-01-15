@@ -13,7 +13,7 @@
 % OUTPUTS
 % features: 1 x N feature vector (where N is the number of features getting extracted in the function)
 
-function [features] = extractScoredFeatures(audio, Fs, wSize, hop, YEAR_OPTION)
+function [features] = extractScoredFeatures(audio, Fs, wSize, hop, YEAR_OPTION, NUM_FEATURES)
 
 if ismac
     % Code to run on Mac plaform
@@ -23,7 +23,7 @@ elseif ispc
     slashtype='\';
 end
 
-features=zeros(1,15);
+features=zeros(1,NUM_FEATURES);
 algo='acf';
 timeStep = hop/Fs;
 
@@ -77,7 +77,10 @@ if flag == 0
 
     features(1,14)=dtw_cost;
     features(1,15)=slopedev;
-%     features(1,16)=std(ampenv_peaks);
+    
+    [note_indices] = computeNoteOccurence(scoreMid);
+    vecDurFeat = DurHistScore(algndmid, note_indices, note_onsets, Fs);
+    features(1,16:29)=vecDurFeat';
 end
       
 end

@@ -21,7 +21,7 @@ elseif ispc
 end
 
 DATA_PATH = ['experiments' slashtype 'pitched_instrument_regression' slashtype 'data' slashtype];
-write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION)];
+write_file_name = [BAND_OPTION INSTRUMENT_OPTION YEAR_OPTION num2str(SEGMENT_OPTION)];
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -88,7 +88,7 @@ for student_idx = 1:num_students
 
   % Extract features.
   features(student_idx, :) = ...
-       extractScoredFeatures(normalized_audio, Fs, WINDOW_SIZE, HOP_SIZE, YEAR_OPTION);
+       extractScoredFeatures(normalized_audio, Fs, WINDOW_SIZE, HOP_SIZE, YEAR_OPTION, NUM_FEATURES);
 
   % Store all assessments.
   segment_assessments = student_assessments(1, :);
