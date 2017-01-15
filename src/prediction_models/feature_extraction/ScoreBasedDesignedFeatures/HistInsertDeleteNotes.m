@@ -1,6 +1,6 @@
 %% Number of insertions and deletions of notes that student has played compared to the score
 % AV@GTCMT
-% [insNote, delNote] = HistInsertDeleteNotes(f0, aligndMid, scoreMid)
+% [insNote, delNote, HistVec] = HistInsertDeleteNotes(f0, aligndMid, scoreMid)
 % objective: Find the number of notes inserted or deleted by the student
 % while playing the score
 %
@@ -45,7 +45,7 @@ for i=1:rwSdnt
 end
 
 for i = 1:rwSc
-    meanPitchInCents_score(i,1) = mod(abs(round(12*log2(scoreMid(i,4)/440))),12);
+    meanPitchInCents_score(i,1) = mod(abs(scoreMid(i,4)-69),12);
 end
 
 [Nstudent]=histcounts(meanPitchInCents_student,edgesHist);
@@ -72,13 +72,18 @@ ShiftHistStudent = circshift(Nstudent,amtShift,2);
 insNote = minIns;
 delNote = minDel;
 
+% plot for debugging purposes
 % ShiftNstudent = circshift(Nstudent,amtShift,2);
-% figure; bar(Nscore); hold on; bar(ShiftNstudent,'r');
+% newBins = edgesHist(1:end-1)+0.5; figure; bar(newBins,HistScore); hold on; bar(newBins,ShiftNstudent,'r');
 
 HistSubtr = abs(HistScore - ShiftHistStudent);
 
 TotVal = sum(HistSubtr);
-NormHistSubtr = HistSubtr ./ TotVal;
+if TotVal ~= 0
+    NormHistSubtr = HistSubtr ./ TotVal;
+else
+    NormHistSubtr = HistSubtr;
+end
 
 HistpeakCrest = IOIPeakCrest(NormHistSubtr, edgesHist(1:end-1)+0.5);
 Histskew = FeatureSpectralSkewness(NormHistSubtr', fs);

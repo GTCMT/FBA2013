@@ -11,16 +11,16 @@ function [nvt] = mySpectralFlux(x, windowSize, hopSize)
 
 
 % Padding zeros to signal for window centering
-x = [zeros(windowSize/2-1,1); x];
+x = [zeros(windowSize/2,1);x ;zeros(windowSize/2,1)];
 
-%Padding zeros to signal if not appropriate size for blocking.
-if(mod(numel(x)-windowSize,hopSize)~=0)
-	pad = zeros(hopSize-mod(numel(x)-windowSize,hopSize),1);
-	x = [x; pad];
-end
+% %Padding zeros to signal if not appropriate size for blocking.
+% if(mod(numel(x)-windowSize,hopSize)~=0)
+% 	pad = zeros(hopSize-mod(numel(x)-windowSize,hopSize),1);
+% 	x = [x; pad];
+% end
 
 %Initialize a matrix for all outputs.
-numBlocks = floor((numel(x)-windowSize)/hopSize+1);
+numBlocks = ceil((numel(x)-windowSize)/hopSize);
 SF_0 = zeros(numBlocks,1);
 
 % Initialize output vector & past spectrum vector

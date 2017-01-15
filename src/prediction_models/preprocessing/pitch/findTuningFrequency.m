@@ -1,8 +1,8 @@
 %Tuning frequency detection for the student recordings
 %Input is the pitch contour
-%Output is the tuning frequency in cents (tf) and a special case indicator
+%Output is the pitch contour (in Hz) after adjustment for tuning frequency and a special case indicator
 %if the tuning is around 50 cents (sc)
-function [tf,sc] = findTuningFrequency(f0)
+function [wav_pitch_contour_in_hz,sc] = findTuningFrequency(f0)
 
 
 
@@ -27,5 +27,10 @@ if I>50
 end
 
 tf = I;
+wav_pitch_contour_in_midi = 69+12*log2(f0/440);
+wav_pitch_contour_in_midi(wav_pitch_contour_in_midi == -Inf) = 0;
+wav_pitch_contour_in_midi(wav_pitch_contour_in_midi~=0) = wav_pitch_contour_in_midi(wav_pitch_contour_in_midi~=0)+ (tf/100);
+wav_pitch_contour_in_hz = wav_pitch_contour_in_midi;
+wav_pitch_contour_in_hz(wav_pitch_contour_in_hz~=0) = (2.^((wav_pitch_contour_in_midi(wav_pitch_contour_in_hz~=0)-69)/12))*440;
 
 
