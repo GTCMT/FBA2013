@@ -14,8 +14,6 @@ INSTRUMENT_OPTION = 'Alto Saxophone';
 year_option = '2013';
 NUM_FEATURES = 25;
 
-addpath(pathdef);
-
 for segment = 2 % segment for which features are to be extracted
 % %     uncomment the line below for extracting standard spectral features for the audio files
 %     getStdFeaturesForSegment(BAND_OPTION, INSTRUMENT_OPTION, segment, year_option);

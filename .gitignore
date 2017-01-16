@@ -36,7 +36,6 @@
 *.mat
 pathdef.m
 *.wav
-*.mid
  
 # OS generated files #
 ######################
