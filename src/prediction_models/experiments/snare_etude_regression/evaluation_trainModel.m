@@ -6,31 +6,41 @@ addpath('../../../../../FBA2013/src/prediction_models/evaluation')
 
 %% ==== 1) load data ======================================================
 data_baseline = [];
-load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_baseline_2013.mat
-data_baseline = [data_baseline; summaryFeatures];
-load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_baseline_2014.mat
-data_baseline = [data_baseline; summaryFeatures];
+% load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_baseline_2013.mat
+% data_baseline = [data_baseline; summaryFeatures];
+% load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_baseline_2014.mat
+% data_baseline = [data_baseline; summaryFeatures];
 load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_baseline_2015.mat
 data_baseline = [data_baseline; summaryFeatures];
 
 data_nonscoreDesigned = [];
-load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_rhythmic_2013.mat
-data_nonscoreDesigned = [data_nonscoreDesigned; summaryFeatures];
-load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_rhythmic_2014.mat
-data_nonscoreDesigned = [data_nonscoreDesigned; summaryFeatures];
+% load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_rhythmic_2013.mat
+% data_nonscoreDesigned = [data_nonscoreDesigned; summaryFeatures];
+% load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_rhythmic_2014.mat
+% data_nonscoreDesigned = [data_nonscoreDesigned; summaryFeatures];
 load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_rhythmic_2015.mat
 data_nonscoreDesigned = [data_nonscoreDesigned; summaryFeatures];
 
-% % data = [data_baseline(:, 1:end-3), data_nonscoreDesigned];
+data_scoreDesigned = [];
+load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_scoreFeat_2013.mat
+data_scoreDesigned = [data_scoreDesigned; summaryFeatures];
+load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_scoreFeat_2014.mat
+data_scoreDesigned = [data_scoreDesigned; summaryFeatures];
+% load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_scoreFeat_2015.mat
+% data_scoreDesigned = [data_scoreDesigned; summaryFeatures];
+
+
+% data = [data_scoreDesigned(:, 1:end-3), data_nonscoreDesigned];
 % data = [data_baseline];
-data = [data_nonscoreDesigned];
+data = [data_scoreDesigned];
+% data = [data_nonscoreDesigned];
 
 %% ==== 2) Experiment setting =============================================
-savepath = '/Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/svrModel_middle_2013_2014_rhythmic_musicality.mat';
+savepath = '/Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/svrModel_middle_2013_2014_scoreFeat_musicality.mat';
 dataID = 1:size(data, 1);
 select = -2; %-2 musicality, -1 note acc, 0 rhythm acc
 
-%% ==== 3) Main loop =============================================
+%% ==== 3) Main loop ======================================================
 trial      = floor( length(data)*0.05 );
 outlierIdx = zeros(trial, 1);
 outlierID = zeros(trial, 1);
@@ -61,14 +71,14 @@ for k = 1:trial
         trainData = trainData';
         
         %== apply the same parameter, normalize testing data
-        testData    = choosen(:, 1:(numFeatures-3));
-        testData = testData';
+        testData   = choosen(:, 1:(numFeatures-3));
+        testData   = testData';
         [testData] = featureScaling(testData, minList, maxList);
-        testData = testData';
-        testLabels  = choosen(:, cate);
+        testData   = testData';
+        testLabels = choosen(:, cate);
         
         %train SVR model
-        svrModel     = svmtrain(trainLabels, trainData, '-s 4 -t 0 -q');
+        svrModel      = svmtrain(trainLabels, trainData, '-s 4 -t 0 -q');
 
         %test SVR model
         testResults   = svmpredict(testLabels, testData, svrModel, '-q');
@@ -114,6 +124,6 @@ ylabel('prediction');
 axis([0 1 0 1]);
 
 %% ==== 5) Save results
-%save(savpath, 'svrModel', 'minList', 'maxList');
+save(savepath, 'svrModel', 'minList', 'maxList');
 fprintf('\n==== Mission Complete, saving file to the directory!====\n');
 

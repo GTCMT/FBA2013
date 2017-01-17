@@ -4,17 +4,21 @@ clear all; close all; clc;
 
 %% ==== 1) load data
 load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_baseline_2015.mat
-data_content = summaryFeatures;
+data_baseline = summaryFeatures;
 
 load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_rhythmic_2015.mat
-data_rhythmic = summaryFeatures;
+data_nonscoreDesigned = summaryFeatures;
 
-%data = [data_content(:, 1:end-3), data_rhythmic];
-%data = [data_content];
-data = [data_rhythmic];
+load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_scoreFeat_2015.mat
+data_scoreDesigned = summaryFeatures;
+
+%data = [data_baseline(:, 1:end-3), data_nonscoreDesigned];
+%data = [data_baseline];
+%data = [data_nonscoreDesigned];
+data = [data_scoreDesigned];
 
 %% ==== 2) load model
-load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/svrModel_middle_2014_2015_rhythmic_music.mat
+load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/svrModel_middle_2013_2014_scoreFeat_musicality.mat
 
 %% ==== 3) experiment setting
 dataID = 1:size(data, 1);

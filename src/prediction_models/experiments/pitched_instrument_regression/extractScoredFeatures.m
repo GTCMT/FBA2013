@@ -63,7 +63,7 @@ if flag == 1
        tfCompnstdF0 = tfCompnstdF02;
     end
 else
-    [algndmid, note_onsets, dtw_cost, path] = alignScore(scorePath, tfCompnstdF0, audio, Fs, wSize, hop);
+    [algndmid, note_onsets, dtw_co st, path] = alignScore(scorePath, tfCompnstdF0, audio, Fs, wSize, hop);
 end
 
 [slopedev, ~] = slopeDeviation(path);
