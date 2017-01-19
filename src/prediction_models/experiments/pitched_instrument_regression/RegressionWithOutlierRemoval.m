@@ -12,7 +12,7 @@ clc;
 % variable.
 
 DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-write_file_name = 'middleAlto Saxophone2_designedFeatures_2015';
+write_file_name = 'middleAlto Saxophone2_NonScoreDesignedFeatures_2013';
 
 % Check for existence of path for writing extracted features.
 root_path = deriveRootPath();
@@ -41,23 +41,23 @@ NUM_FOLDS = length(labels);
 [row,col]=size(features);
 dummy = ones(1,col);
 [normFeat, dum] = NormalizeFeatures(features,dummy);
-[coeff,score,latent,tsquared,explained,mu]=pca(normFeat);
-for i =1:length(explained)
-    if sum(explained(1:i))>=95
-        featNum=i;
-        break;
-    end
-end
+% [coeff,score,latent,tsquared,explained,mu]=pca(normFeat);
+% for i =1:length(explained)
+%     if sum(explained(1:i))>=95
+%         featNum=i;
+%         break;
+%     end
+% end
 
 % remove 5% outliers
-[Rsq, S, p, r, predictions] = crossValidation(labels, score, NUM_FOLDS);
+[Rsq, S, p, r, predictions] = crossValidation(labels, normFeat, NUM_FOLDS);
 % for PCA
-[Rsq, S, p, r, predictions] = crossValidation(labels, score(:,1:featNum), NUM_FOLDS);
+% [Rsq, S, p, r, predictions] = crossValidation(labels, score(:,1:featNum), NUM_FOLDS);
 err=abs(labels-predictions);
 [sort_err,idx_err]=sort(err,'descend');
 % new_features=features;
 
-new_features=score(:,1:featNum);
+new_features= normFeat; %score(:,1:featNum);
 new_labels = labels;
 
 for i=1:floor(0.05*length(labels))

@@ -6,19 +6,16 @@ function [note_indices] = computeNoteOccurence(midi_mat_score)
 % Output: Indices of first and highest occuring notes
 
 dur_list = midi_mat_score(:,7);
-dur_norm = dur_list/min(dur_list);
-edge_list = 0.5:1:10.5;
-num_counts = histcounts(dur_norm, edge_list);
-%newx = edge_list(1:end-1)+0.5;
-[~,ind] = sort(num_counts,'descend');
-
+[n,x] = hist(dur_list);
+d = diff(x)/2;
+edges = [0, x(1:end-1)+d, x(end)+d(end)];
+[~,ind] = sort(n);
 note1 = ind(1);
-note2 = ind(2);
+t1 = edges(note1);
+t2 = edges(note1+1);
 
-dur_norm = round(dur_norm);
-note1_indices = find(dur_norm==note1);
-note2_indices = find(dur_norm==note2);
 
-note_indices = {note1_indices; note2_indices};
+note_indices = find(dur_list >= t1 && dur_list <= t2);
+%note_indices = {note1_indices; note2_indices};
 
 end
