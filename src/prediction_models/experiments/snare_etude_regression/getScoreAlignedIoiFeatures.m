@@ -28,26 +28,22 @@ function [IOI_score, dtw_cost_n, addedNotes, missingNotes] = getScoreAlignedIoiF
         end
     end
     
-    %IOI_score_aligned = zeros(length(IOI), 1);
+    IOI_score_aligned = zeros(length(IOI), 1);
     for kk = 1:length(IOI)
         idx = find(path(:, 2) == kk);
-        %IOI_score_aligned(kk) = IOI_score(path(idx(1), 1));
+        IOI_score_aligned(kk) = IOI_score(path(idx(1), 1));
         if length(idx) > 1
             missingNotes = missingNotes + length(idx) - 1;
         end
     end
     
-    % ==== visualization
-%     % before alignment
-%     stem(1:length(IOI), IOI); hold on; stem(1:length(IOI_score), IOI_score); legend('perform', 'score');figure;
-%     % after alignment
-%     stem(1:length(IOI_aligned), IOI_aligned); hold on; stem(1:length(IOI_score), IOI_score); legend('perform_aligned', 'score');
-%     
     % ==== duration normalization 
-%     [minIOI_score, minIdx_score] = min(IOI_score);
-%     minIOI_aligned = IOI_aligned(minIdx_score);
-%     IOI_n = IOI_aligned./minIOI_aligned;
-%     IOI_score_n = IOI_score./minIOI_score;
+    IOI_score = round(IOI_score * 10000)/10000;
+    IOI_score_set = zeros(length(unique(IOI_score)), 2);
+    IOI_score_set(:, 1) = unique(IOI_score);
+    for i = 1:length(IOI_score_set)
+        IOI_score_set(i, 2) = length(find(IOI_score == IOI_score_set(i, 1)));
+    end
     
     % ==== compute IOI diff after alignment and duration normalization 
 %     IOI_diff = abs(IOI_score_aligned(:) - IOI(:));

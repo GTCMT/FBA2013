@@ -23,6 +23,7 @@ load /Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/ex
 %% ==== 3) experiment setting
 dataID = 1:size(data, 1);
 select = -2; %-2 musicality, -1 note acc, 0 rhythm acc
+numLabels = 3;
 
 %== initialization
 [numSamples, numFeatures] = size(data);
@@ -34,7 +35,7 @@ choosen = data(:, :);
 cate = numFeatures + select;
         
 %% ==== 4) feature scaling (using same param as training data)
-testData    = choosen(:, 1:(numFeatures-3));
+testData    = choosen(:, 1:(numFeatures-numLabels));
 testData = testData';
 [testData] = featureScaling(testData, minList, maxList);
 %== test feature truncation

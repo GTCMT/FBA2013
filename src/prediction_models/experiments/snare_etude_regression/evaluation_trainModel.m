@@ -39,7 +39,7 @@ data = [data_scoreDesigned];
 savepath = '/Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/svrModel_middle_2013_2014_scoreFeat_musicality.mat';
 dataID = 1:size(data, 1);
 select = -2; %-2 musicality, -1 note acc, 0 rhythm acc
-
+numLabels = 3;
 %% ==== 3) Main loop ======================================================
 trial      = floor( length(data)*0.05 );
 outlierIdx = zeros(trial, 1);
@@ -60,9 +60,9 @@ for k = 1:trial
 
         %select score category
         cate = numFeatures + select;
-        trainData   = others(:, 1:(numFeatures-3));
+        trainData   = others(:, 1:(numFeatures-numLabels));
         trainLabels = others(:, cate); %hard-coded
-        testData    = choosen(:, 1:(numFeatures-3));
+        testData    = choosen(:, 1:(numFeatures-numLabels));
         testLabels  = choosen(:, cate);
         
         %== normalize training data
@@ -71,7 +71,7 @@ for k = 1:trial
         trainData = trainData';
         
         %== apply the same parameter, normalize testing data
-        testData   = choosen(:, 1:(numFeatures-3));
+        testData   = choosen(:, 1:(numFeatures-numLabels));
         testData   = testData';
         [testData] = featureScaling(testData, minList, maxList);
         testData   = testData';

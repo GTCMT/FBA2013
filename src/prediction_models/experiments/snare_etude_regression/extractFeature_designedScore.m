@@ -11,16 +11,16 @@ addpath('../../../../../FBA2013/src/prediction_models/preprocessing/score_alignm
 
 %% ==== 1) Enter path to judges' gradings =================================
 [musicality, noteAccuracy, rhythmAccuracy] ...
-    = textread('/Users/cw/Documents/CW_FILES/04_Datasets/Database2/FBA middle/Grade/snareEtude_middle_2015.txt');
+    = textread('/Users/cw/Documents/CW_FILES/04_Datasets/Database2/FBA middle/Grade/snareEtude_middle_2013.txt');
 
 %% ==== 2) define the group of interest and scan for student ID ===========
 band_option = 'middle';
 instrument_option = 'Percussion';
-year_option = '2015'; % path to excel file:
+year_option = '2013'; % path to excel file:
 [student_ids] = scanStudentIds(band_option, instrument_option, year_option);
-sourcefolder = '/Volumes/CW_MBP15/Datasets/FBA/2015-2016/middleschool/';
-annfolder = strcat('../../../../../FBA2013/FBA2015/', 'middleschool/');
-savepath = '/Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_scoreFeat_2015.mat';
+sourcefolder = '/Volumes/CW_MBP15/Datasets/FBA/2013-2014/middleschoolscores/';
+annfolder = strcat('../../../../../FBA2013/FBA2013/', 'middleschoolscores/');
+savepath = '/Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_scoreFeat_2013.mat';
 
 %% ==== 2.5) read midi score ==============================================
 if strcmp(year_option, '2013')
