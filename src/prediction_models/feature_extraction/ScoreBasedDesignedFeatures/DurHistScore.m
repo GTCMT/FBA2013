@@ -13,7 +13,7 @@ function [durFeats] = DurHistScore(midi_mat_aligned, note_indices, note_onsets,f
 %pre-process midi_mat_aligned and remove the insertions
 midi_mat_aligned(note_onsets+1,:) = [];
 
-note1_indices = note_indices(1);
+note1_indices = note_indices;
 % note2_indices = note_indices(2);
 
 %Get corresponding note occurences of note 1&2 from student's performance
