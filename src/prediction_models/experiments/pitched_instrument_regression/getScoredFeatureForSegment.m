@@ -20,7 +20,7 @@ elseif ispc
     slashtype='\';
 end
 
-DATA_PATH = ['experiments' slashtype 'pitched_instrument_regression' slashtype 'data_1' slashtype];
+DATA_PATH = ['experiments' slashtype 'pitched_instrument_regression' slashtype 'data' slashtype];
 write_file_name = [BAND_OPTION INSTRUMENT_OPTION YEAR_OPTION '_segment' num2str(SEGMENT_OPTION)];
 
 % Check for existence of path for writing extracted features.
