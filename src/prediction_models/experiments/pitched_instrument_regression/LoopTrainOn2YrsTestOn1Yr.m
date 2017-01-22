@@ -10,7 +10,7 @@ clear all;
 clc;
 
 DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-
+delFeat = [24]; %9, 12, 17, 21,
 
 % Check for existence of path for writing extracted features.
 root_path = deriveRootPath();
@@ -25,28 +25,33 @@ results_mat_test = [];
 
 for l = 2:5
     
-write_file_name = 'middleAlto Saxophone2014_ScoreDesignedFeatures_segment2';
+write_file_name = 'middleAlto Saxophone2_NonScoreDesignedFeatures_2013';
+
+% Check for existence of path for writing extracted features.
+root_path = deriveRootPath();
+full_data_path = [root_path DATA_PATH];
+
+if(~isequal(exist(full_data_path, 'dir'), 7))
+    error('Error in your file path.');
+end
+  
 load([full_data_path write_file_name]);
+% features(:,14)=features(:,14)./features(:,23);
+features(:,delFeat)=[];
+
 features1 =features;
 
-% write_file_name = 'middleAlto Saxophone2_NonScoreDesignedFeatures_2015';
-% load([full_data_path write_file_name]);
-% features1 =[features1, features(:,10:17)];
 % Average the assessments to get one label.
 labels1 = labels(:,l); %labels(:,3),labels(:,5)
 
-write_file_name = 'middleAlto Saxophone2013_ScoreDesignedFeatures_segment2';
+write_file_name = 'middleAlto Saxophone2_NonScoreDesignedFeatures_2015';
 load([full_data_path write_file_name]);
-features2=features;
+% features(:,14)=features(:,14)./features(:,23);
+features(:,delFeat)=[];
 
-% write_file_name = 'middleAlto Saxophone2_NonScoreDesignedFeatures_2013';
-% load([full_data_path write_file_name]);
-% features2 =[features2, features(:,10:17)];
-
-labels = labels(:,l); %labels(:,3),labels(:,5)
+features = [features; features1];
+labels = labels(:,l-1); %labels(:,3),labels(:,5)
 labels = [labels; labels1];
-
-features = [features1; features2];
 
 NUM_FOLDS = length(labels);
 % remove top 5% outliers and test
@@ -56,8 +61,9 @@ err=abs(labels-predictions);
 new_features=features;
 %new_labels=predictions;
 % new_labels = labels;
+loopLen = floor(0.05*length(labels));
 
-for i=1:floor(0.05*length(labels))
+for i=1:loopLen
     
     new_features(idx_err(1),:)=[];
     labels(idx_err(1)) = [];
@@ -75,24 +81,23 @@ end
 
 result_train = [r;p;Rsq;S];
 results_mat_train = [results_mat_train,result_train];
-figure; plot(labels,new_predictions,'*'); xlabel('Test Labels'); ylabel('Prediction');
+
+% figure; plot(labels,new_predictions,'*'); xlabel('Test Labels'); ylabel('Prediction');
 % training features from 2013
 train_features = new_features;
 train_labels = labels;
 clear labels; clear features;
 
 % test features from either 2014 or 2015
-write_file_name = 'middleAlto Saxophone2015_ScoreDesignedFeatures_segment2';
+write_file_name = 'middleAlto Saxophone2_NonScoreDesignedFeatures_2014';
 root_path = deriveRootPath();
 full_data_path = [root_path DATA_PATH];
 load([full_data_path write_file_name]);
+% features(:,14)=features(:,14)./features(:,23);
+features(:,delFeat)=[];
+
 test_features = features;
-test_labels = labels(:,l-1);
-
-% write_file_name = 'middleAlto Saxophone2_NonScoreDesignedFeatures_2014';
-% load([full_data_path write_file_name]);
-% test_features =[test_features, features(:,10:17)];
-
+test_labels = labels(:,l);
 clear labels; clear features;
 
 % Normalize
@@ -116,22 +121,20 @@ clear labels; clear features;
 svm = svmtrain(train_labels, train_features, '-s 4 -t 0 -q');
 predictions = svmpredict(test_labels, test_features, svm, '-q');
 
-predictions(predictions<0) = 0;
-predictions(predictions>1) = 1;
+predictions(predictions>1)=1;
+predictions(predictions<0)=0;
+[Rsq, S, p, r] = myRegEvaluation(test_labels, predictions);  
 
-[Rsq, S, p, r] = myRegEvaluation(test_labels, predictions); 
-[spearr, spearp] = corr(test_labels, predictions, 'type', 'Spearman');
-
-result_test = [r;p;spearr;spearp;Rsq;S];
+result_test = [r;p;Rsq;S];
 results_mat_test = [results_mat_test,result_test];
 
 fprintf(['\nResults complete.\nR squared: ' num2str(Rsq) ...
          '\nStandard error: ' num2str(S) '\nP value: ' num2str(p) ...
-         '\nCorrelation coefficient: ' num2str(r) '\n'...
-         '\nSpearman coeff: ' num2str(spearr) '\nSpearman P value:' num2str(spearp) '\n']);
+         '\nCorrelation coefficient: ' num2str(r) '\n']);
 
-figure; plot(test_labels,predictions,'*'); xlabel('Test Labels'); ylabel('Prediction');
+% figure; plot(test_labels,predictions,'*'); xlabel('Test Labels'); ylabel('Prediction');
 end
 
-xlswrite('result_train_2015_14', results_mat_train);
-xlswrite('result_test_2013', results_mat_test);
+
+xlswrite('result_train_baseline_2013_14', results_mat_train);
+xlswrite('result_test_baseline_2015', results_mat_test);
