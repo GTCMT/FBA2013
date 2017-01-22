@@ -85,7 +85,7 @@ function midi_mat_aligned = fix_repeats(midi_mat_aligned, midi_mat_gt, note_pos,
     first_onset = midi_mat_aligned(note_pos-num_repeats, 6);
     last_offset = midi_mat_aligned(note_pos, 6);
     total_duration_beats = sum(midi_mat_gt(note_pos-num_repeats:note_pos, 2));
-    if(last_offset - first_onset > num_repeats*hop_s+1e-5)
+    if(last_offset - first_onset > num_repeats*hop_s)
         
         for j = 1:num_repeats
 %             if(midi_mat_aligned(note_pos-num_repeats+j,6) - midi_mat_aligned(note_pos-num_repeats+j-1,6) <= hop_s)
