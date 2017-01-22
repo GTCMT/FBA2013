@@ -45,26 +45,6 @@ wav_pitch_contour_in_midi = wav_pitch_contour_in_midi(lead_trail_z(1):lead_trail
 zeros_other = find(wav_pitch_contour_in_midi == 0);
 wav_pitch_contour_in_midi(zeros_other) = [];
 
-%Retain zeros that are at least 8 frames long (46 ms using 256 samples hop)
-diff_zeros_other = diff(zeros_other);
-num_consecutive_zeros = 1;
-long_zeros = [];
-for i = 1:numel(diff_zeros_other)
-    if diff_zeros_other(i) == 1
-        num_consecutive_zeros = num_consecutive_zeros + 1;
-        continue;
-    else
-        if num_consecutive_zeros >= 8
-            long_zeros = [long_zeros; zeros_other(i) - num_consecutive_zeros + 1, num_consecutive_zeros];
-        end
-        num_consecutive_zeros = 1;
-    end
-end
-%check if last silence is long
-if num_consecutive_zeros >= 3
-    long_zeros = [long_zeros; zeros_other(i) - num_consecutive_zeros + 1, num_consecutive_zeros];
-end
-
 % perform alignment
 % [~, ix, iy] = dtw(midi_mat(:,4), wav_pitch_contour_in_midi);
 D = wrappedDist(midi_mat(:,4), wav_pitch_contour_in_midi, 12);
@@ -85,7 +65,7 @@ nvt = mySpectralFlux(wav, wSize, hop);
 nvt = nvt(lead_trail_z(1):lead_trail_z(end));
 nvt(zeros_other) = [];
 onsets = myOnsetDetection(nvt, fs_w, wSize, hop);
-midi_mat_aligned = updateMidiOnsets(midi_mat_aligned, midi_mat, onsets, 50, hop/fs_w);
+midi_mat_aligned = updateMidiOnsets(midi_mat_aligned, midi_mat, onsets, 50);
 
 %Modify durations: Note onset difference for all notes but the last
 %for last note, use length of pitch contour to match the end points.
@@ -95,8 +75,8 @@ midi_mat_aligned(end, 7) = numel(wav_pitch_contour_in_midi)*hop/fs_w - midi_mat_
 %Add silences back at the appropriate location
 notes_altered = [];
 % tolerance = 4*hop/fs_w;
-for i = 1:length(long_zeros)
-    pos = long_zeros(i,1);
+for i = 1:numel(zeros_other)
+    pos = zeros_other(i);
     prior_notes = find(midi_mat_aligned(:,6)<pos*hop/fs_w);
     previous_note = prior_notes(end);
     %check if note occurs after silence occurs
@@ -106,7 +86,7 @@ for i = 1:length(long_zeros)
 %         midi_mat_aligned = addSilence(midi_mat_aligned, previous_note, hop, fs_w);
 %     else
 %         %split the note
-        [midi_mat_aligned, split_note] = splitNote(midi_mat_aligned, previous_note, pos, long_zeros(i,2), hop, fs_w);
+        [midi_mat_aligned, split_note] = splitNote(midi_mat_aligned, previous_note, pos, hop, fs_w);
         notes_altered = [notes_altered; split_note];
 %     end
 end
@@ -118,13 +98,13 @@ midi_mat_aligned(:,6) = midi_mat_aligned(:,6) + lead_trail_z(1)*hop/fs_w;
 % writemidi(midi_mat_aligned,'exp3.mid');
 end
 
-function midi_mat = addSilence(midi_mat, previous_note, num_zeros, hop, fs_w)
+function midi_mat = addSilence(midi_mat, previous_note, hop, fs_w)
     for i = previous_note + 1:size(midi_mat,1)
-        midi_mat(i,6) = midi_mat(i,6) + num_zeros*hop/fs_w; %add one frame of silence
+        midi_mat(i,6) = midi_mat(i,6) + hop/fs_w; %add one frame of silence
     end
 end
 
-function [midi_mat, split_note] = splitNote(midi_mat, previous_note, pos, num_zeros, hop, fs_w)
+function [midi_mat, split_note] = splitNote(midi_mat, previous_note, pos, hop, fs_w)
     split_note = [];
     onset_time = midi_mat(previous_note,6);
     duration = midi_mat(previous_note, 7);
@@ -138,17 +118,17 @@ function [midi_mat, split_note] = splitNote(midi_mat, previous_note, pos, num_ze
     note_1 = [onset_note_1, duration_note_1, midi_mat(previous_note, 3:5), onset_note_1, duration_note_1];
     note_2 = [onset_note_2, duration_note_2, midi_mat(previous_note, 3:5), onset_note_2, duration_note_2]; 
     % check if silence is at note off or during note to split
-    if((pos-1)*hop/fs_w - onset_time >= duration || duration_note_2 < hop/fs_w)
-        midi_mat = addSilence(midi_mat, previous_note, num_zeros, hop, fs_w);
+    if((pos-1)*hop/fs_w - onset_time >= duration)
+        midi_mat = addSilence(midi_mat, previous_note, hop, fs_w);
     else
-        if(duration_note_1 < hop/fs_w) %note was not played or shorter than 1 frame
+        if(duration_note_1 <= 1e-6) %note was not played yet
 %             midi_mat(previous_note,7) = duration_note_1;
             midi_mat = [midi_mat(1:previous_note-1,:); note_2; midi_mat(previous_note+1:end,:)];
-            midi_mat = addSilence(midi_mat, previous_note - 1, num_zeros, hop, fs_w);
+            midi_mat = addSilence(midi_mat, previous_note - 1, hop, fs_w);
         else %split note
             split_note = previous_note;
             midi_mat = [midi_mat(1:previous_note-1,:); note_1; note_2; midi_mat(previous_note+1:end,:)];
-            midi_mat = addSilence(midi_mat, previous_note, num_zeros, hop, fs_w);
+            midi_mat = addSilence(midi_mat, previous_note, hop, fs_w);
         end
     end
 end

@@ -36,7 +36,7 @@ binDiff1 = mean(diff(xcenters1));
 skew1 = FeatureSpectralSkewness(h1_norm', fs);
 kurto1 = FeatureSpectralKurtosis(h1_norm', fs);
 rolloff1 = FeatureSpectralRolloff(h1_norm', fs, 0.85);
-% flatness1 = FeatureSpectralFlatness(h1_norm', fs);
+flatness1 = FeatureSpectralFlatness(h1_norm', fs);
 tonalPower1 = FeatureSpectralTonalPowerRatio(h1_norm', fs);
 
 % peakCrest2 = IOIPeakCrest(h2_norm, xcenters2);
@@ -47,6 +47,6 @@ tonalPower1 = FeatureSpectralTonalPowerRatio(h1_norm', fs);
 % flatness2 = FeatureSpectralFlatness(h2_norm', fs);
 % tonalPower2 = FeatureSpectralTonalPowerRatio(h2_norm', fs);
 
-durFeats = [peakCrest1;binDiff1;skew1;kurto1;rolloff1;tonalPower1];  %;...
+durFeats = [peakCrest1;binDiff1;skew1;kurto1;rolloff1;flatness1;tonalPower1];  %;...
 %     peakCrest2;binDiff2; skew2;kurto2;rolloff2;flatness2;tonalPower2];
 end

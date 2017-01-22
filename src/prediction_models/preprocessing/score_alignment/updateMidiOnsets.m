@@ -1,4 +1,4 @@
-function midi_mat_new = updateMidiOnsets(midi_mat_aligned, midi_mat_gt, onsetTime, tolerance, hop_s)
+function midi_mat_new = updateMidiOnsets(midi_mat_aligned, midi_mat_gt, onsetTime, tolerance)
 
 % function midi_mat_new = updateMidiOnsets(midi_mat, onsetTime, fs, hopSize, tolerance)
 % Input Arguments: 
@@ -50,7 +50,7 @@ for i = 1:N-1
         if num_repeats == 0
             continue;
         else
-            midi_mat_new = fix_repeats(midi_mat_new, midi_mat_gt, i, num_repeats, hop_s);
+            midi_mat_new = fix_repeats(midi_mat_new, midi_mat_gt, i, num_repeats);
             num_repeats = 0;
         end
     end
@@ -65,10 +65,10 @@ end
 % by the onset detection algorithm.
 k = 1;
 for i=1:N-1
-    midiOnset = midi_mat_new(i,6);
+    midiOnset = midi_mat_aligned(i,6);
     while(k<M)
         if ((abs(onsetTime(k)-midiOnset)) < tol_ms && ... % actual onset within tolerance
-                onsetTime(k)<midi_mat_new(i+1,6) && onsetTime(k) < midiOnset)             % and within next onset
+                onsetTime(k)<midi_mat_aligned(i+1,6) && onsetTime(k) < midiOnset)             % and within next onset
             midi_mat_new(i,6) = onsetTime(k);            
 %         else
 %             if (onsetTime(k) > midiOnset)                 % Verify only till current midiOnset
@@ -81,18 +81,12 @@ end
  
 end
 
-function midi_mat_aligned = fix_repeats(midi_mat_aligned, midi_mat_gt, note_pos, num_repeats, hop_s)
+function midi_mat_aligned = fix_repeats(midi_mat_aligned, midi_mat_gt, note_pos, num_repeats)
     first_onset = midi_mat_aligned(note_pos-num_repeats, 6);
     last_offset = midi_mat_aligned(note_pos, 6);
     total_duration_beats = sum(midi_mat_gt(note_pos-num_repeats:note_pos, 2));
-    if(last_offset - first_onset > num_repeats*hop_s)
-        
-        for j = 1:num_repeats
-%             if(midi_mat_aligned(note_pos-num_repeats+j,6) - midi_mat_aligned(note_pos-num_repeats+j-1,6) <= hop_s)
-%                 continue
-%             end
-            midi_mat_aligned(note_pos-num_repeats+j, 6) = ...
-                midi_mat_aligned(note_pos-num_repeats+j - 1, 6) + (last_offset-first_onset)*midi_mat_gt(note_pos-num_repeats+j-1,2)/total_duration_beats;
-        end
+    for j = 1:num_repeats
+        midi_mat_aligned(note_pos-num_repeats+j, 6) = ...
+            first_onset + (last_offset-first_onset)*midi_mat_gt(note_pos-num_repeats+j-1,2)/total_duration_beats;
     end
 end

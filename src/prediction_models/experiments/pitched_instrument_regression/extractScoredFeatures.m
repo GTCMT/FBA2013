@@ -67,7 +67,6 @@ else
 end
 
 [slopedev, ~] = slopeDeviation(path);
-dtw_cost = dtw_cost/length(path);
 [rwStu, clStu] = size(algndmid);
 
 % features over each individual note and then its derived statistical features
@@ -109,8 +108,8 @@ features(1,15)=slopedev;
 
 [note_indices] = computeNoteOccurence(scoreMid);
 vecDurFeat = DurHistScore(algndmid, note_indices, note_onsets, Fs);
-features(1,16:21)=vecDurFeat';
-% features(1,23) = length(path);
-% features(1,24) = length(f0);
+features(1,16:22)=vecDurFeat';
+features(1,23) = length(path);
+features(1,24) = length(f0);
       
 end
