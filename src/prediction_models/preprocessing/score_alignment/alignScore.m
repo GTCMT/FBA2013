@@ -45,7 +45,6 @@ wav_pitch_contour_in_midi = wav_pitch_contour_in_midi(lead_trail_z(1):lead_trail
 zeros_other = find(wav_pitch_contour_in_midi == 0);
 wav_pitch_contour_in_midi(zeros_other) = [];
 
-%Retain zeros that are at least 8 frames long (46 ms using 256 samples hop)
 diff_zeros_other = diff(zeros_other);
 num_consecutive_zeros = 1;
 long_zeros = [];
@@ -54,14 +53,14 @@ for i = 1:numel(diff_zeros_other)
         num_consecutive_zeros = num_consecutive_zeros + 1;
         continue;
     else
-        if num_consecutive_zeros >= 8
+        if num_consecutive_zeros >= 1
             long_zeros = [long_zeros; zeros_other(i) - num_consecutive_zeros + 1, num_consecutive_zeros];
         end
         num_consecutive_zeros = 1;
     end
 end
 %check if last silence is long
-if num_consecutive_zeros >= 3
+if num_consecutive_zeros >= 1
     long_zeros = [long_zeros; zeros_other(i) - num_consecutive_zeros + 1, num_consecutive_zeros];
 end
 
