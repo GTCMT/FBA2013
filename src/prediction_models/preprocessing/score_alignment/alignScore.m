@@ -95,7 +95,7 @@ midi_mat_aligned(end, 7) = numel(wav_pitch_contour_in_midi)*hop/fs_w - midi_mat_
 %Add silences back at the appropriate location
 notes_altered = [];
 % tolerance = 4*hop/fs_w;
-for i = 1:size(long_zeros,1)
+for i = 1:length(long_zeros)
     pos = long_zeros(i,1);
     prior_notes = find(midi_mat_aligned(:,6)<pos*hop/fs_w);
     previous_note = prior_notes(end);
