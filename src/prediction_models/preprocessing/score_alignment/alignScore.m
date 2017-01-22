@@ -45,23 +45,26 @@ wav_pitch_contour_in_midi = wav_pitch_contour_in_midi(lead_trail_z(1):lead_trail
 zeros_other = find(wav_pitch_contour_in_midi == 0);
 wav_pitch_contour_in_midi(zeros_other) = [];
 
+%Retain zeros positions along with length in frames
 diff_zeros_other = diff(zeros_other);
 num_consecutive_zeros = 1;
 long_zeros = [];
-for i = 1:numel(diff_zeros_other)
-    if diff_zeros_other(i) == 1
-        num_consecutive_zeros = num_consecutive_zeros + 1;
-        continue;
-    else
-        if num_consecutive_zeros >= 1
-            long_zeros = [long_zeros; zeros_other(i) - num_consecutive_zeros + 1, num_consecutive_zeros];
+if(numel(zeros_other) > 1)
+    for i = 1:numel(diff_zeros_other)
+        if diff_zeros_other(i) == 1
+            num_consecutive_zeros = num_consecutive_zeros + 1;
+            continue;
+        else
+            if num_consecutive_zeros >= 1
+                long_zeros = [long_zeros; zeros_other(i) - num_consecutive_zeros + 1, num_consecutive_zeros];
+            end
+            num_consecutive_zeros = 1;
         end
-        num_consecutive_zeros = 1;
     end
-end
-%check if last silence is long
-if num_consecutive_zeros >= 1
-    long_zeros = [long_zeros; zeros_other(i) - num_consecutive_zeros + 1, num_consecutive_zeros];
+    %check if last silence is long
+    if num_consecutive_zeros >= 1
+        long_zeros = [long_zeros; zeros_other(i) - num_consecutive_zeros + 1, num_consecutive_zeros];
+    end
 end
 
 % perform alignment
