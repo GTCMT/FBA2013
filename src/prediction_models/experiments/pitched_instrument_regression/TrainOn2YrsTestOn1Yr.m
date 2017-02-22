@@ -10,7 +10,7 @@ clear all;
 clc;
 
 DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-write_file_name = 'middleAlto Saxophone2_designedFeatures_2013';
+write_file_name = 'middleAlto Saxophone2_baseline_2013';
 
 % Check for existence of path for writing extracted features.
 root_path = deriveRootPath();
@@ -26,7 +26,7 @@ features1 =features;
 % Average the assessments to get one label.
 labels1 = labels(:,2); %labels(:,3),labels(:,5)
 
-write_file_name = 'middleAlto Saxophone2_designedFeatures_2014';
+write_file_name = 'middleAlto Saxophone2_baseline_2014';
 load([full_data_path write_file_name]);
 
 features = [features; features1];
@@ -41,8 +41,9 @@ err=abs(labels-predictions);
 new_features=features;
 %new_labels=predictions;
 % new_labels = labels;
+loopLen = floor(0.05*length(labels));
 
-for i=1:floor(0.05*length(labels))
+for i=1:loopLen
     
     new_features(idx_err(1),:)=[];
     labels(idx_err(1)) = [];
@@ -65,10 +66,11 @@ train_labels = labels;
 clear labels; clear features;
 
 % test features from either 2014 or 2015
-write_file_name = 'middleAlto Saxophone2_designedFeatures_2015';
+write_file_name = 'middleAlto Saxophone2_baseline_2015';
 root_path = deriveRootPath();
 full_data_path = [root_path DATA_PATH];
 load([full_data_path write_file_name]);
+
 test_features = features;
 test_labels = labels(:,1);
 clear labels; clear features;
@@ -93,7 +95,9 @@ clear labels; clear features;
 % Train the classifier and get predictions for the current fold.
 svm = svmtrain(train_labels, train_features, '-s 4 -t 0 -q');
 predictions = svmpredict(test_labels, test_features, svm, '-q');
-  
+
+predictions(predictions>1)=1;
+predictions(predictions<0)=0;
 [Rsq, S, p, r] = myRegEvaluation(test_labels, predictions);  
 
 fprintf(['\nResults complete.\nR squared: ' num2str(Rsq) ...

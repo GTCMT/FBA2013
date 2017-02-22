@@ -103,13 +103,14 @@ features(1,11)=std(NormCountGreaterStdDev);
 features(1,12)=max(NormCountGreaterStdDev);
 features(1,13)=min(NormCountGreaterStdDev);
 
-features(1,14)=dtw_cost;
+features(1,14)=dtw_cost/length(path);
 features(1,15)=slopedev;
 
 [note_indices] = computeNoteOccurence(scoreMid);
-vecDurFeat = DurHistScore(algndmid, note_indices, note_onsets, Fs);
-features(1,16:22)=vecDurFeat';
-features(1,23) = length(path);
-features(1,24) = length(f0);
+vecDurFeat = DurHistScore(algndmid, note_indices, note_onsets, Fs, timeStep);
+features(1,16:21)=vecDurFeat';
+features(1,22) = length(ShortNotes);
+% features(1,23) = length(path);
+% features(1,24) = length(f0);
       
 end

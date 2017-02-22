@@ -41,17 +41,21 @@ for (feature_idx = 1:num_features)
   feature_max = max(clean_data);
 
   % In this case, all feature values are the same. 
-  if(feature_max == 0) 
-    warning(['Max of feature ' num2str(feature_idx) ...
+  if(feature_max-feature_min == 0) 
+      warning(['Max of feature ' num2str(feature_idx) ...
              ' is zero.']);
-    feature_max = 1;
-  end
-  
-  % Whiten data.
-  featr_train(:,feature_idx) = (train(:, feature_idx) - feature_min) / ...
-                               (feature_max-feature_min);
-  featr_test(:,feature_idx) = (test(:, feature_idx) - feature_min) / ...
-                               (feature_max-feature_min);
+%       Whiten data.
+      featr_train(:,feature_idx) = (train(:, feature_idx) - feature_min) / ...
+                                   (realmin);
+      featr_test(:,feature_idx) = (test(:, feature_idx) - feature_min) / ...
+                                   (realmin);
+  else
+
+      % Whiten data.
+      featr_train(:,feature_idx) = (train(:, feature_idx) - feature_min) / ...
+                                   (feature_max-feature_min);
+      featr_test(:,feature_idx) = (test(:, feature_idx) - feature_min) / ...
+                                   (feature_max-feature_min);
 end
 
 end
