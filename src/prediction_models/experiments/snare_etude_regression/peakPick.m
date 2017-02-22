@@ -17,12 +17,12 @@ function [onset, loc] = peakPick(nvt, Gdma, fs, windowSize, hopSize)
 peaks = zeros(m1,n1); %peak values
 ht = hopSize/fs; %hop time
 wt = windowSize/fs; %window time
-t = (1:n1)*ht + wt/2;
+t = (0:n1-1)*ht;
 
 
 tmp = nvt;
 tmp( tmp <= Gdma ) = 0;
-dis = ceil(0.01/ht); % 50ms
+dis = ceil(0.01/ht); % 10ms
 
 
 [~, loc] = findpeaks(tmp,'MINPEAKDISTANCE', dis);
