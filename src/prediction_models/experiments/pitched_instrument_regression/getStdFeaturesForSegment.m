@@ -22,7 +22,7 @@ elseif ispc
 end
 
 DATA_PATH = ['experiments' slashtype 'pitched_instrument_regression' slashtype 'data' slashtype];
-write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION)];
+write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION) '_' num2str(YEAR_OPTION)];
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();
@@ -35,6 +35,7 @@ write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION)];
 NUM_FEATURES = 68;
 HOP_SIZE = 256;
 WINDOW_SIZE = 1024;
+Resample_fs = 44100;
 % Scanning Options.
 if YEAR_OPTION == '2013'
     year_folder = '2013-2014';
@@ -83,13 +84,16 @@ for student_idx = 1:num_students
   [segmented_audio, Fs] = scanAudioIntoSegments(file_name, segments);
   current_audio = segmented_audio{1};
 
+  % resample audio
+  current_audio = resample(current_audio,Resample_fs,Fs);
+  
   % Normalize audio;
   normalized_audio = mean(current_audio, 2);
   normalized_audio = normalized_audio ./ max(abs(normalized_audio));
 
   % Extract features.
   features(student_idx, :) = ...
-       extractStdFeatures(normalized_audio, Fs, WINDOW_SIZE, HOP_SIZE);
+       extractStdFeatures(normalized_audio, Resample_fs, WINDOW_SIZE, HOP_SIZE);
 
   % Store all assessments.
   segment_assessments = student_assessments(1, :);
