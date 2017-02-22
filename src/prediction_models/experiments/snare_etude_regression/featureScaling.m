@@ -17,7 +17,7 @@ function [vFeaturesS, varargout] = featureScaling(vFeatures, varargin )
 vFeaturesS = zeros(featureNum, dataNum);
 
 if nargin == 1
-    fprintf('Input argument number = %d\n', nargin);
+    %fprintf('Input argument number = %d\n', nargin);
     %initialization
     minList = zeros(featureNum,1);
     maxList = zeros(featureNum,1);
@@ -25,19 +25,19 @@ if nargin == 1
     for i = 1:featureNum
        minList(i) = min(vFeatures(i, :));
        maxList(i) = max(vFeatures(i, :));
-       vFeaturesS(i,:) = (vFeatures(i,:) - minList(i))./(maxList(i) - minList(i));
+       vFeaturesS(i,:) = (vFeatures(i,:) - minList(i))./(maxList(i) - minList(i) + realmin);
     end
     varargout = {minList, maxList};
     
 elseif nargin == 3
-    fprintf('Input argument number = %d\n', nargin);
+    %fprintf('Input argument number = %d\n', nargin);
     minList = varargin{1};
     maxList = varargin{2};
     assert(length(minList) == length(maxList));
     assert(length(minList) == size(vFeatures, 1));
     
     for i = 1:featureNum
-       vFeaturesS(i,:) = (vFeatures(i,:) - minList(i))./(maxList(i) - minList(i));
+       vFeaturesS(i,:) = (vFeatures(i,:) - minList(i))./(maxList(i) - minList(i) + realmin);
     end
      
 else

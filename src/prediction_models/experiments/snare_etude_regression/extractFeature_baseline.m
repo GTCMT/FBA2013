@@ -10,18 +10,26 @@ addpath('../../../../../FBA2013/src/prediction_models/feature_extraction/Standar
 addpath('../../../../../FBA2013/src/prediction_models/')
 
 
-%% ==== 1) Enter path to judges' gradings =================================
+%% ==== 1) Enter year to be extracted =================================
+year_option = '2015';
+
+%% ==== 2) get student IDs and source path ============================
 [musicality, noteAccuracy, rhythmAccuracy] ...
     = textread('/Users/cw/Documents/CW_FILES/04_Datasets/Database2/FBA middle/Grade/snareEtude_middle_2015.txt');
-
-%% ==== 2) Define the group of interest and scan for student ID ===========
 band_option = 'middle';
 instrument_option = 'Percussion';
-year_option = '2015';
 [student_ids] = scanStudentIds(band_option, instrument_option, year_option);
-sourcefolder = '/Volumes/CW_MBP15/Datasets/FBA/2015-2016/middleschool/';
-annfolder = strcat('../../../../../FBA2013/FBA2015/', 'middleschool/');
-savepath = '/Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_baseline_2015.mat';
+if strcmp(year_option, '2013')
+    sourcefolder = '/Volumes/CW_MBP15/Datasets/FBA/2013-2014/middleschoolscores/';
+    annfolder = strcat('../../../../../FBA2013/FBA2013/', 'middleschoolscores/');
+elseif strcmp(year_option, '2014')
+    sourcefolder = '/Volumes/CW_MBP15/Datasets/FBA/2014-2015/middleschool/';
+    annfolder = strcat('../../../../../FBA2013/FBA2014/', 'middleschool/');    
+elseif strcmp(year_option, '2015')
+    sourcefolder = '/Volumes/CW_MBP15/Datasets/FBA/2015-2016/middleschool/';
+    annfolder = strcat('../../../../../FBA2013/FBA2015/', 'middleschool/');
+end
+savepath = ['/Users/cw/Documents/CW_FILES/02_Github_repo/GTCMT/FBA_cw_local_workspace/experiment_data/middle_baseline_', year_option, '.mat'];
 
 %% ==== 3) Main loop for all tracks
 %set parameters
@@ -50,6 +58,7 @@ for i = 1:trackNum
 
     %load wave file
     [x, fs] = audioread(sourcepath); 
+    x = resample(x, 44100, fs);
     x = mean(x,2); %down-mixing   
     [col1, col2] = textread(annpath,'%s%s','headerlines',1);
     
