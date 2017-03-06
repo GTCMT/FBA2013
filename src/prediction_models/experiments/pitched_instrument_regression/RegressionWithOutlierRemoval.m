@@ -12,7 +12,7 @@ clc;
 % variable.
 
 DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-write_file_name = 'middleAlto Saxophone2_NonScoreDesignedFeatures_2013';
+write_file_name = 'AllDataScoreNonScore131415';
 
 % Check for existence of path for writing extracted features.
 root_path = deriveRootPath();
@@ -33,14 +33,36 @@ load([full_data_path write_file_name]);
 % load([full_data_path write_file_name]);
 % features=[features,features_designed];
 
+Rsq_before = zeros(1,4);
+S_before = zeros(1,4);
+p_before = zeros(1,4);
+r_before = zeros(1,4);
+p_s_before = zeros(1,4);
+r_s_before = zeros(1,4);
+
+Rsq_all = zeros(1,4);
+S_all = zeros(1,4);
+p_all = zeros(1,4);
+r_all = zeros(1,4);
+p_s_all = zeros(1,4);
+r_s_all = zeros(1,4);
+
+Rsq_outliers = zeros(1,4);
+S_outliers = zeros(1,4);
+p_outliers = zeros(1,4);
+r_outliers = zeros(1,4);
+
+prediction_arr = [];
+
+for l = 1:4
 % Average the assessments to get one label.
-labels = labels(:,1); %labels(:,3),labels(:,5)
-NUM_FOLDS = length(labels);
+labels_sel = labels(:,l); %labels(:,3),labels(:,5)
+NUM_FOLDS = length(labels_sel);
 
 % consider the PCA transformed features with 95% variability 
-[row,col]=size(features);
-dummy = ones(1,col);
-[normFeat, dum] = NormalizeFeatures(features,dummy);
+% [row,col]=size(features);
+% dummy = ones(1,col);
+% [normFeat, dum] = NormalizeFeatures(features,dummy);
 % [coeff,score,latent,tsquared,explained,mu]=pca(normFeat);
 % for i =1:length(explained)
 %     if sum(explained(1:i))>=95
@@ -50,18 +72,24 @@ dummy = ones(1,col);
 % end
 
 % remove 5% outliers
-[Rsq, S, p, r, predictions] = crossValidation(labels, normFeat, NUM_FOLDS);
+[Rsq, S, p, r, predictions] = crossValidation(labels_sel, features, NUM_FOLDS);
 % for PCA
 % [Rsq, S, p, r, predictions] = crossValidation(labels, score(:,1:featNum), NUM_FOLDS);
-err=abs(labels-predictions);
+err=abs(labels_sel-predictions);
 [sort_err,idx_err]=sort(err,'descend');
 % new_features=features;
 
-new_features= normFeat; %score(:,1:featNum);
-new_labels = labels;
+new_features= features; %score(:,1:featNum);
+new_labels = labels_sel;
+lenLoop = floor(0.05*length(labels_sel));
+dataID = 1:length(new_labels);
 
-for i=1:floor(0.05*length(labels))
-    
+for i=1:lenLoop
+
+    outlierIdx(i) = idx_err(1);
+%     outlierIdx(i) = dataID(outlierIdx(i));
+    dataID(outlierIdx(i)) = [];
+   
     new_features(idx_err(1),:)=[];
     new_labels(idx_err(1)) = [];
 
@@ -71,10 +99,52 @@ for i=1:floor(0.05*length(labels))
     err=abs(new_labels-new_predictions);
     [sort_err,idx_err]=sort(err,'descend');
 
-    fprintf(['\nResults complete.\nR squared: ' num2str(Rsq) ...
-     '\nStandard error: ' num2str(S) '\nP value: ' num2str(p) ...
-     '\nCorrelation coefficient: ' num2str(r) '\n']);
+    if i == lenLoop
+        fprintf(['\nResults complete.\nR squared: ' num2str(Rsq) ...
+        '\nStandard error: ' num2str(S) '\nP value: ' num2str(p) ...
+        '\nCorrelation coefficient: ' num2str(r) '\n']);
+    end
 end
-  
 
+[r_s_before(l), p_s_before(l)] = corr(new_labels, new_predictions, 'type', 'Spearman');
+Rsq_before(l) = Rsq;
+S_before(l)=S;
+p_before(l)=p;
+r_before(l)=r;
+
+test_remaining = features(outlierIdx,:);
+test_labels = labels_sel(outlierIdx,:);
+[train_features, test_features] = NormalizeFeatures(new_features, test_remaining);
+
+% Train the classifier and get predictions for the current fold.
+svm = svmtrain(new_labels, train_features, '-s 4 -t 0 -q');
+predictions = svmpredict(test_labels, test_features, svm, '-q');
+
+final_predictions(dataID,1) = new_predictions;
+final_predictions(outlierIdx,1) = predictions;
+
+final_predictions(final_predictions>1)=1;
+final_predictions(final_predictions<0)=0;
+[Rsq, S, p, r] = myRegEvaluation(labels_sel, final_predictions);  
+
+prediction_arr = [prediction_arr,final_predictions];
+
+[r_s_all(l), p_s_all(l)] = corr(labels_sel, final_predictions, 'type', 'Spearman');
+Rsq_all(l) = Rsq;
+S_all(l)=S;
+p_all(l)=p;
+r_all(l)=r;
+
+% correlation of just the outliers
+[Rsq, S, p, r] = myRegEvaluation(test_labels, predictions);  
+Rsq_outliers(l) = Rsq;
+S_outliers(l)=S;
+p_outliers(l)=p;
+r_outliers(l)=r;
+
+end
+
+FinalResults = [r_all;p_all;r_s_all;p_s_all;Rsq_all;S_all];  
+predictions = prediction_arr;
+%save('predictions_allTogether','predictions');
 

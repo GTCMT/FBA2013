@@ -7,8 +7,8 @@ clc;
 % feature selection procedure. Maximum accuracy at each feature combination
 % is plotted in the end.
 
-DATA_PATH = 'experiments\pitched_instrument_regression\data_acf_altosax\';
-write_file_name = 'middleAlto Saxophone1';
+DATA_PATH = 'experiments/pitched_instrument_regression/data/';
+write_file_name = 'LatestScoreNonScoreConcat_2013';
 
 % Check for existence of path for reading stored features and labels.
 root_path = deriveRootPath();
