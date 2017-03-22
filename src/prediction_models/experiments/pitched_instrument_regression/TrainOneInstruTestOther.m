@@ -27,33 +27,39 @@ FinalPredictions = [];
 yr1 = 4; yr2 = 5; yr3 = 3;
 for l = 2:5
     
-write_file_name = ['middleAlto Saxophone2_baseline_201' num2str(yr1)];
-
+% write_file_name = ['SoreNonScoreConcat_201' num2str(yr1)];
+% 
 % Check for existence of path for writing extracted features.
 root_path = deriveRootPath();
 full_data_path = [root_path DATA_PATH];
+% 
+% if(~isequal(exist(full_data_path, 'dir'), 7))
+%     error('Error in your file path.');
+% end
+%   
+% load([full_data_path write_file_name]);
+% % features(:,14)=features(:,14)./features(:,23);
+% % features(:,delFeat)=[];
+% 
+% features1 =features;
+% 
+% % Average the assessments to get one label.
+% labels1 = labels(:,l); %labels(:,3),labels(:,5)
+% 
+% write_file_name = ['SoreNonScoreConcat_201' num2str(yr2)];
+% load([full_data_path write_file_name]);
+% % features(:,14)=features(:,14)./features(:,23);
+% % features(:,delFeat)=[];
+% 
+% features1 = [features; features1];
+% labels1 = [labels(:,l-1); labels1];
 
-if(~isequal(exist(full_data_path, 'dir'), 7))
-    error('Error in your file path.');
-end
-  
+write_file_name = ['SoreNonScoreConcat_201' num2str(yr3)];
 load([full_data_path write_file_name]);
-% features(:,14)=features(:,14)./features(:,23);
-% features(:,delFeat)=[];
 
-features1 =features;
-
-% Average the assessments to get one label.
-labels1 = labels(:,l); %labels(:,3),labels(:,5)
-
-write_file_name = ['middleAlto Saxophone2_baseline_201' num2str(yr2)];
-load([full_data_path write_file_name]);
-% features(:,14)=features(:,14)./features(:,23);
-% features(:,delFeat)=[];
-
-features = [features; features1];
-labels = labels(:,l-1); %labels(:,3),labels(:,5)
-labels = [labels; labels1];
+% features = [features; features1];
+labels = labels(:,l); %labels(:,3),labels(:,5)
+% labels = [labels; labels1];
 
 NUM_FOLDS = length(labels);
 % remove top 5% outliers and test
@@ -91,7 +97,7 @@ train_labels = labels;
 clear labels; clear features;
 
 % test features from either 2014 or 2015
-write_file_name = ['middleAlto Saxophone2_baseline_201' num2str(yr3)];
+write_file_name = ['ScoreNonScoremiddleFlute2_2013'];
 root_path = deriveRootPath();
 full_data_path = [root_path DATA_PATH];
 load([full_data_path write_file_name]);
@@ -140,7 +146,7 @@ fprintf(['\nResults complete.\nR squared: ' num2str(Rsq) ...
 % figure; plot(test_labels,predictions,'*'); xlabel('Test Labels'); ylabel('Prediction');
 end
 
-save(['Predictions Saxophone2_baseline_201' num2str(yr3)],'FinalPredictions');
+% save(['Predictions Saxophone2_baseline_201' num2str(yr3)],'FinalPredictions');
 
 % xlswrite('result_train_baseline_2013_14', results_mat_train);
 % xlswrite('result_test_baseline_2015', results_mat_test);

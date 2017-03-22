@@ -45,11 +45,12 @@ end
 [maxima, indmax] = findpeaks(autoCorrelation(minOffset:maxOffset));
 
 if (isempty(maxima) == 1)
-   [maxima, indmax] = max(autoCorrelation(minOffset:maxOffset));
-end
+f0 = 0;
+else
 [~,ind1] = max(maxima);
 idx1 = indmax(ind1)+minOffset-1;
 f0 = fs/idx1;
+end
 
 % spectra = abs(fft(frame));
 % spectra = spectra(1:wSize/2);
