@@ -118,7 +118,7 @@ function [midi_mat, split_note] = splitNote(midi_mat, previous_note, pos, hop, f
     note_1 = [onset_note_1, duration_note_1, midi_mat(previous_note, 3:5), onset_note_1, duration_note_1];
     note_2 = [onset_note_2, duration_note_2, midi_mat(previous_note, 3:5), onset_note_2, duration_note_2]; 
     % check if silence is at note off or during note to split
-    if((pos-1)*hop/fs_w - onset_time >= duration)
+    if(((pos-1)*hop/fs_w - onset_time >= duration) || (duration_note_2 <= 1e-6))
         midi_mat = addSilence(midi_mat, previous_note, hop, fs_w);
     else
         if(duration_note_1 <= 1e-6) %note was not played yet

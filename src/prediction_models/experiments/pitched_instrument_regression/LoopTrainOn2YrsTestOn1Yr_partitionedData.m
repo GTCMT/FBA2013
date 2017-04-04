@@ -20,60 +20,42 @@ if(~isequal(exist(full_data_path, 'dir'), 7))
     error('Error in your file path.');
 end
 
+write_file_name = 'FeaturesConCatChihweiExp';
+load([full_data_path write_file_name]);
+
+[dataFolds, fileIndices] = nfoldPartition(features, 3);
+[train, test] = stackFolds(dataFolds, 3);
+[rw,cl]=size(train);
+
 results_mat_train = [];
 results_mat_test = [];
 FinalPredictions = [];
 
-yr1 = 3; yr2 = 4; yr3 = 5;
-for l = 2:5
-    
-write_file_name = ['Score_middleAltoSaxophone_segment2_pitchCrctd_featCrctd_201' num2str(yr1)];
+for l = 1:4
 
-% Check for existence of path for writing extracted features.
-root_path = deriveRootPath();
-full_data_path = [root_path DATA_PATH];
+feat_train = train(:,1:cl-4);
+labels_train = train(:,cl-3:cl);
+labels_train = labels_train(:,l);
 
-if(~isequal(exist(full_data_path, 'dir'), 7))
-    error('Error in your file path.');
-end
-  
-load([full_data_path write_file_name]);
-% features(:,14)=features(:,14)./features(:,23);
-% features(:,delFeat)=[];
-
-features1 =features;
-
-% Average the assessments to get one label.
-labels1 = labels(:,l); %labels(:,3),labels(:,5)
-
-write_file_name = ['Score_middleAltoSaxophone_segment2_pitchCrctd_featCrctd_201' num2str(yr2)];
-load([full_data_path write_file_name]);
-% features(:,14)=features(:,14)./features(:,23);
-% features(:,delFeat)=[];
-
-features = [features; features1];
-labels = labels(:,l); %labels(:,3),labels(:,5)
-labels = [labels; labels1];
-
-NUM_FOLDS = length(labels);
+NUM_FOLDS = length(labels_train);
 % remove top 5% outliers and test
-[Rsq, S, p, r, predictions] = crossValidation(labels, features, NUM_FOLDS);
-err=abs(labels-predictions);
+[Rsq, S, p, r, predictions] = crossValidation(labels_train, features, NUM_FOLDS);
+err=abs(labels_train-predictions);
 [sort_err,idx_err]=sort(err,'descend');
-new_features=features;
+new_features=feat_train;
 %new_labels=predictions;
 % new_labels = labels;
-loopLen = floor(0.05*length(labels));
+loopLen = floor(0.05*length(labels_train));
 
 for i=1:loopLen
     
     new_features(idx_err(1),:)=[];
-    labels(idx_err(1)) = [];
+    labels_train(idx_err(1)) = [];
 
     NUM_FOLDS=NUM_FOLDS-1;
-    [Rsq, S, p, r, new_predictions] = crossValidation(labels, new_features, NUM_FOLDS);
+    [Rsq, S, p, r, new_predictions] = crossValidation(labels_train, new_features, NUM_FOLDS);
 
-    err=abs(labels-new_predictions);
+    err=abs(labels_train-new_predictions);
     [sort_err,idx_err]=sort(err,'descend');
 
 %     fprintf(['\nResults complete.\nR squared: ' num2str(Rsq) ...
@@ -87,37 +69,15 @@ results_mat_train = [results_mat_train,result_train];
 % figure; plot(labels,new_predictions,'*'); xlabel('Test Labels'); ylabel('Prediction');
 % training features from 2013
 train_features = new_features;
-train_labels = labels;
-clear labels; clear features;
+train_labels = labels_train;
 
 % test features from either 2014 or 2015
-write_file_name = ['Score_middleAltoSaxophone_segment2_pitchCrctd_featCrctd_201' num2str(yr3)];
-root_path = deriveRootPath();
-full_data_path = [root_path DATA_PATH];
-load([full_data_path write_file_name]);
-% features(:,14)=features(:,14)./features(:,23);
-% features(:,delFeat)=[];
-
-test_features = features;
-test_labels = labels(:,l-1);
-clear labels; clear features;
+test_features = test(:,1:cl-4);
+test_labels = test(:,cl-3:cl);
+test_labels = test_labels(:,l);
 
 % Normalize
 [train_features, test_features] = NormalizeFeatures(train_features, test_features);
-% feature truncation
-% test_features(test_features >= 1) = 1;
-% test_features(test_features <= 0) = 0;
-% locations_truncated = (test_features >= 1) + (test_features <= 0);
-
-% remove top 2 most truncated features
-% countTruncation = sum(locations_truncated);
-% [val,loc]=max(countTruncation);
-% train_features(:,loc)=[];
-% test_features(:,loc)=[];
-% countTruncation(loc)=[];
-% [val,loc]=max(countTruncation);
-% train_features(:,loc)=[];
-% test_features(:,loc)=[];
 
 % Train the classifier and get predictions for the current fold.
 svm = svmtrain(train_labels, train_features, '-s 4 -t 0 -q');
@@ -140,7 +100,7 @@ fprintf(['\nResults complete.\nR squared: ' num2str(Rsq) ...
 % figure; plot(test_labels,predictions,'*'); xlabel('Test Labels'); ylabel('Prediction');
 end
 
-save(['predictions_E3_201' num2str(yr3)],'FinalPredictions');
+save(['predictions_partitionedData_' num2str(3)],'FinalPredictions');
 
 % xlswrite('result_train_baseline_2013_14', results_mat_train);
 % xlswrite('result_test_baseline_2015', results_mat_test);

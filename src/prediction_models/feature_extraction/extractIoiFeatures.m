@@ -21,8 +21,8 @@ IOIbinDiff = mean(diff(xcenters));
 IOIskew = FeatureSpectralSkewness(nelementN', fs);
 IOIkurto = FeatureSpectralKurtosis(nelementN', fs);
 IOIrolloff = FeatureSpectralRolloff(nelementN', fs, 0.85);
-IOIflatness = FeatureSpectralFlatness(nelementN', fs);
+% IOIflatness = FeatureSpectralFlatness(nelementN', fs);
 IOItonalPower = FeatureSpectralTonalPowerRatio(nelementN', fs);
 
 vIoi = [IOIpeakCrest; IOIbinDiff; IOIskew; IOIkurto; IOIrolloff; ...
-        IOIflatness; IOItonalPower];
+        IOItonalPower];

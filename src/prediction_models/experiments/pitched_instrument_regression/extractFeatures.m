@@ -15,7 +15,7 @@
 
 function [features] = extractFeatures(audio, Fs, wSize, hop)
 
-    features=zeros(1,25);
+    features=zeros(1,24);
     algo='acf';
 %     algo='wav';
     thresh1=0.1;
@@ -72,7 +72,7 @@ function [features] = extractFeatures(audio, Fs, wSize, hop)
 %     features(1,22)=max(ampenv_peaks)-min(ampenv_peaks);
     
     features(1,18) = numGoodNotes(note,thresh1,thresh2);
-    features(1,19:25) = extractIOIFeaturesCW(audio, Fs, wSize, hop);
+    features(1,19:24) = extractIOIFeaturesCW(audio, Fs, wSize, hop);
 %     features(1,23)=IOIfeatures(note);
       
 end
