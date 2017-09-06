@@ -11,7 +11,7 @@ clc
 
 BAND_OPTION = 'middle';
 INSTRUMENT_OPTION = 'Alto Saxophone';
-year_option = '2014';
+year_option = '2015';
 NUM_FEATURES = 22;
 
 for segment = 2 % segment for which features are to be extracted

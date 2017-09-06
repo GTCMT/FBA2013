@@ -51,35 +51,37 @@ if flag == 1
     [algndmid1, note_onsets1, dtw_cost1, path1] = alignScore(scorePath, tfCompnstdF0, audio, Fs, wSize, hop);
     [algndmid2, note_onsets2, dtw_cost2, path2] = alignScore(scorePath, tfCompnstdF02, audio, Fs, wSize, hop);
     if dtw_cost2 > dtw_cost1
-       algndmid = algndmid1;
-       note_onsets = note_onsets1;
+       algndmidi = algndmid1;
+       note_altrd = note_onsets1;
        dtw_cost = dtw_cost1;
        path = path1;
     else
-       algndmid = algndmid2;
-       note_onsets = note_onsets2;
+       algndmidi = algndmid2;
+       note_altrd = note_onsets2;
        dtw_cost = dtw_cost2;
        path = path2;
        tfCompnstdF0 = tfCompnstdF02;
     end
 else
-    [algndmid, note_onsets, dtw_co st, path] = alignScore(scorePath, tfCompnstdF0, audio, Fs, wSize, hop);
+    [algndmidi, note_altrd, dtw_cost, path] = alignScore(scorePath, tfCompnstdF0, audio, Fs, wSize, hop);
 end
 
 [slopedev, ~] = slopeDeviation(path);
-[rwStu, clStu] = size(algndmid);
+[rwStu, clStu] = size(algndmidi);
 
 % features over each individual note and then its derived statistical features
 NoteAvgDevFromRef = zeros(1,rwStu); NoteStdDevFromRef = zeros(1,rwStu); NormCountGreaterStdDev = zeros(1,rwStu);
 ShortNotes = [];
+numSampShortNotes = [];
 for i=1:rwStu
-    strtTime = round(algndmid(i,6)/timeStep);
-    endTime = round(algndmid(i,6)/timeStep + algndmid(i,7)/timeStep-1);
+    strtTime = round(algndmidi(i,6)/timeStep);
+    endTime = round(algndmidi(i,6)/timeStep + algndmidi(i,7)/timeStep-1);
     pitchvals=(tfCompnstdF0(strtTime:endTime));
     if (numel(pitchvals) < 3) %note played is too short i.e. around 10 ms
         ShortNotes = [ShortNotes, i];
+        numSampShortNotes = [numSampShortNotes, numel(pitchvals)];
     else
-        [NoteAvgDevFromRef(1,i),NoteStdDevFromRef(1,i),NormCountGreaterStdDev(1,i)]=NoteSteadinessMeasureWithRefScore(pitchvals(pitchvals~=0), algndmid(i,4));
+        [NoteAvgDevFromRef(1,i),NoteStdDevFromRef(1,i),NormCountGreaterStdDev(1,i)]=NoteSteadinessMeasureWithRefScore(pitchvals(pitchvals~=0), algndmidi(i,4));
     end
 end
 % Remove Short Notes
@@ -87,29 +89,29 @@ NoteAvgDevFromRef(ShortNotes) = [];
 NoteStdDevFromRef(ShortNotes) = [];
 NormCountGreaterStdDev(ShortNotes) = [];
 
-features(1,1) = abs(rwSc-rwStu);  % difference between the number of notes in the score and the student (inserted notes)
+features(1,1) = sum(algndmidi(:,7))/(sum(algndmidi(:,7))+sum(algndmidi(note_altrd+1,6)-(algndmidi(note_altrd,6)+algndmidi(note_altrd,7))));  % sum of silences between the number of notes in the score and the student (inserted notes)
 features(1,2)=mean(NoteAvgDevFromRef);
 features(1,3)=std(NoteAvgDevFromRef);
 features(1,4)=max(NoteAvgDevFromRef);
 features(1,5)=min(NoteAvgDevFromRef);
-
+ 
 features(1,6)=mean(NoteStdDevFromRef);
 features(1,7)=std(NoteStdDevFromRef);
 features(1,8)=max(NoteStdDevFromRef);
 features(1,9)=min(NoteStdDevFromRef); 
-
+ 
 features(1,10)=mean(NormCountGreaterStdDev);
 features(1,11)=std(NormCountGreaterStdDev);
 features(1,12)=max(NormCountGreaterStdDev);
 features(1,13)=min(NormCountGreaterStdDev);
-
+ 
 features(1,14)=dtw_cost/length(path);
 features(1,15)=slopedev;
-
+ 
 [note_indices] = computeNoteOccurence(scoreMid);
-vecDurFeat = DurHistScore(algndmid, note_indices, note_onsets, Fs, timeStep);
+vecDurFeat = DurHistScore(algndmidi, note_indices, note_altrd, Fs, timeStep);
 features(1,16:21)=vecDurFeat';
-features(1,22) = length(ShortNotes);
+features(1,22) = length(ShortNotes)*sum(numSampShortNotes)*timeStep / sum(algndmidi(:,7)); 
 % features(1,23) = length(path);
 % features(1,24) = length(f0);
       
