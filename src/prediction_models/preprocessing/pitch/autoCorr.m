@@ -22,14 +22,17 @@ i = 1;
 threshold = 0.001;
 frame(abs(frame)<threshold) = 0;
 
+%{
 while(i<=wSize);
     frameShifted = [zeros(i,1);frame(1:wSize-i)];
     autoCorrelation(i) = sum(frame.*frameShifted);
     i = i+1;
 end
-
 autoCorrelation = autoCorrelation/autoCorrelation(1);
+%}
 
+autoCorrelation = xcorr(frame, 'coeff');
+autoCorrelation = autoCorrelation(length(frame):end);
 maxOffset = round(fs/100); % considering 100Hz as lower freq
 minOffset = round(fs/1000); % considering 1000Hz as higher freq
 
