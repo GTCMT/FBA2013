@@ -22,9 +22,13 @@ elseif ispc
 end
 
 %% specify pYin parameters
-path_to_sonic_annotator = '/pYin/exec/';
-path_to_pyin_n3 = '/pYin/';
 curr_folder = pwd;
+path_to_sonic_annotator = 'pYin/exec/';
+path_to_pyin_n3 = 'pYin/';
+cd(path_to_pyin_n3);
+path_to_pyin_n3 = [pwd slashtype 'pyin.n3'];
+cd(curr_folder)
+
 
 % Scanning Options.
 if YEAR_OPTION == '2013'
@@ -45,15 +49,21 @@ student_ids = scanStudentIds(BAND_OPTION, INSTRUMENT_OPTION, YEAR_OPTION);
 FBA_RELATIVE_PATH = ['..' slashtype '..' slashtype '..' slashtype 'FBA2013data' slashtype year_folder];
 root_path = deriveRootPath();
 full_fba_relative_path = [root_path FBA_RELATIVE_PATH];
-audio_file_paths = scanFilePaths(full_fba_relative_path, student_ids, year_option);
+audio_file_paths = scanFilePaths(full_fba_relative_path, student_ids, YEAR_OPTION);
 disp('Done scanning.');
 
 %% iterate over the files
 num_students = length(audio_file_paths);
 for student_idx = 1%:num_students
-    path_to_file = audition_metadata.file_paths{student_idx};
-    output_dir = path_to_file;
+    path_to_file = audio_file_paths{student_idx};
+    [audio_directory, file_name, ext] = fileparts(path_to_file);
+    cd(audio_directory);
+    audio_directory = pwd;
+    cd(curr_folder);
+    path_to_file = [audio_directory slashtype file_name ext];
+    output_dir = [audio_directory slashtype];
     extractPyinPitchContour(path_to_file, output_dir, path_to_sonic_annotator, path_to_pyin_n3); 
+    cd(curr_folder);
 end
 
 

@@ -26,8 +26,9 @@ system(command);
 [x, fs] = audioread(path_to_file);
 % specify blocking parameters, must be the same as the paramters in the pYin .n3 file 
 wSize = 1024;
-hop = 512;
+hop = 256;
 % compute number of blocks
+x = x(:,1);
 N = length([zeros(wSize/2,1);x;zeros(wSize/2,1)]);
 num_blocks = ceil((N-wSize)/hop);
 % compute time_stamps
@@ -47,7 +48,7 @@ pyin_time = round(pyin_output(:,1), 3);
 
 % compare time stamps and insert zeros where appropriate
 if length(pyin_time) > length(time_stamps)
-       error('Error in pYin pitch estimate: Voicing');
+       error('Error in pYin pitch estimate: Check if the parameters in .n3 file are the same as this function');
 end
 [~, common_time_idx] = ismember(pyin_time, time_stamps, 'R2012a');
 pyin_f0_rev = zeros(size(time_stamps));
