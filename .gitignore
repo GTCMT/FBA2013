@@ -48,3 +48,4 @@ desktop.ini
 .Trashes
 ehthumbs.db
 Thumbs.db
+/src/prediction_models/preprocessing/pitch/pYin/exec
