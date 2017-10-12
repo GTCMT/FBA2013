@@ -22,7 +22,7 @@ elseif ispc
 end
 
 DATA_PATH = ['experiments' slashtype 'pitched_instrument_regression' slashtype 'data' slashtype];
-write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION) '_' num2str(YEAR_OPTION)];
+write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION) '_baseline' '_' num2str(YEAR_OPTION)];
 
 % Check for existence of path for writing extracted features.
   root_path = deriveRootPath();

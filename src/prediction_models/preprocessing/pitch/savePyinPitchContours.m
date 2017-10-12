@@ -54,7 +54,7 @@ disp('Done scanning.');
 
 %% iterate over the files
 num_students = length(audio_file_paths);
-for student_idx = 1%:num_students
+for student_idx = 1:num_students
     path_to_file = audio_file_paths{student_idx};
     [audio_directory, file_name, ext] = fileparts(path_to_file);
     cd(audio_directory);

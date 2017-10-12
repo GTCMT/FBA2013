@@ -1,16 +1,4 @@
-% Objective: Store (score based) designed features for each student for the specified
-% segment, year and instrument
-% Inputs: 
-% BAND_OPTION: band name i.e. concert band, middle school or
-% symphonic band
-% INSTRUMENT_OPTION: eg. alto sax, oboe
-% SEGMENT_OPTION: eg. 1-5
-% YEAR_OPTION: eg. 2013, 2014, 2015
-% Output: Extracted features and labels get stored in 'data' folder with
-% the name in variable write_file_name which includes the band option,
-% instrument option and segment name
-
-function getScoredFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION, YEAR_OPTION, NUM_FEATURES)
+function getScoredFeatureForSegmentPyin(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION, YEAR_OPTION, NUM_FEATURES)
 
 if ismac
     % Code to run on Mac plaform
@@ -20,7 +8,7 @@ elseif ispc
     slashtype='\';
 end
 
-DATA_PATH = ['experiments' slashtype 'pitched_instrument_regression' slashtype 'data' slashtype];
+DATA_PATH = ['experiments' slashtype 'pitched_instrument_regression' slashtype 'dataPyin' slashtype];
 write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION) '_Score' '_' num2str(YEAR_OPTION)];
 
 % Check for existence of path for writing extracted features.
@@ -34,7 +22,7 @@ write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION) '_Score
 % NUM_FEATURES = 25;
 HOP_SIZE = 256;
 WINDOW_SIZE = 1024;
-Resample_fs = 44100;
+resample_fs = 44100;
 % Scanning Options.
 if YEAR_OPTION == '2013'
     year_folder = '2013-2014';
@@ -76,23 +64,29 @@ disp('Extracting features...');
 for student_idx = 1:num_students
   disp(['Processing student: ' num2str(student_idx)]);
   file_name = audition_metadata.file_paths{student_idx};
+  [path, ~, ~] = fileparts(file_name);
+  path = [path slashtype];
   segments = audition_metadata.segments{student_idx};
   student_assessments = audition_metadata.assessments{student_idx};
 
   % Retrieve audio for each segment.
   [segmented_audio, Fs] = scanAudioIntoSegments(file_name, segments);
   current_audio = segmented_audio{1};
-
-  % resample audio
-  current_audio = resample(current_audio,Resample_fs,Fs);
+  
+  if(Fs ~= resample_fs)
+    disp(file_name);
+    error('improper sampling frequency in file');
+  end
   
   % Normalize audio;
   normalized_audio = mean(current_audio, 2);
   normalized_audio = normalized_audio ./ max(abs(normalized_audio));
 
-  % Extract features.
+  %% Extract features
+  % extract the pYin pitch contour for the segment
+  f0 = getPyinPitchForSegment(path, segments);
   features(student_idx, :) = ...
-       extractScoredFeatures(normalized_audio, Resample_fs, WINDOW_SIZE, HOP_SIZE, YEAR_OPTION, NUM_FEATURES);
+       extractScoredF0Features(normalized_audio, f0, resample_fs, WINDOW_SIZE, HOP_SIZE, YEAR_OPTION, NUM_FEATURES);
 
   % Store all assessments.
   segment_assessments = student_assessments(1, :);
@@ -106,4 +100,3 @@ save([full_data_path write_file_name], 'features', 'labels');
 disp('Done writing file.');
 
 end
-

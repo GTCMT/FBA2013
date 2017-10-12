@@ -65,6 +65,14 @@ for(note_idx = 1:num_notes)
   note_stop_idx = boundaries(note_idx + 1)-1;
   note_start = ((boundaries(note_idx) - 1) * hop_size) + 1;
   note_stop = ((boundaries(note_idx + 1) - 1) * hop_size) + 1;
+  if note_stop > length(audio)
+     warning('note segmentation exceeds audio length')
+     if (note_idx == num_notes)
+        note_stop = length(audio);
+     else
+        error('Error in note segmentation'); 
+     end
+  end
   cur_pitches_hz = pitches_hz_smooth(1, note_start_idx:note_stop_idx);
 
   notes(note_idx).audio = audio(note_start:note_stop);

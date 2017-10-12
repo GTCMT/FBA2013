@@ -9,8 +9,8 @@ fclose all;
 clear all;
 clc;
 
-DATA_PATH = 'experiments/pitched_instrument_regression/data/';
-write_file_name = 'middleAlto Saxophone2_baseline_2013';
+DATA_PATH = 'experiments/pitched_instrument_regression/dataPyin/';
+write_file_name = 'middleAlto Saxophone2_Combined_2013';
 
 % Check for existence of path for writing extracted features.
 root_path = deriveRootPath();
@@ -20,20 +20,20 @@ if(~isequal(exist(full_data_path, 'dir'), 7))
     error('Error in your file path.');
 end
 
-l = 2;
+l = 3;
 unionSet = [12,26,34,38];%[1;2;3;4;5;7;8;9;11;12;13;14;15;16;18;19;20;21;22;23;25;26;27;29;30;31;33;34;35;36;37;38;39;40;41;42;43;44;45;46];
 delFeat = 1:46; delFeat(unionSet)=[];
   
 load([full_data_path write_file_name]);
-features(:,delFeat)=[];
+%features(:,delFeat)=[];
 features1 =features;
 
 % Average the assessments to get one label.
 labels1 = labels(:,l); %labels(:,3),labels(:,5)
 
-write_file_name = 'middleAlto Saxophone2_baseline_2014';
+write_file_name = 'middleAlto Saxophone2_Combined_2015';
 load([full_data_path write_file_name]);
-features(:,delFeat)=[];
+%features(:,delFeat)=[];
 
 features = [features; features1];
 labels = labels(:,l); %labels(:,3),labels(:,5)
@@ -72,14 +72,14 @@ train_labels = labels;
 clear labels; clear features;
 
 % test features from either 2014 or 2015
-write_file_name = 'middleAlto Saxophone2_baseline_2015';
+write_file_name = 'middleAlto Saxophone2_Combined_2014';
 root_path = deriveRootPath();
 full_data_path = [root_path DATA_PATH];
 load([full_data_path write_file_name]);
-features(:,delFeat)=[];
+%features(:,delFeat)=[];
 
 test_features = features;
-test_labels = labels(:,l-1);
+test_labels = labels(:,l);
 clear labels; clear features;
 
 % Normalize
