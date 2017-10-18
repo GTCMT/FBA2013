@@ -10,7 +10,15 @@
 % the name in variable write_file_name which includes the band option,
 % instrument option and segment name
 
-function getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION, YEAR_OPTION, NUM_FEATURES)
+%% Note by CW
+% this is the function that i modified heavily:
+% 1) add one argument audio_path for users to point to their audio dir
+% 2) add one argument problem_id for identifying the problematic file
+% 3) disable save functions
+
+%%
+
+function [features, labels] = getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, SEGMENT_OPTION, YEAR_OPTION, NUM_FEATURES, audio_path, problem_id)
 
 if ismac
     % Code to run on Mac plaform
@@ -27,9 +35,9 @@ write_file_name = [BAND_OPTION INSTRUMENT_OPTION num2str(SEGMENT_OPTION) '_NonSc
   root_path = deriveRootPath();
   full_data_path = [root_path DATA_PATH];
   
-  if(~isequal(exist(full_data_path, 'dir'), 7))
-    error('Error in your file path.');
-  end
+%   if(~isequal(exist(full_data_path, 'dir'), 7))
+%     error('Error in your file path.');
+%   end
 
 % NUM_FEATURES = 25;
 HOP_SIZE = 256;
@@ -46,7 +54,9 @@ else
     disp('Error in year option');
 end
     
-FBA_RELATIVE_PATH = ['..' slashtype '..' slashtype '..' slashtype 'FBA2013data' slashtype year_folder];
+%FBA_RELATIVE_PATH = ['..' slashtype '..' slashtype '..' slashtype 'FBA2013data' slashtype year_folder];
+FBA_RELATIVE_PATH = [audio_path, year_folder];
+
 % BAND_OPTION = 'middle';
 % INSTRUMENT_OPTION = 'Oboe';
 % SEGMENT_OPTION = 2;
@@ -73,12 +83,12 @@ labels = zeros(num_students, num_labels);
 disp('Extracting features...');
 
 % One student at a time.
-for student_idx = 1:num_students
+for student_idx = problem_id:problem_id
   disp(['Processing student: ' num2str(student_idx)]);
   file_name = audition_metadata.file_paths{student_idx};
   segments = audition_metadata.segments{student_idx};
   student_assessments = audition_metadata.assessments{student_idx};
-
+  fprintf('Current file: %s\n', file_name);
   % Retrieve audio for each segment.
   [segmented_audio, Fs] = scanAudioIntoSegments(file_name, segments);
   current_audio = segmented_audio{1};
@@ -101,9 +111,9 @@ for student_idx = 1:num_students
 end
 
 % Write results to the file.
-disp('Done extracting features. Writing results to file.');
-save([full_data_path write_file_name], 'features', 'labels');
-disp('Done writing file.');
+% disp('Done extracting features. Writing results to file.');
+% save([full_data_path write_file_name], 'features', 'labels');
+% disp('Done writing file.');
 
 end
 
