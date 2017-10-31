@@ -64,6 +64,7 @@ for student_idx = 1:num_students
     output_dir = [audio_directory slashtype];
     extractPyinPitchContour(path_to_file, output_dir, path_to_sonic_annotator, path_to_pyin_n3); 
     cd(curr_folder);
+    disp(['Completed: ', num2str(student_idx), ' ,out of: ', num2str(num_students)]);
 end
 
 
