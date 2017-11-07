@@ -72,6 +72,9 @@ for student_idx = 1:num_students
     [audio_directory, current_id, ~] = fileparts(path_to_file);
     path_to_pyin_contour = [audio_directory slashtype current_id,'_pyin_pitchtrack.txt'];
     output_dir = [repo_path band_folder slashtype current_id slashtype];
+    if exist(output_dir, 'dir') ~= 7
+       system(['mkdir ', output_dir]); 
+    end
     command = ['cp ',path_to_pyin_contour, ' ', output_dir];
     system(command);
     disp(['Completed: ', num2str(student_idx), ' ,out of: ', num2str(num_students)]);
