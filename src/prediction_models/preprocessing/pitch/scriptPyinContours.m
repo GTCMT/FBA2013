@@ -1,7 +1,7 @@
 band = 'symphonic';
-inst = 'Alto Saxophone';
+inst = 'Bb Clarinet';
 
-year = '2015';
+year = '2013';
 savePyinPitchContours(band, inst, year);
 copyPyinPitchContours(band, inst, year);
 
