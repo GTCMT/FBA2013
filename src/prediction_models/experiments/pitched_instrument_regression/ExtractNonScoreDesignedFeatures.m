@@ -1,6 +1,6 @@
-close all;
-clear all;
-clc
+% close all;
+% clear all;
+% clc
 
 % AV@GTCMT
 % Objective: extract non score based designed features for segment specified in the for loop for the
@@ -9,14 +9,14 @@ clc
 % The getFeatureForSegment function stores the extracted features and their
 % labels in the folder 'data' in a mat file named as 'BandOption InstrumentOption SegmentNumber'
 
-BAND_OPTION = 'middle';
-INSTRUMENT_OPTION = 'Alto Saxophone';
-year_option = '2015';
+% BAND_OPTION = 'middle';
+% INSTRUMENT_OPTION = 'Alto Saxophone';
+% year_option = '2014';
 NUM_FEATURES = 24;
 
 for segment = 2 % segment for which features are to be extracted
 % %     uncomment the line below for extracting standard spectral features for the audio files
 %     getStdFeaturesForSegment(BAND_OPTION, INSTRUMENT_OPTION, segment, year_option);
 % % the line below is for extracting non score based designed features
-    getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, segment, year_option, NUM_FEATURES);
+    getFeatureForSegment(BAND_OPTION, INSTRUMENT_OPTION, segment, year_option, NUM_FEATURES, audio_path, problem_id(i));
 end

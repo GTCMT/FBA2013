@@ -103,7 +103,8 @@ for student_idx = problem_id:problem_id
   % Extract features.
   features(student_idx, :) = ...
        extractFeatures(normalized_audio, Resample_fs, WINDOW_SIZE, HOP_SIZE);
-
+  % For feature debugging, stop here
+  
   % Store all assessments.
   segment_assessments = student_assessments(1, :);
   segment_assessments = segment_assessments(segment_assessments ~= -1);
