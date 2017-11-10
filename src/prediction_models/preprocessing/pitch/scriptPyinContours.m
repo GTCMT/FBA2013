@@ -1,5 +1,5 @@
 band = 'concert';
-inst = 'Bb Clarinet';
+inst = 'Flute';
 
 year = '2013';
 savePyinPitchContours(band, inst, year);
