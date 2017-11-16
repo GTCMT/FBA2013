@@ -1,4 +1,4 @@
-function [outliers_no_seg, outliers_num_seg] = findAnnotationOutliers(BAND_OPTION, INSTRUMENT_OPTION, YEAR_OPTION)
+function [outliers_no_seg, outliers_num_seg, outliers_seg_dur] = findAnnotationOutliers(BAND_OPTION, INSTRUMENT_OPTION, YEAR_OPTION)
 
 % AP@GTCMT, 2017
 % objective: tries to find possible outliers in annotations
@@ -19,12 +19,17 @@ a = cellfun(@isempty, segment_filepaths);
 outliers_no_seg = student_ids(a);
 b = ~cellfun(@isempty, segment_filepaths);
 students_with_seg = student_ids(b);
-segmentpaths = segment_filepaths(b);
+good_paths = segment_filepaths(b);
 
-wrong_segments = checkNumSegments(segmentpaths);
+wrong_segments = checkNumSegments(good_paths);
 outliers_num_seg = students_with_seg(wrong_segments == 1);
 
+normal_num_seg_ids = students_with_seg(wrong_segments == 0);
+normal_num_seg_paths = good_paths(wrong_segments == 0);
+[bad_dur, mu, sigma] = checkDurSegments(normal_num_seg_paths, 2, 2);
 
-%bad_dur = checkDurSegments(segment_filepaths, 2, 3);
+outliers_seg_dur = normal_num_seg_ids(bad_dur == 1);
+mu
+sigma
 
 end

@@ -1,4 +1,4 @@
-function [outliers, pd] = checkDurSegments(segmentText,segmentNum,tolerance)
+function [outliers, mu, sigma] = checkDurSegments(segmentText,segmentNum,tolerance)
 
 formatSpec = '%f %f';
 sizeA = [2 5];
@@ -16,6 +16,9 @@ pd = fitdist(dur_data(:,segmentNum), 'Normal');
 index_below = (dur_data(:,segmentNum))<pd.mu-tolerance*pd.sigma;
 index_above = (dur_data(:,segmentNum))<pd.mu-tolerance*pd.sigma;
 outliers = index_below | index_above;
+
+mu = pd.mu;
+sigma = pd.sigma;
 
 end
 
