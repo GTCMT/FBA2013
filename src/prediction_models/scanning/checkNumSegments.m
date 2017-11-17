@@ -10,9 +10,9 @@ for i = 1:length(segmentText);
     
     tline = fgetl(fileID); % this is the first line with file information
     
-    A = fscanf(fileID,formatSpec,sizeA);
+    A = fscanf(fileID,formatSpec);
     
-    if (length(A) ~= 5)
+    if (length(A) ~= 10)
         wrong_segments = [wrong_segments; 1];
     else
         wrong_segments = [wrong_segments; 0];
