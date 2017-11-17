@@ -22,7 +22,7 @@ function [features] = extractFeatures(audio, Fs, wSize, hop)
     thresh2=0.4;
     
     [f0, ~] = estimatePitch(audio, Fs, hop, wSize, algo);
-    note = noteSegmentation(audio, f0, Fs, hop, 50, 0.2 , -50);
+    note = noteSegmentation(audio, f0, Fs, hop, 50, 0.1 , -50);
 
     % feature over entire segment
     features(1,1) = PlayingNotes100CntsHist(f0);
@@ -31,7 +31,7 @@ function [features] = extractFeatures(audio, Fs, wSize, hop)
     for i=1:size(note,1)
         a = note(i).pitches_hz;
         b = note(i).audio;
-        [stdDev(i) countGreaterStdDev(i)]=NoteSteadinessMeasure(a);
+        [stdDev(i), countGreaterStdDev(i)]=NoteSteadinessMeasure(a);
         
         timbreMeasure(:,i) =timbreDev(note(i).audio,Fs);
 
@@ -72,7 +72,7 @@ function [features] = extractFeatures(audio, Fs, wSize, hop)
 %     features(1,22)=max(ampenv_peaks)-min(ampenv_peaks);
     
     features(1,18) = numGoodNotes(note,thresh1,thresh2);
-    features(1,19:24) = extractIOIFeaturesCW(audio, Fs, wSize, hop);
+    features(1,19:24) = extractIOIFeaturesCW(note, Fs);
 %     features(1,23)=IOIfeatures(note);
       
 end

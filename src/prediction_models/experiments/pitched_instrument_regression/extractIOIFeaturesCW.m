@@ -12,14 +12,14 @@
 % OUTPUTS
 % features: 1 x N feature vector (where N is the number of features getting extracted in the function)
 
-function [features] = extractIOIFeaturesCW(audio, Fs, wSize, hop)
+function [features] = extractIOIFeaturesCW(note, Fs)
 
     features=zeros(1,7);
-    algo='acf';
-%     algo='wav';
-    
-    [f0, ~] = estimatePitch(audio, Fs, hop, wSize, algo);
-    note = noteSegmentation(audio, f0, Fs, hop, 50, 0.2 , -50);
+%     algo='acf';
+% %     algo='wav';
+%     
+%     [f0, ~] = estimatePitch(audio, Fs, hop, wSize, algo);
+%     note = noteSegmentation(audio, f0, Fs, hop, 50, 0.1 , -50);
     
     % feature over each individual note and then its derived statistical features
     for i=1:size(note,1)

@@ -21,6 +21,6 @@ pitchvalsMidi=69+12*log2(pitchvals/440);
 % mean value of notes deviating from the given midi note reference
 NoteAvgDevFromRef=mean((abs(pitchvalsMidi-midiNote)));
 NoteStdDevFromRef=std((abs(pitchvalsMidi-midiNote)));
-NormCountGreaterStdDev=sum(abs(pitchvalsMidi-midiNote)>NoteStdDevFromRef)/length(pitchvalsMidi);
+NormCountGreaterStdDev=sum(abs(pitchvalsMidi-midiNote) - NoteAvgDevFromRef>NoteStdDevFromRef)/length(pitchvalsMidi);
 
 end
