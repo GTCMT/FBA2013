@@ -33,7 +33,7 @@
 
 function notes = noteSegmentation(audio, pitches_hz, Fs, hop_size, ...
                                   interval_thresh_cents, min_note_secs, ...
-                                  power_thresh_db)
+                                  power_thresh_db, thinning)
 % Number of necessary sequential pitch estimates for a note to be valid.
 min_note_windows = floor(min_note_secs * Fs / hop_size);
 num_windows = size(pitches_hz, 2);
@@ -120,7 +120,9 @@ end
 % end
 
 % Thin notes: coalesce spurious notes at boundaries.
-% notes = noteThinning(notes, min_note_windows);
+if thinning == true
+notes = noteThinning(notes, min_note_windows);
+end
 
 % Remove notes below a power threshold.
 old_notes = notes;
